@@ -1,0 +1,8 @@
+<platform xmlns="http://ns.adobe.com/air/extension/3.1"> 
+    <description >NativeDialogs</description> 
+    <copyright>2012</copyright> 
+    <linkerOptions> 
+<!--        <option>-framework CoreMotion</option> -->
+    </linkerOptions> 
+</platform>
+

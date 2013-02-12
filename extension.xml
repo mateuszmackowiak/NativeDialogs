@@ -1,0 +1,46 @@
+<extension xmlns="http://ns.adobe.com/air/extension/3.1">
+<id>pl.mateuszmackowiak.nativeANE.NativeDialogs</id>
+<versionNumber>1</versionNumber>
+<platforms>
+<platform name="Android-ARM">
+<applicationDeployment>
+<nativeLibrary>libNativeDialogs.jar</nativeLibrary>
+<initializer>pl.mateuszmackowiak.nativeANE.NativeDialogsExtension</initializer>
+<finalizer>pl.mateuszmackowiak.nativeANE.NativeDialogsExtension</finalizer>
+</applicationDeployment>
+</platform>
+<platform name="iPhone-ARM">
+<applicationDeployment>
+<nativeLibrary>libNativeDialogs.a</nativeLibrary>
+<initializer>NativeDialogsExtInitializer</initializer>
+<finalizer>NativeDialogsExtFinalizer</finalizer>
+</applicationDeployment>
+</platform>
+<platform name="iPhone-x86">
+<applicationDeployment>
+<nativeLibrary>libNativeDialogs.a</nativeLibrary>
+<initializer>NativeDialogsExtInitializer</initializer>
+<finalizer>NativeDialogsExtFinalizer</finalizer>
+</applicationDeployment>
+</platform>
+<!--<platform name="Windows-x86">
+<applicationDeployment>
+<nativeLibrary>libNativeDialogs.dll</nativeLibrary>
+<initializer>NativeDialogsExtInitializer</initializer>
+<finalizer>NativeDialogsExtFinalizer</finalizer>
+</applicationDeployment>
+</platform>
+-->
+<!--<platform name="MacOS-x86">
+<applicationDeployment>
+<nativeLibrary>libNativeDialogs.framework</nativeLibrary>
+<initializer>NativeDialogsExtInitializer</initializer>
+<finalizer>NativeDialogsExtFinalizer</finalizer>
+</applicationDeployment>
+</platform>
+-->
+<platform name="default">
+<applicationDeployment/>
+</platform>
+</platforms>
+</extension>

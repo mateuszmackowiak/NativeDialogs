@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" contentCreationComplete="creaComp(event)">
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import spark.events.IndexChangeEvent;
+			
+			import pl.mateuszmackowiak.nativeANE.dialogs.NativeAlertDialog;
+			import pl.mateuszmackowiak.nativeANE.dialogs.NativeDatePickerDialog;
+			import pl.mateuszmackowiak.nativeANE.dialogs.NativeListDialog;
+			import pl.mateuszmackowiak.nativeANE.dialogs.NativeProgressDialog;
+			import pl.mateuszmackowiak.nativeANE.dialogs.NativeTextInputDialog;
+			import pl.mateuszmackowiak.nativeANE.dialogs.support.NativeTextField;
+			import pl.mateuszmackowiak.nativeANE.dialogs.support.iNativeDialog;
+			import pl.mateuszmackowiak.nativeANE.events.NativeDialogEvent;
+			import pl.mateuszmackowiak.nativeANE.events.NativeDialogListEvent;
+			
+			
+			private var myTimer:Timer = new Timer(100);
+			private var progressPopup:NativeProgressDialog;
+			private var _date:Date = new Date();
+			private var isIOS:Boolean = Capabilities.os.toLowerCase().indexOf("ip")>-1;
+			
+			protected function creaComp(event:Event):void
+			{
+				bindEvents();
+				
+				if(isIOS){
+					themeSelector.dataProvider = themesIOS;
+					themeSelector.selectedItem = themesIOS.getItemAt(0);
+				}else{
+					themeSelector.dataProvider = themesAndroid;
+					themeSelector.selectedItem = themesAndroid.getItemAt(0);
+				}
+			}
+			
+			private function bindEvents():void
+			{
+
+				showAlertButton.addEventListener(MouseEvent.CLICK,onShowAlertButtonClicked);
+				showMultiChoiceButton.addEventListener(MouseEvent.CLICK,onMultiChoiceButtonClicked);
+				showSingleChoiceButton.addEventListener(MouseEvent.CLICK,onShowSingleChoiceButtonClicked);
+				showTextInputButton.addEventListener(MouseEvent.CLICK,onTextInputButtonClicked);
+				showHorizontalProgressDialogButton.addEventListener(MouseEvent.CLICK,onHorizontalProgressDialogButtonClicked);
+				showSpinnerProgressDialogButton.addEventListener(MouseEvent.CLICK,onSpinnerProgressDialogButtonClicked);
+				showDatePickerDialog.addEventListener(MouseEvent.CLICK,onDatePickerButtonClicked);
+				themeSelector.addEventListener(IndexChangeEvent.CHANGE,themeSelectorChangeHandler);
+			}
+			
+			protected function onShowAlertButtonClicked(event:MouseEvent):void
+			{
+				NativeAlertDialog.show("Message","Title","OK","Cancle",mess,true);
+				/*
+				var a:NativeAlertDialog = new NativeAlertDialog();
+				a.closeHandler = function(e:NativeDialogEvent):void{
+					mess(e);
+				};
+				a.title = "Title";
+				a.message = "Some message.";
+				a.closeLabel = "OK";
+				a.show();*/
+			}
+
+			protected function onMultiChoiceButtonClicked(event:MouseEvent):void
+			{
+				var m:NativeListDialog = new NativeListDialog();
+				
+				m.addEventListener(NativeDialogEvent.CLOSED,readSelected);
+				m.addEventListener(NativeDialogListEvent.LIST_CHANGE,function(event:NativeDialogListEvent):void
+				{
+					mess(event);
+					var m:NativeListDialog = NativeListDialog(event.target);
+					m.shake();
+				});
+				
+				m.buttons = Vector.<String> (["OK","Cancle"]);
+				m.title = "Title";
+				m.message = "Message";
+				m.dataProvider = Vector.<Object>(["one","two","three"]);
+				m.displayMode = NativeListDialog.DISPLAY_MODE_MULTIPLE;
+				m.show();
+			}
+			protected function onShowSingleChoiceButtonClicked(event:MouseEvent):void
+			{
+				var m:NativeListDialog = new NativeListDialog();
+				
+				m.addEventListener(NativeDialogEvent.CLOSED,readSelected);
+				m.addEventListener(NativeDialogListEvent.LIST_CHANGE,mess);
+				
+				m.buttons = Vector.<String> (["OK","Cancle"]);
+				m.setTitle("Title");
+				m.setMessage("Message");
+				m.dataProvider = Vector.<Object>(["one","two","three"]);
+				m.displayMode = NativeListDialog.DISPLAY_MODE_SINGLE;
+				m.show();
+			}
+			
+
+			private function readSelected(event:NativeDialogEvent):void
+			{
+				
+				
+				var m:NativeListDialog = NativeListDialog(event.target);
+				m.removeEventListener(NativeDialogEvent.CLOSED,mess);
+				
+				mess(event);
+				mess("selectedIndex: "+m.selectedIndex);
+				mess("selectedIndexes: "+m.selectedIndexes);
+				mess("selectedItem: "+m.selectedItem);
+				mess("selectedItems: "+m.selectedItems);
+				
+				m.dispose();
+			}
+			
+			
+			protected function onTextInputButtonClicked(event:MouseEvent):void
+			{
+				var t:NativeTextInputDialog = new NativeTextInputDialog();
+				t.addEventListener(NativeDialogEvent.CANCELED,mess);
+				t.addEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
+				
+				var v:Vector.<NativeTextField> = new Vector.<NativeTextField>();
+				
+				var message:NativeTextField = new NativeTextField(null);
+				message.text = "Message";
+				message.editable = false;
+				v.push(message);
+				
+				var serverAdressTextInput:NativeTextField = new NativeTextField("serverAdress");
+				serverAdressTextInput.displayAsPassword = true;
+				serverAdressTextInput.prompText = "prompt";
+				serverAdressTextInput.softKeyboardType = SoftKeyboardType.URL;
+				serverAdressTextInput.addEventListener(Event.CHANGE,function(event:Event):void{
+					var tf:NativeTextField = NativeTextField(event.target);
+					tf.nativeTextInputDialog.shake();
+				});
+				serverAdressTextInput.addEventListener(TextEvent.TEXT_INPUT,function(event:Event):void{
+					var tf:NativeTextField = NativeTextField(event.target);
+					tf.nativeTextInputDialog.hide(0);
+				});
+				v.push(serverAdressTextInput);
+				
+				t.textInputs = v;
+				t.title = "Title";
+				t.show();
+				
+			}
+
+
+			
+			
+			
+			
+			
+						
+			
+			
+			
+			protected function onHorizontalProgressDialogButtonClicked(event:MouseEvent):void
+			{
+				var p:NativeProgressDialog= new NativeProgressDialog();
+				p.addEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
+				p.secondaryProgress = 45;
+				p.max = 50;
+				p.title = "Title";
+				p.message ="Message";
+				p.showProgressbar();
+				
+				progressPopup = p;
+				
+				myTimer.addEventListener(TimerEvent.TIMER, updateProgress);
+				myTimer.start();
+			}
+			protected function onSpinnerProgressDialogButtonClicked(event:MouseEvent):void
+			{
+				var p:NativeProgressDialog= new NativeProgressDialog();
+				p.addEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
+				p.secondaryProgress = 45;
+				p.max = 50;
+				p.title = "Title ";
+				p.message ="Message";
+				p.showSpinner();
+				
+				progressPopup = p;
+				
+				myTimer.addEventListener(TimerEvent.TIMER, updateProgress);
+				myTimer.start();
+			}
+			
+			
+			private function updateProgress(event:TimerEvent):void
+			{
+				var p:int = progressPopup.progress;
+				p++;
+				if(p>=50){
+					p = 0;
+					progressPopup.hide(1);
+					myTimer.removeEventListener(TimerEvent.TIMER,updateProgress);
+					//progressPopup.hide("with some message",true);
+					(event.target as Timer).stop();
+				}
+				else{
+					if(p==25){
+						progressPopup.shake();
+						//progressPopup.setMessage("some message changed in between");
+						//progressPopup.setTitle("some title changed in between");
+					}
+					try{
+						progressPopup.setProgress(p);
+					}catch(e:Error){
+						mess("Error "+ e.message+"   "+e.toString());
+					}
+				}
+			}
+
+			protected function onDatePickerButtonClicked(event:MouseEvent):void
+			{
+				var d:NativeDatePickerDialog = new NativeDatePickerDialog();
+				d.addEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
+				d.addEventListener(NativeDialogEvent.CANCELED,mess);
+				d.addEventListener(Event.CHANGE,function(event:Event):void
+				{
+					var n:NativeDatePickerDialog = NativeDatePickerDialog(event.target);
+					_date = n.date;
+					mess(event);
+					mess("Date set to:"+String(_date));
+				});
+				d.buttons = Vector.<String>(["Cancle","OK"]);
+				d.displayMode =NativeDatePickerDialog.DISPLAY_MODE_DATE_AND_TIME;
+				d.title = "DatePicker";
+				d.message = "Select date:";
+				d.date = _date;
+				d.show(false);
+			}
+			
+
+			
+			
+			
+			private function onCloseDialog(event:NativeDialogEvent):void
+			{
+				var m:iNativeDialog = iNativeDialog(event.target);
+				m.removeEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
+				mess(event);
+				m.dispose();
+			}
+			public function mess(message:*):void
+			{
+				var s:String = String(message);
+				textArea.appendText(s+"\n");
+				trace(s+"\n");
+			}
+			
+			protected function themeSelectorChangeHandler(event:IndexChangeEvent):void
+			{
+				if(isIOS){
+					NativeProgressDialog.defaultIOSTheme = themeSelector.selectedItem.data;
+				}else{
+					var itemSelected:int = themeSelector.selectedItem.data;
+					NativeAlertDialog.defaultTheme = itemSelected;
+					NativeListDialog.defaultTheme = itemSelected;
+					NativeTextInputDialog.defaultTheme = itemSelected;
+					NativeDatePickerDialog.defaultTheme = itemSelected;
+					NativeProgressDialog.defaultAndroidTheme = itemSelected;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:ArrayList id="themesAndroid">
+			<fx:Object name="ANDROID_DEVICE_DEFAULT_DARK_THEME" data="0x00000004"/>
+			<fx:Object name="ANDROID_DEVICE_DEFAULT_LIGHT_THEME" data="0x00000005"/>
+			<fx:Object name="ANDROID_HOLO_DARK_THEME" data="0x00000002"/>
+			<fx:Object name="ANDROID_HOLO_LIGHT_THEME" data="0x00000003"/>
+			<fx:Object name="DEFAULT_THEME" data="0x00000001"/>
+		</s:ArrayList>
+		<s:ArrayList id="themesIOS">
+			<fx:Object name="IOS_SVHUD_GRADIENT_BACKGROUND_THEME" data="0x00000004" />
+			<fx:Object name="IOS_SVHUD_BLACK_BACKGROUND_THEME" data="0x00000002" />
+			<fx:Object name="IOS_SVHUD_NON_BACKGROUND_THEME" data="0x00000003" />
+			<fx:Object name="DEFAULT_THEME" data="0x00000001"/>
+		</s:ArrayList>
+	</fx:Declarations>
+	
+	
+	<s:TextArea id="textArea" width="100%" height="100%" editable="false" selectable="false" minHeight="150" maxHeight="250"/>
+	<s:Scroller width="100%" height="100%" >
+		<s:Group height="100%" id="content" >
+			<s:layout>
+				<s:VerticalLayout horizontalAlign="center"/>
+			</s:layout>
+
+			
+			
+			<s:Button label="show" id="showAlertButton" width="100%" height="40"/>
+			
+			<s:Button label="show multi choice dialog" id="showMultiChoiceButton" width="100%" height="40"/>
+			
+			<s:Button label="show single choice dialog" id="showSingleChoiceButton" width="100%" height="40"/>
+			
+			<s:Button label="show datePicker dialog" id="showDatePickerDialog" width="100%" height="40"/>
+			
+			<s:Button label="show text Input Dialog" id="showTextInputButton" width="100%" height="40"/>
+			
+			<s:HGroup width="100%" includeInLayout="{NativeProgressDialog.isSupported}" verticalAlign="middle">
+				<s:Button width="100%" label="horizontal progress popup" id="showHorizontalProgressDialogButton" height="40"/>
+				<s:Button width="100%" label="spinner progress popup"  id="showSpinnerProgressDialogButton" height="40"/>
+			</s:HGroup>
+
+			<s:SpinnerListContainer width="100%">
+				<s:SpinnerList id="themeSelector" fontWeight="bold" labelField="name" minWidth="100" width="100%"/>
+			</s:SpinnerListContainer>
+		</s:Group>
+	</s:Scroller>
+	
+	
+	
+</s:Application>

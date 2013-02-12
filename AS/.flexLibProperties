@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.NativeAlertDialog"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.NativeListDialog"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.NativeTextInputDialog"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.nativeDialogNamespace"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.NativeProgressDialog"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.notifications.Toast"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.support.AbstractNativeDialog"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.NativeDatePickerDialog"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.support.iNativeDialog"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

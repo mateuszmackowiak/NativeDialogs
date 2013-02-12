@@ -1,0 +1,578 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9A0396F916BD905700445AD1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0396F816BD905700445AD1 /* Foundation.framework */; };
+		9A0396FB16BD905700445AD1 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0396FA16BD905700445AD1 /* CoreFoundation.framework */; };
+		9A0396FD16BD905700445AD1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0396FC16BD905700445AD1 /* UIKit.framework */; };
+		9A0396FF16BD905700445AD1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0396FE16BD905700445AD1 /* MobileCoreServices.framework */; };
+		9A03970116BD905700445AD1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03970016BD905700445AD1 /* CoreGraphics.framework */; };
+		9A03970316BD905700445AD1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03970216BD905700445AD1 /* SystemConfiguration.framework */; };
+		9A03970516BD905700445AD1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03970416BD905700445AD1 /* AudioToolbox.framework */; };
+		9A03970716BD905700445AD1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03970616BD905700445AD1 /* CFNetwork.framework */; };
+		9A03970916BD905700445AD1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03970816BD905700445AD1 /* QuartzCore.framework */; };
+		9A03970B16BD905700445AD1 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03970A16BD905700445AD1 /* OpenGLES.framework */; };
+		9A03970D16BD905700445AD1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03970C16BD905700445AD1 /* CoreLocation.framework */; };
+		9A03970F16BD905700445AD1 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03970E16BD905700445AD1 /* CoreMedia.framework */; };
+		9A03971116BD905700445AD1 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03971016BD905700445AD1 /* CoreVideo.framework */; };
+		9A03971316BD905700445AD1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03971216BD905700445AD1 /* AVFoundation.framework */; };
+		9A03971516BD905700445AD1 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A03971416BD905700445AD1 /* Security.framework */; };
+		9A03971B16BD905700445AD1 /* NativeDialogs.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A03971A16BD905700445AD1 /* NativeDialogs.m */; };
+		9A03972516BD908000445AD1 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A03972416BD908000445AD1 /* FlashRuntimeExtensions.h */; };
+		9A03972816BD916800445AD1 /* NativeDialogControler.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A03972616BD916800445AD1 /* NativeDialogControler.h */; };
+		9A03972916BD916800445AD1 /* NativeDialogControler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A03972716BD916800445AD1 /* NativeDialogControler.m */; };
+		9A2775A216BDD13E00298B22 /* SBTableAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2775A016BDD13E00298B22 /* SBTableAlert.h */; };
+		9A2775A316BDD13E00298B22 /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2775A116BDD13E00298B22 /* SBTableAlert.m */; };
+		9A2B59CC16C1CF0B00B65047 /* SlideNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2B59CA16C1CF0B00B65047 /* SlideNotification.h */; };
+		9A2B59CD16C1CF0B00B65047 /* SlideNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2B59CB16C1CF0B00B65047 /* SlideNotification.m */; };
+		9AA7AE3416C0262300CB48D4 /* SVProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */; };
+		9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */; };
+		9AEF3E6416BFE96A0003036B /* AlertTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AEF3E6216BFE96A0003036B /* AlertTextView.h */; };
+		9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AEF3E6316BFE96A0003036B /* AlertTextView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		9A0396F516BD905700445AD1 /* libNativeDialogs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNativeDialogs.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A0396F816BD905700445AD1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		9A0396FA16BD905700445AD1 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		9A0396FC16BD905700445AD1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		9A0396FE16BD905700445AD1 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		9A03970016BD905700445AD1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		9A03970216BD905700445AD1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9A03970416BD905700445AD1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9A03970616BD905700445AD1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		9A03970816BD905700445AD1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9A03970A16BD905700445AD1 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		9A03970C16BD905700445AD1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		9A03970E16BD905700445AD1 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		9A03971016BD905700445AD1 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		9A03971216BD905700445AD1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		9A03971416BD905700445AD1 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		9A03971816BD905700445AD1 /* NativeDialogs-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NativeDialogs-Prefix.pch"; sourceTree = "<group>"; };
+		9A03971A16BD905700445AD1 /* NativeDialogs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NativeDialogs.m; sourceTree = "<group>"; };
+		9A03971C16BD905700445AD1 /* platformoptions.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = platformoptions.xml; sourceTree = "<group>"; };
+		9A03971D16BD905700445AD1 /* aneBuildAfter.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = aneBuildAfter.sh; sourceTree = "<group>"; };
+		9A03971E16BD905700445AD1 /* aneBuildBefore.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = aneBuildBefore.sh; sourceTree = "<group>"; };
+		9A03972416BD908000445AD1 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
+		9A03972616BD916800445AD1 /* NativeDialogControler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeDialogControler.h; sourceTree = SOURCE_ROOT; };
+		9A03972716BD916800445AD1 /* NativeDialogControler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeDialogControler.m; sourceTree = SOURCE_ROOT; };
+		9A2775A016BDD13E00298B22 /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBTableAlert.h; sourceTree = "<group>"; };
+		9A2775A116BDD13E00298B22 /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBTableAlert.m; sourceTree = "<group>"; };
+		9A2775AF16BDE5E200298B22 /* nativealert-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nativealert-Info.plist"; sourceTree = "<group>"; };
+		9A2775B116BDE5E200298B22 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9A2775B316BDE5E200298B22 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		9A2775B516BDE5E200298B22 /* nativealert-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nativealert-Prefix.pch"; sourceTree = "<group>"; };
+		9A2775B616BDE5E200298B22 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		9A2775B716BDE5E200298B22 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		9A2775B916BDE5E200298B22 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		9A2775BB16BDE5E200298B22 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		9A2775BD16BDE5E200298B22 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		9A2B59CA16C1CF0B00B65047 /* SlideNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideNotification.h; path = SlideNotification/SlideNotification.h; sourceTree = SOURCE_ROOT; };
+		9A2B59CB16C1CF0B00B65047 /* SlideNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlideNotification.m; path = SlideNotification/SlideNotification.m; sourceTree = SOURCE_ROOT; };
+		9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = SVProgressHUD/SVProgressHUD.h; sourceTree = SOURCE_ROOT; };
+		9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD.m; sourceTree = SOURCE_ROOT; };
+		9ADF1B0616BF0F2200DA9AAA /* NativeDialogsTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NativeDialogsTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9ADF1B0C16BF0F2200DA9AAA /* nativealert-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nativealert-Info.plist"; sourceTree = "<group>"; };
+		9ADF1B0E16BF0F2200DA9AAA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9ADF1B1016BF0F2200DA9AAA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		9ADF1B1216BF0F2200DA9AAA /* nativealert-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nativealert-Prefix.pch"; sourceTree = "<group>"; };
+		9ADF1B1316BF0F2200DA9AAA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		9ADF1B1416BF0F2200DA9AAA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		9AEF3E6216BFE96A0003036B /* AlertTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlertTextView.h; path = AlertTextView/AlertTextView.h; sourceTree = SOURCE_ROOT; };
+		9AEF3E6316BFE96A0003036B /* AlertTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlertTextView.m; path = AlertTextView/AlertTextView.m; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9A0396F116BD905700445AD1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A0396F916BD905700445AD1 /* Foundation.framework in Frameworks */,
+				9A0396FB16BD905700445AD1 /* CoreFoundation.framework in Frameworks */,
+				9A0396FD16BD905700445AD1 /* UIKit.framework in Frameworks */,
+				9A0396FF16BD905700445AD1 /* MobileCoreServices.framework in Frameworks */,
+				9A03970116BD905700445AD1 /* CoreGraphics.framework in Frameworks */,
+				9A03970316BD905700445AD1 /* SystemConfiguration.framework in Frameworks */,
+				9A03970516BD905700445AD1 /* AudioToolbox.framework in Frameworks */,
+				9A03970716BD905700445AD1 /* CFNetwork.framework in Frameworks */,
+				9A03970916BD905700445AD1 /* QuartzCore.framework in Frameworks */,
+				9A03970B16BD905700445AD1 /* OpenGLES.framework in Frameworks */,
+				9A03970D16BD905700445AD1 /* CoreLocation.framework in Frameworks */,
+				9A03970F16BD905700445AD1 /* CoreMedia.framework in Frameworks */,
+				9A03971116BD905700445AD1 /* CoreVideo.framework in Frameworks */,
+				9A03971316BD905700445AD1 /* AVFoundation.framework in Frameworks */,
+				9A03971516BD905700445AD1 /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9A0396EA16BD905700445AD1 = {
+			isa = PBXGroup;
+			children = (
+				9A03971616BD905700445AD1 /* NativeDialogs */,
+				9A2775AD16BDE5E200298B22 /* nativealert */,
+				9ADF1B0A16BF0F2200DA9AAA /* nativealert */,
+				9A0396F716BD905700445AD1 /* Frameworks */,
+				9A0396F616BD905700445AD1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9A0396F616BD905700445AD1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A0396F516BD905700445AD1 /* libNativeDialogs.a */,
+				9ADF1B0616BF0F2200DA9AAA /* NativeDialogsTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9A0396F716BD905700445AD1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9A0396F816BD905700445AD1 /* Foundation.framework */,
+				9A0396FA16BD905700445AD1 /* CoreFoundation.framework */,
+				9A0396FC16BD905700445AD1 /* UIKit.framework */,
+				9A0396FE16BD905700445AD1 /* MobileCoreServices.framework */,
+				9A03970016BD905700445AD1 /* CoreGraphics.framework */,
+				9A03970216BD905700445AD1 /* SystemConfiguration.framework */,
+				9A03970416BD905700445AD1 /* AudioToolbox.framework */,
+				9A03970616BD905700445AD1 /* CFNetwork.framework */,
+				9A03970816BD905700445AD1 /* QuartzCore.framework */,
+				9A03970A16BD905700445AD1 /* OpenGLES.framework */,
+				9A03970C16BD905700445AD1 /* CoreLocation.framework */,
+				9A03970E16BD905700445AD1 /* CoreMedia.framework */,
+				9A03971016BD905700445AD1 /* CoreVideo.framework */,
+				9A03971216BD905700445AD1 /* AVFoundation.framework */,
+				9A03971416BD905700445AD1 /* Security.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9A03971616BD905700445AD1 /* NativeDialogs */ = {
+			isa = PBXGroup;
+			children = (
+				9A2B59CE16C1CF1000B65047 /* SlideNotification */,
+				9AA7AE3616C0262800CB48D4 /* SVPRogressHUD */,
+				9AEF3E6716BFE9770003036B /* AlertTextView */,
+				9A2775A416BDD14400298B22 /* SBTableAlert */,
+				9A03971A16BD905700445AD1 /* NativeDialogs.m */,
+				9A03971716BD905700445AD1 /* Supporting Files */,
+				9A03972616BD916800445AD1 /* NativeDialogControler.h */,
+				9A03972716BD916800445AD1 /* NativeDialogControler.m */,
+			);
+			path = NativeDialogs;
+			sourceTree = "<group>";
+		};
+		9A03971716BD905700445AD1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9A03972416BD908000445AD1 /* FlashRuntimeExtensions.h */,
+				9A03971816BD905700445AD1 /* NativeDialogs-Prefix.pch */,
+				9A03971C16BD905700445AD1 /* platformoptions.xml */,
+				9A03971D16BD905700445AD1 /* aneBuildAfter.sh */,
+				9A03971E16BD905700445AD1 /* aneBuildBefore.sh */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9A2775A416BDD14400298B22 /* SBTableAlert */ = {
+			isa = PBXGroup;
+			children = (
+				9A2775A016BDD13E00298B22 /* SBTableAlert.h */,
+				9A2775A116BDD13E00298B22 /* SBTableAlert.m */,
+			);
+			name = SBTableAlert;
+			sourceTree = "<group>";
+		};
+		9A2775AD16BDE5E200298B22 /* nativealert */ = {
+			isa = PBXGroup;
+			children = (
+				9A2775B616BDE5E200298B22 /* AppDelegate.h */,
+				9A2775B716BDE5E200298B22 /* AppDelegate.m */,
+				9A2775AE16BDE5E200298B22 /* Supporting Files */,
+			);
+			path = nativealert;
+			sourceTree = "<group>";
+		};
+		9A2775AE16BDE5E200298B22 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9A2775AF16BDE5E200298B22 /* nativealert-Info.plist */,
+				9A2775B016BDE5E200298B22 /* InfoPlist.strings */,
+				9A2775B316BDE5E200298B22 /* main.m */,
+				9A2775B516BDE5E200298B22 /* nativealert-Prefix.pch */,
+				9A2775B916BDE5E200298B22 /* Default.png */,
+				9A2775BB16BDE5E200298B22 /* Default@2x.png */,
+				9A2775BD16BDE5E200298B22 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9A2B59CE16C1CF1000B65047 /* SlideNotification */ = {
+			isa = PBXGroup;
+			children = (
+				9A2B59CA16C1CF0B00B65047 /* SlideNotification.h */,
+				9A2B59CB16C1CF0B00B65047 /* SlideNotification.m */,
+			);
+			name = SlideNotification;
+			sourceTree = "<group>";
+		};
+		9AA7AE3616C0262800CB48D4 /* SVPRogressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */,
+				9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */,
+			);
+			name = SVPRogressHUD;
+			sourceTree = "<group>";
+		};
+		9ADF1B0A16BF0F2200DA9AAA /* nativealert */ = {
+			isa = PBXGroup;
+			children = (
+				9ADF1B1316BF0F2200DA9AAA /* AppDelegate.h */,
+				9ADF1B1416BF0F2200DA9AAA /* AppDelegate.m */,
+				9ADF1B0B16BF0F2200DA9AAA /* Supporting Files */,
+			);
+			path = nativealert;
+			sourceTree = "<group>";
+		};
+		9ADF1B0B16BF0F2200DA9AAA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9ADF1B0C16BF0F2200DA9AAA /* nativealert-Info.plist */,
+				9ADF1B0D16BF0F2200DA9AAA /* InfoPlist.strings */,
+				9ADF1B1016BF0F2200DA9AAA /* main.m */,
+				9ADF1B1216BF0F2200DA9AAA /* nativealert-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9AEF3E6716BFE9770003036B /* AlertTextView */ = {
+			isa = PBXGroup;
+			children = (
+				9AEF3E6216BFE96A0003036B /* AlertTextView.h */,
+				9AEF3E6316BFE96A0003036B /* AlertTextView.m */,
+			);
+			name = AlertTextView;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		9A0396F216BD905700445AD1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A03972516BD908000445AD1 /* FlashRuntimeExtensions.h in Headers */,
+				9A03972816BD916800445AD1 /* NativeDialogControler.h in Headers */,
+				9A2775A216BDD13E00298B22 /* SBTableAlert.h in Headers */,
+				9AEF3E6416BFE96A0003036B /* AlertTextView.h in Headers */,
+				9AA7AE3416C0262300CB48D4 /* SVProgressHUD.h in Headers */,
+				9A2B59CC16C1CF0B00B65047 /* SlideNotification.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		9A0396F416BD905700445AD1 /* NativeDialogs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A03972116BD905700445AD1 /* Build configuration list for PBXNativeTarget "NativeDialogs" */;
+			buildPhases = (
+				9A0396EF16BD905700445AD1 /* ShellScript */,
+				9A0396F016BD905700445AD1 /* Sources */,
+				9A0396F116BD905700445AD1 /* Frameworks */,
+				9A0396F216BD905700445AD1 /* Headers */,
+				9A0396F316BD905700445AD1 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NativeDialogs;
+			productName = NativeDialogs;
+			productReference = 9A0396F516BD905700445AD1 /* libNativeDialogs.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		9ADF1B0516BF0F2200DA9AAA /* nativealert */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9ADF1B1816BF0F2200DA9AAA /* Build configuration list for PBXNativeTarget "nativealert" */;
+			buildPhases = (
+				9ADF1B1916BF0F2E00DA9AAA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = nativealert;
+			productName = nativealert;
+			productReference = 9ADF1B0616BF0F2200DA9AAA /* NativeDialogsTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9A0396EB16BD905700445AD1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+			};
+			buildConfigurationList = 9A0396EE16BD905700445AD1 /* Build configuration list for PBXProject "NativeDialogs" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9A0396EA16BD905700445AD1;
+			productRefGroup = 9A0396F616BD905700445AD1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9A0396F416BD905700445AD1 /* NativeDialogs */,
+				9ADF1B0516BF0F2200DA9AAA /* nativealert */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9A0396EF16BD905700445AD1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "\n\t\t\t\t\t\tchmod 755 \"$PROJECT_DIR/$PROJECT_NAME/aneBuildBefore.sh\"\n\t\t\t\t\t\t\"$PROJECT_DIR/$PROJECT_NAME/aneBuildBefore.sh\"\n\t\t\t\t\t";
+		};
+		9A0396F316BD905700445AD1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "\n\t\t\t\t\t\tchmod 755 \"$PROJECT_DIR/$PROJECT_NAME/aneBuildAfter.sh\"\n\t\t\t\t\t\t\"$PROJECT_DIR/$PROJECT_NAME/aneBuildAfter.sh\"\n\t\t\t\t\t";
+		};
+		9ADF1B1916BF0F2E00DA9AAA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# change to the proper directory\npushd ~/Documents/git/NativeDialogs/TestApp/bin-debug\n\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\n\n# package th e IPA - skip if already built\n\"$AIR_SDK_PATH\"/bin/adt -package -target ipa-debug-interpreter-simulator -provisioning-profile /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/nativealertdeveloper.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/iphone_dev.p12 \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.0.sdk/ -C ../src/ icons -C ../src/ images \n\nelse\n\n# package the IPA - skip if already built\n\"$AIR_SDK_PATH\"/bin/adt -package -target ipa-debug-interpreter -provisioning-profile /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/nativealertdeveloper.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/iphone_dev.p12  \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/ -C ../src/ icons -C ../src/ images \n\n\nfi\n\necho \"****** App packed *******\"\n#extract the IPA\ncp \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\".ipa.zip\n\nunzip -o \"$PRODUCT_NAME\".ipa.zip\nrm \"$PRODUCT_NAME\".ipa.zip\n\n# copy the contents of the IPA to the location xcode wants\ncp -r Payload/\"$PRODUCT_NAME\".app/ * \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\ncp -r \"$PRODUCT_NAME\".app.dSYM \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\n\n# remove the following files and folders to avoid signature errors when installing the app\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature/CodeResources\"\nrmdir \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/CodeResources\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/PkgInfo\"\n\n# restore working directory\n#popd";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9A0396F016BD905700445AD1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A03971B16BD905700445AD1 /* NativeDialogs.m in Sources */,
+				9A03972916BD916800445AD1 /* NativeDialogControler.m in Sources */,
+				9A2775A316BDD13E00298B22 /* SBTableAlert.m in Sources */,
+				9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */,
+				9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */,
+				9A2B59CD16C1CF0B00B65047 /* SlideNotification.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		9A2775B016BDE5E200298B22 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9A2775B116BDE5E200298B22 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		9ADF1B0D16BF0F2200DA9AAA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9ADF1B0E16BF0F2200DA9AAA /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9A03971F16BD905700445AD1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.6/include/";
+			};
+			name = Debug;
+		};
+		9A03972016BD905700445AD1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.6/include/";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9A03972216BD905700445AD1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/NativeDialogs.dst;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NativeDialogs/NativeDialogs-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 armv7s i386";
+			};
+			name = Debug;
+		};
+		9A03972316BD905700445AD1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/NativeDialogs.dst;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NativeDialogs/NativeDialogs-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 armv7s i386";
+			};
+			name = Release;
+		};
+		9ADF1B1616BF0F2200DA9AAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "nativealert/nativealert-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "nativealert/nativealert-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = NativeDialogsTest;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		9ADF1B1716BF0F2200DA9AAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "nativealert/nativealert-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "nativealert/nativealert-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PRODUCT_NAME = NativeDialogsTest;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9A0396EE16BD905700445AD1 /* Build configuration list for PBXProject "NativeDialogs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A03971F16BD905700445AD1 /* Debug */,
+				9A03972016BD905700445AD1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A03972116BD905700445AD1 /* Build configuration list for PBXNativeTarget "NativeDialogs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A03972216BD905700445AD1 /* Debug */,
+				9A03972316BD905700445AD1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9ADF1B1816BF0F2200DA9AAA /* Build configuration list for PBXNativeTarget "nativealert" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9ADF1B1616BF0F2200DA9AAA /* Debug */,
+				9ADF1B1716BF0F2200DA9AAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9A0396EB16BD905700445AD1 /* Project object */;
+}

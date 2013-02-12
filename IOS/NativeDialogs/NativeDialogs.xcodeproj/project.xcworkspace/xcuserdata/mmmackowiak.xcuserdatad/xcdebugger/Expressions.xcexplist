@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[ListItem setSelected:]:NativeDialogControler.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[NativeDialogControler showTextInputDialog:message:textInputs:buttons:]:NativeDialogControler.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "title">
+            </PersistentString>
+            <PersistentString
+               value = "message">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[NativeDialogControler showSelectDialogWithTitle:message:options:checked:buttons:]:NativeDialogControler.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[NativeDialogControler tableAlert:numberOfRowsInSection:]:NativeDialogControler.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "tableItemList.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[NativeDialogControler tableAlert:cellForRowAtIndexPath:]:NativeDialogControler.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "cell">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
