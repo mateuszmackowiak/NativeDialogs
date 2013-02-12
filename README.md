@@ -16,6 +16,7 @@ If You like what I make pleas donate:
 
 	Displays a native date-picker dialog.
 *Usage*
+
 		protected function showDatePicker():void
 		{
 			var d:NativeDatePickerDialog = new NativeDatePickerDialog();
