@@ -14,7 +14,8 @@ If You like what I make pleas donate:
 
 ## NativeDatePickerDialog (IOS/Andorid) ##
 
-  Displays a native date-picker dialog.
+	Displays a native date-picker dialog.
+  
 *Usage*
 
 		protected function showDatePicker():void
@@ -292,9 +293,7 @@ To display message specyfie for the first NativeTextField editable == false
 
 ![](https://github.com/mateuszmackowiak/NativeAlert/raw/master/images/AndoridToast.png)
 
-For IOS uses : [SlideNotification](https://github.com/mateuszmackowiak/SlideNotification)
-
-![](https://github.com/mateuszmackowiak/NativeAlert/raw/master/images/IOSToast.png)
+For IOS uses : [WToast](https://github.com/Narmo/WToast)
 
 *Usage:*
 
