@@ -51,7 +51,7 @@
                    buttons: (FREObject*)buttons;
 
 -(void)showProgressPopup: (NSString *)title
-                   style: (NSInteger)style
+                   style: (int32_t)style
                  message: (NSString*)message
                 progress: (NSNumber*)progress
             showActivity:(Boolean)showActivity

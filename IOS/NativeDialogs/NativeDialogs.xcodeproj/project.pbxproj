@@ -26,15 +26,36 @@
 		9A03972516BD908000445AD1 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A03972416BD908000445AD1 /* FlashRuntimeExtensions.h */; };
 		9A03972816BD916800445AD1 /* NativeDialogControler.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A03972616BD916800445AD1 /* NativeDialogControler.h */; };
 		9A03972916BD916800445AD1 /* NativeDialogControler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A03972716BD916800445AD1 /* NativeDialogControler.m */; };
+		9A199BAC16CD9B8F00953C37 /* WToast.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A199BAA16CD9B8F00953C37 /* WToast.h */; };
+		9A199BAD16CD9B8F00953C37 /* WToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A199BAB16CD9B8F00953C37 /* WToast.m */; };
 		9A2775A216BDD13E00298B22 /* SBTableAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2775A016BDD13E00298B22 /* SBTableAlert.h */; };
 		9A2775A316BDD13E00298B22 /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2775A116BDD13E00298B22 /* SBTableAlert.m */; };
-		9A2B59CC16C1CF0B00B65047 /* SlideNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2B59CA16C1CF0B00B65047 /* SlideNotification.h */; };
-		9A2B59CD16C1CF0B00B65047 /* SlideNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2B59CB16C1CF0B00B65047 /* SlideNotification.m */; };
 		9AA7AE3416C0262300CB48D4 /* SVProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */; };
 		9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */; };
+		9AD71CBA16CBC2860086A206 /* error.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB616CBC2800086A206 /* error.png */; };
+		9AD71CBB16CBC2860086A206 /* error@2x.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB716CBC2800086A206 /* error@2x.png */; };
+		9AD71CBC16CBC2860086A206 /* success.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB816CBC2800086A206 /* success.png */; };
+		9AD71CBD16CBC2860086A206 /* success@2x.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB916CBC2800086A206 /* success@2x.png */; };
 		9AEF3E6416BFE96A0003036B /* AlertTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AEF3E6216BFE96A0003036B /* AlertTextView.h */; };
 		9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AEF3E6316BFE96A0003036B /* AlertTextView.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9AD71CB016CBC1B90086A206 /* Copy Aditional Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				9AD71CBA16CBC2860086A206 /* error.png in Copy Aditional Files */,
+				9AD71CBB16CBC2860086A206 /* error@2x.png in Copy Aditional Files */,
+				9AD71CBC16CBC2860086A206 /* success.png in Copy Aditional Files */,
+				9AD71CBD16CBC2860086A206 /* success@2x.png in Copy Aditional Files */,
+			);
+			name = "Copy Aditional Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9A0396F516BD905700445AD1 /* libNativeDialogs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNativeDialogs.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,21 +82,16 @@
 		9A03972416BD908000445AD1 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
 		9A03972616BD916800445AD1 /* NativeDialogControler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeDialogControler.h; sourceTree = SOURCE_ROOT; };
 		9A03972716BD916800445AD1 /* NativeDialogControler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeDialogControler.m; sourceTree = SOURCE_ROOT; };
+		9A199BAA16CD9B8F00953C37 /* WToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WToast.h; path = Toast/WToast.h; sourceTree = SOURCE_ROOT; };
+		9A199BAB16CD9B8F00953C37 /* WToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WToast.m; path = Toast/WToast.m; sourceTree = SOURCE_ROOT; };
 		9A2775A016BDD13E00298B22 /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBTableAlert.h; sourceTree = "<group>"; };
 		9A2775A116BDD13E00298B22 /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBTableAlert.m; sourceTree = "<group>"; };
-		9A2775AF16BDE5E200298B22 /* nativealert-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nativealert-Info.plist"; sourceTree = "<group>"; };
-		9A2775B116BDE5E200298B22 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9A2775B316BDE5E200298B22 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		9A2775B516BDE5E200298B22 /* nativealert-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nativealert-Prefix.pch"; sourceTree = "<group>"; };
-		9A2775B616BDE5E200298B22 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		9A2775B716BDE5E200298B22 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9A2775B916BDE5E200298B22 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		9A2775BB16BDE5E200298B22 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		9A2775BD16BDE5E200298B22 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		9A2B59CA16C1CF0B00B65047 /* SlideNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideNotification.h; path = SlideNotification/SlideNotification.h; sourceTree = SOURCE_ROOT; };
-		9A2B59CB16C1CF0B00B65047 /* SlideNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlideNotification.m; path = SlideNotification/SlideNotification.m; sourceTree = SOURCE_ROOT; };
 		9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = SVProgressHUD/SVProgressHUD.h; sourceTree = SOURCE_ROOT; };
 		9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD.m; sourceTree = SOURCE_ROOT; };
+		9AD71CB616CBC2800086A206 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = error.png; path = SVProgressHUD/error.png; sourceTree = SOURCE_ROOT; };
+		9AD71CB716CBC2800086A206 /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "error@2x.png"; path = "SVProgressHUD/error@2x.png"; sourceTree = SOURCE_ROOT; };
+		9AD71CB816CBC2800086A206 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = success.png; path = SVProgressHUD/success.png; sourceTree = SOURCE_ROOT; };
+		9AD71CB916CBC2800086A206 /* success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "success@2x.png"; path = "SVProgressHUD/success@2x.png"; sourceTree = SOURCE_ROOT; };
 		9ADF1B0616BF0F2200DA9AAA /* NativeDialogsTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NativeDialogsTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ADF1B0C16BF0F2200DA9AAA /* nativealert-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nativealert-Info.plist"; sourceTree = "<group>"; };
 		9ADF1B0E16BF0F2200DA9AAA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -117,7 +133,6 @@
 			isa = PBXGroup;
 			children = (
 				9A03971616BD905700445AD1 /* NativeDialogs */,
-				9A2775AD16BDE5E200298B22 /* nativealert */,
 				9ADF1B0A16BF0F2200DA9AAA /* nativealert */,
 				9A0396F716BD905700445AD1 /* Frameworks */,
 				9A0396F616BD905700445AD1 /* Products */,
@@ -158,7 +173,7 @@
 		9A03971616BD905700445AD1 /* NativeDialogs */ = {
 			isa = PBXGroup;
 			children = (
-				9A2B59CE16C1CF1000B65047 /* SlideNotification */,
+				9A199BAE16CD9B9300953C37 /* Toast */,
 				9AA7AE3616C0262800CB48D4 /* SVPRogressHUD */,
 				9AEF3E6716BFE9770003036B /* AlertTextView */,
 				9A2775A416BDD14400298B22 /* SBTableAlert */,
@@ -182,6 +197,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		9A199BAE16CD9B9300953C37 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				9A199BAA16CD9B8F00953C37 /* WToast.h */,
+				9A199BAB16CD9B8F00953C37 /* WToast.m */,
+			);
+			name = Toast;
+			sourceTree = "<group>";
+		};
 		9A2775A416BDD14400298B22 /* SBTableAlert */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,42 +215,13 @@
 			name = SBTableAlert;
 			sourceTree = "<group>";
 		};
-		9A2775AD16BDE5E200298B22 /* nativealert */ = {
-			isa = PBXGroup;
-			children = (
-				9A2775B616BDE5E200298B22 /* AppDelegate.h */,
-				9A2775B716BDE5E200298B22 /* AppDelegate.m */,
-				9A2775AE16BDE5E200298B22 /* Supporting Files */,
-			);
-			path = nativealert;
-			sourceTree = "<group>";
-		};
-		9A2775AE16BDE5E200298B22 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				9A2775AF16BDE5E200298B22 /* nativealert-Info.plist */,
-				9A2775B016BDE5E200298B22 /* InfoPlist.strings */,
-				9A2775B316BDE5E200298B22 /* main.m */,
-				9A2775B516BDE5E200298B22 /* nativealert-Prefix.pch */,
-				9A2775B916BDE5E200298B22 /* Default.png */,
-				9A2775BB16BDE5E200298B22 /* Default@2x.png */,
-				9A2775BD16BDE5E200298B22 /* Default-568h@2x.png */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		9A2B59CE16C1CF1000B65047 /* SlideNotification */ = {
-			isa = PBXGroup;
-			children = (
-				9A2B59CA16C1CF0B00B65047 /* SlideNotification.h */,
-				9A2B59CB16C1CF0B00B65047 /* SlideNotification.m */,
-			);
-			name = SlideNotification;
-			sourceTree = "<group>";
-		};
 		9AA7AE3616C0262800CB48D4 /* SVPRogressHUD */ = {
 			isa = PBXGroup;
 			children = (
+				9AD71CB616CBC2800086A206 /* error.png */,
+				9AD71CB716CBC2800086A206 /* error@2x.png */,
+				9AD71CB816CBC2800086A206 /* success.png */,
+				9AD71CB916CBC2800086A206 /* success@2x.png */,
 				9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */,
 				9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */,
 			);
@@ -275,7 +270,7 @@
 				9A2775A216BDD13E00298B22 /* SBTableAlert.h in Headers */,
 				9AEF3E6416BFE96A0003036B /* AlertTextView.h in Headers */,
 				9AA7AE3416C0262300CB48D4 /* SVProgressHUD.h in Headers */,
-				9A2B59CC16C1CF0B00B65047 /* SlideNotification.h in Headers */,
+				9A199BAC16CD9B8F00953C37 /* WToast.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +285,7 @@
 				9A0396F016BD905700445AD1 /* Sources */,
 				9A0396F116BD905700445AD1 /* Frameworks */,
 				9A0396F216BD905700445AD1 /* Headers */,
+				9AD71CB016CBC1B90086A206 /* Copy Aditional Files */,
 				9A0396F316BD905700445AD1 /* ShellScript */,
 			);
 			buildRules = (
@@ -394,21 +390,13 @@
 				9A2775A316BDD13E00298B22 /* SBTableAlert.m in Sources */,
 				9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */,
 				9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */,
-				9A2B59CD16C1CF0B00B65047 /* SlideNotification.m in Sources */,
+				9A199BAD16CD9B8F00953C37 /* WToast.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9A2775B016BDE5E200298B22 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9A2775B116BDE5E200298B22 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		9ADF1B0D16BF0F2200DA9AAA /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

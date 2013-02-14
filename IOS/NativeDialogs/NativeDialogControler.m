@@ -128,13 +128,11 @@
             datePicker.datePickerMode = UIDatePickerModeTime;
         }else if(strcmp((const char *)style, (const char *)"date")==0)
         {
-             datePicker.datePickerMode = UIDatePickerModeTime;
+             datePicker.datePickerMode = UIDatePickerModeDate;
         }else if(strcmp((const char *)style, (const char *)"dateAndTime")==0)
         {
             datePicker.datePickerMode = UIDatePickerModeDateAndTime;
         }
-        
-        UIView* rootView = [[[[UIApplication sharedApplication] keyWindow]rootViewController]view];
         
 
         [datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
@@ -215,13 +213,14 @@
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
             popoverController.delegate=self;
             
-            
+            UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
+                             
             [popoverController setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
-            CGFloat viewWidth = rootView.frame.size.width;
-            CGFloat viewHeight = rootView.frame.size.height;
+            CGFloat viewWidth = wind.frame.size.width;
+            CGFloat viewHeight = wind.frame.size.height;
             CGRect rect = CGRectMake(viewWidth/2, viewHeight/2, 1, 1);
             
-            [popoverController presentPopoverFromRect:rect inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:0 animated:YES];
+            [popoverController presentPopoverFromRect:rect inView:wind permittedArrowDirections:0 animated:YES];
             
             popover = popoverController;
             
@@ -243,7 +242,9 @@
             [aac addSubview:pickerDateToolbar];
             [aac addSubview:datePicker];
             
-            [aac showInView:rootView];
+            UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
+            
+            [aac showInView:wind];
             
             [aac setBounds:CGRectMake(0,0,320, 464)];
             
@@ -336,7 +337,7 @@
 
 #pragma mark - Progress Dialog
 -(void)showProgressPopup: (NSString *)title
-                   style: (NSInteger)style
+                   style: (int32_t)style
                  message: (NSString*)message
                 progress: (NSNumber*)progress
             showActivity:(Boolean)showActivity

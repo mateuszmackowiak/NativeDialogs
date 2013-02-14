@@ -8,7 +8,7 @@
 #import "FlashRuntimeExtensions.h"
 #import "NativeDialogControler.h"
 #import "SVProgressHUD.h"
-#import "SlideNotification.h"
+#import "WToast.h"
 
 #define MYDEBUG
 
@@ -19,23 +19,34 @@ DEFINE_ANE_FUNCTION(showAlertWithTitleAndMessage){
     NativeDialogControler *nativeDialogController = functionData;
     //Temporary values to hold our actionscript code.
 
-    const uint8_t *title;
+
     uint32_t stringLength;
-    const uint8_t *message;
+    const uint8_t *title = nil;
+    const uint8_t *message = nil;
     const uint8_t *closeLabel;
-    const uint8_t *otherLabels;
+    const uint8_t *otherLabels = nil;
+    
+    NSString *titleString = nil;
+    NSString *messageString = nil;
+    NSString *closeLabelString = nil;
+    NSString *otherLabelsString = nil;
     
     //Turn our actionscrpt code into native code.
-    FREGetObjectAsUTF8(argv[0], &stringLength, &title);
-    FREGetObjectAsUTF8(argv[1], &stringLength, &message);
-    FREGetObjectAsUTF8(argv[2], &stringLength, &closeLabel);
-    FREGetObjectAsUTF8(argv[3], &stringLength, &otherLabels);
+    if(argv[0] && FREGetObjectAsUTF8(argv[0], &stringLength, &title)==FRE_OK){
+        titleString = [NSString stringWithUTF8String:(char*)title];
+    }
+    if(argv[1] && FREGetObjectAsUTF8(argv[1], &stringLength, &message)==FRE_OK){
+        messageString = [NSString stringWithUTF8String:(char*)message];
+    }
+    if(argv[2] && FREGetObjectAsUTF8(argv[2], &stringLength, &closeLabel)==FRE_OK){
+        closeLabelString = [NSString stringWithUTF8String:(char*)closeLabel];
+    }
+    if(argv[3] && FREGetObjectAsUTF8(argv[3], &stringLength, &otherLabels)==FRE_OK){
+        otherLabelsString = [NSString stringWithUTF8String:(char*)otherLabels];
+    }
     
     //Create our Strings for our Alert.
-    NSString *titleString = [NSString stringWithUTF8String:(char*)title];
-    NSString *messageString = [NSString stringWithUTF8String:(char*)message];
-    NSString *closeLabelString = [NSString stringWithUTF8String:(char*)closeLabel];
-    NSString *otherLabelsString = [NSString stringWithUTF8String:(char*)otherLabels];
+    
     
     
     [nativeDialogController showAlertWithTitle:titleString
@@ -113,10 +124,13 @@ DEFINE_ANE_FUNCTION(updateMessage){
     uint32_t messageLength;
     const uint8_t *message;
     
+    NSString*messageString = nil;
     //Turn our actionscrpt code into native code.
-    FREGetObjectAsUTF8(argv[0], &messageLength, &message);
+    if(FREGetObjectAsUTF8(argv[0], &messageLength, &message)==FRE_OK){
+        messageString = [NSString stringWithUTF8String:(char*)message];
+    }
     
-    [nativeDialogController updateMessage:[NSString stringWithUTF8String:(char*)message]];
+    [nativeDialogController updateMessage:messageString];
     return nil;
 }
 
@@ -129,10 +143,13 @@ DEFINE_ANE_FUNCTION(updateTitle){
     uint32_t titleLength;
     const uint8_t *title;
     
+    NSString*titleString = nil;
     //Turn our actionscrpt code into native code.
-    FREGetObjectAsUTF8(argv[0], &titleLength, &title);
+    if(argv[0] && FREGetObjectAsUTF8(argv[0], &titleLength, &title)==FRE_OK){
+        titleString = [NSString stringWithUTF8String:(char*)title];
+    }
+    [nativeDialogController updateTitle:titleString];
     
-    [nativeDialogController updateTitle:[NSString stringWithUTF8String:(char*)title]];
     return nil;
 }
 
@@ -146,8 +163,9 @@ DEFINE_ANE_FUNCTION(shake){
 
 DEFINE_ANE_FUNCTION(dismiss){
     NativeDialogControler *nativeDialogController = functionData;
-    int32_t index;
-    FREGetObjectAsInt32(argv[0], &index);
+    int32_t index = 0;
+    if(argv[0])
+        FREGetObjectAsInt32(argv[0], &index);
     
     [nativeDialogController dismissWithButtonIndex:index];
     [SVProgressHUD dismiss];
@@ -162,40 +180,44 @@ DEFINE_ANE_FUNCTION(showProgressPopup){
     
     const uint8_t *title = nil;
     const uint8_t *message = nil;
-    double progressParam;
+    double progressParam = 0;
     
-    uint32_t showActivityValue, cancleble;
-    int32_t style,theme;
+    uint32_t showActivityValue = 0, cancleble = 0;
+    int32_t style = 0 ,theme = 0;
+    
+    
+    NSString *titleString = nil;
+    NSString *messageString = nil;
+    
+    
     //Turn our actionscrpt code into native code.
+    if(argv[3] && FREGetObjectAsUTF8(argv[3], &stringLength, &title)==FRE_OK){
+        if(title)
+            titleString = [NSString stringWithUTF8String:(char*)title];
+    }
+    
+    if(argv[4] && FREGetObjectAsUTF8(argv[4], &stringLength, &message)==FRE_OK){
+        if(message)
+            messageString =[NSString stringWithUTF8String:(char*)message];
+    }
+    
     FREGetObjectAsDouble(argv[0], &progressParam);
     ///Secondary progress ignored
     FREGetObjectAsInt32(argv[2], &style);
-    if(argv[3])
-        FREGetObjectAsUTF8(argv[3], &stringLength, &title);
-    if(argv[4])
-        FREGetObjectAsUTF8(argv[4], &stringLength, &message);
     FREGetObjectAsBool(argv[5], &cancleble);
     FREGetObjectAsBool(argv[6], &showActivityValue);
     FREGetObjectAsInt32(argv[7], &theme);
     
-    //Create our Strings for our Alert.
-    NSInteger styleValue=(NSInteger)style;
-    NSString *titleString = nil;
-    if(title)
-        titleString = [NSString stringWithUTF8String:(char*)title];
-    NSString *messageString = nil;
-    if(message)
-        messageString =[NSString stringWithUTF8String:(char*)message];
     
-    NSNumber *progressValue =[NSNumber numberWithDouble:progressParam];
+    
     
     if(theme == 2){
-        if(messageString && ![messageString isEqualToString:@""])
+        if(messageString && ![messageString isEqualToString:@""]){
             if(cancleble)
                 [SVProgressHUD showWithStatus:messageString];
             else
                 [SVProgressHUD showWithStatus:messageString maskType:SVProgressHUDMaskTypeBlack];
-            else {
+        }else {
                 if (cancleble)
                     [SVProgressHUD show];
                 else
@@ -203,24 +225,24 @@ DEFINE_ANE_FUNCTION(showProgressPopup){
             }
     
     }else if(theme == 3){
-        if(messageString && ![messageString isEqualToString:@""])
+        if(messageString && ![messageString isEqualToString:@""]){
             if(cancleble)
                 [SVProgressHUD showWithStatus:messageString];
             else
                 [SVProgressHUD showWithStatus:messageString maskType:SVProgressHUDMaskTypeClear];
-            else {
+        } else {
                 if (cancleble)
                     [SVProgressHUD show];
                 else
                     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
             }
     }else if(theme == 4){
-        if(messageString && ![messageString isEqualToString:@""])
+        if(messageString && ![messageString isEqualToString:@""]){
             if(cancleble)
                 [SVProgressHUD showWithStatus:messageString];
             else
                 [SVProgressHUD showWithStatus:messageString maskType:SVProgressHUDMaskTypeGradient];
-            else {
+        }else {
                 if (cancleble)
                     [SVProgressHUD show];
                 else
@@ -228,8 +250,10 @@ DEFINE_ANE_FUNCTION(showProgressPopup){
             }
     }else{
 
+        NSNumber *progressValue =[NSNumber numberWithDouble:progressParam];
+        
         [nativeDialogController showProgressPopup:titleString
-                           style:styleValue
+                           style:style
                          message:messageString
                         progress:progressValue
                     showActivity:showActivityValue
@@ -256,20 +280,22 @@ DEFINE_ANE_FUNCTION(showDatePicker){
     const uint8_t *message = nil;
     const uint8_t *style = nil;
     
-    FREGetObjectAsUTF8(argv[0], &stringLength, &title);
-    FREGetObjectAsUTF8(argv[1], &stringLength, &message);
+    NSString *titleString = nil;
+    NSString *messageString = nil;
+    
+    if(FREGetObjectAsUTF8(argv[0], &stringLength, &title)==FRE_OK){
+        if(title)
+            titleString = [NSString stringWithUTF8String:(char*)title];
+    }
+    if(FREGetObjectAsUTF8(argv[1], &stringLength, &message)==FRE_OK){
+        if(message)
+            messageString =[NSString stringWithUTF8String:(char*)message];
+    }
     
     FREGetObjectAsUTF8(argv[4], &stringLength, &style);
     
     double date;
     FREGetObjectAsDouble(argv[2], &date);
-    
-    NSString *titleString = nil;
-    if(title)
-        titleString = [NSString stringWithUTF8String:(char*)title];
-    NSString *messageString = nil;
-    if(message)
-        messageString =[NSString stringWithUTF8String:(char*)message];
     
     
     [nativeDialogController showDatePickerWithTitle:titleString andMessage:messageString andDate:date andStyle:style andButtons:argv[3]];
@@ -281,7 +307,7 @@ DEFINE_ANE_FUNCTION(showDatePicker){
 DEFINE_ANE_FUNCTION(setDate){
     NativeDialogControler *nativeDialogController = functionData;
     
-    double timeStamp;
+    double timeStamp = 0;
     FREGetObjectAsDouble(argv[0], &timeStamp);
 
     [nativeDialogController updateDateWithTimestamp:timeStamp];
@@ -291,7 +317,7 @@ DEFINE_ANE_FUNCTION(setDate){
 DEFINE_ANE_FUNCTION(setCancelable){
     NativeDialogControler *nativeDialogController = functionData;
     
-    uint32_t cancelable;
+    uint32_t cancelable = 0;
     FREGetObjectAsBool(argv[0], &cancelable);
     
     [nativeDialogController setCancelable:cancelable];
@@ -307,27 +333,15 @@ FREObject showToast(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
         return nil;
     
     uint32_t messageLength;
-    const uint8_t *message;
+    const uint8_t *message = nil;
     double dur;
     FREGetObjectAsDouble(argv[1], &dur);
-    
-    FREGetObjectAsUTF8(argv[0], &messageLength, &message);
-    
-    NSString* messageString = [NSString stringWithUTF8String:(char*)message];
-    
-    float duration = [SlideNotification SHORT];
-    if(dur==1)
-        duration = [SlideNotification LONG];
-    
-    #ifdef MYDEBUG
-        NSLog(@" durration %f",dur);
-    #endif
-    
-    if(messageString && ![messageString isEqualToString:@""]){
 
-        [SlideNotification showMessage2:messageString duration:duration];
+    if(FREGetObjectAsUTF8(argv[0], &messageLength, &message)==FRE_OK){
+        if(message){
+            [WToast showWithText:[NSString stringWithUTF8String:(char*)message]];
+        }
     }
-    
     
     return nil;
 }

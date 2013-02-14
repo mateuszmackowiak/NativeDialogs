@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "NativeDialogs/NativeDialogs.m"
-         timestampString = "382316329.693302"
+         timestampString = "382570170.538071"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "427"
-         endingLineNumber = "427"
+         startingLineNumber = "459"
+         endingLineNumber = "459"
          landmarkName = "NativeDialogsContextInitializer()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -28,6 +28,19 @@
          endingLineNumber = "29"
          landmarkName = "-init"
          landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "NativeDialogs/NativeDialogs.m"
+         timestampString = "382570170.538071"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "278"
+         endingLineNumber = "278"
+         landmarkName = "DEFINE_ANE_FUNCTION()"
+         landmarkType = "7">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

@@ -17,6 +17,7 @@
 			import pl.mateuszmackowiak.nativeANE.dialogs.support.iNativeDialog;
 			import pl.mateuszmackowiak.nativeANE.events.NativeDialogEvent;
 			import pl.mateuszmackowiak.nativeANE.events.NativeDialogListEvent;
+			import pl.mateuszmackowiak.nativeANE.notifications.Toast;
 			
 			
 			private var myTimer:Timer = new Timer(100);
@@ -48,6 +49,7 @@
 				showSpinnerProgressDialogButton.addEventListener(MouseEvent.CLICK,onSpinnerProgressDialogButtonClicked);
 				showDatePickerDialog.addEventListener(MouseEvent.CLICK,onDatePickerButtonClicked);
 				themeSelector.addEventListener(IndexChangeEvent.CHANGE,themeSelectorChangeHandler);
+				showToastButton.addEventListener(MouseEvent.CLICK,onToastButtonClicked);
 			}
 			
 			protected function onShowAlertButtonClicked(event:MouseEvent):void
@@ -229,7 +231,7 @@
 					mess("Date set to:"+String(_date));
 				});
 				d.buttons = Vector.<String>(["Cancle","OK"]);
-				d.displayMode =NativeDatePickerDialog.DISPLAY_MODE_DATE_AND_TIME;
+				d.displayMode =NativeDatePickerDialog.DISPLAY_MODE_DATE;
 				d.title = "DatePicker";
 				d.message = "Select date:";
 				d.date = _date;
@@ -266,6 +268,11 @@
 					NativeDatePickerDialog.defaultTheme = itemSelected;
 					NativeProgressDialog.defaultAndroidTheme = itemSelected;
 				}
+			}
+			
+			protected function onToastButtonClicked(event:MouseEvent):void
+			{
+				Toast.show("Message",Toast.LENGTH_SHORT);
 			}
 			
 		]]>
@@ -305,6 +312,8 @@
 			<s:Button label="show datePicker dialog" id="showDatePickerDialog" width="100%" height="40"/>
 			
 			<s:Button label="show text Input Dialog" id="showTextInputButton" width="100%" height="40"/>
+			
+			<s:Button label="show Toast" id="showToastButton" width="100%" height="40"/>
 			
 			<s:HGroup width="100%" includeInLayout="{NativeProgressDialog.isSupported}" verticalAlign="middle">
 				<s:Button width="100%" label="horizontal progress popup" id="showHorizontalProgressDialogButton" height="40"/>

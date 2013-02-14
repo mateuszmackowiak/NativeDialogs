@@ -34,6 +34,18 @@
 - (void)dismissWithStatus:(NSString*)string error:(BOOL)error;
 - (void)dismissWithStatus:(NSString*)string error:(BOOL)error afterDelay:(NSTimeInterval)seconds;
 
+
+
++ (void)showSuccessWithStatus:(NSString *)string duration:(NSTimeInterval)duration;
++ (void)dismissWithSuccess:(NSString *)successString afterDelay:(NSTimeInterval)seconds;
++ (void)dismissWithError:(NSString*)errorString;
++ (void)showErrorWithStatus:(NSString *)string duration:(NSTimeInterval)duration;
++ (void)dismissWithError:(NSString *)errorString afterDelay:(NSTimeInterval)seconds;
+
+
+
++ (SVProgressHUD*)sharedView;
+
 @end
 
 
@@ -281,7 +293,7 @@ static SVProgressHUD *sharedView = nil;
         CGRect keyboardFrame = [[keyboardInfo valueForKey:@"UIKeyboardFrameBeginUserInfoKey"] CGRectValue];
         animationDuration = [[keyboardInfo valueForKey:@"UIKeyboardAnimationDurationUserInfoKey"] doubleValue];
         
-        if(notification.name == @"UIKeyboardWillShowNotification" || notification.name == @"UIKeyboardDidShowNotification") {
+        if([notification.name isEqual: @"UIKeyboardWillShowNotification"] || [notification.name isEqual: @"UIKeyboardDidShowNotification"]) {
             if(UIInterfaceOrientationIsPortrait(orientation))
                 keyboardHeight = keyboardFrame.size.height;
             else
@@ -434,9 +446,9 @@ static SVProgressHUD *sharedView = nil;
     }
 	
 	if(error)
-		self.imageView.image = [UIImage imageNamed:@"SVProgressHUD.bundle/error.png"];
+		self.imageView.image = [UIImage imageNamed:@"error.png"];
 	else
-		self.imageView.image = [UIImage imageNamed:@"SVProgressHUD.bundle/success.png"];
+		self.imageView.image = [UIImage imageNamed:@"success.png"];
 	
 	self.imageView.hidden = NO;
 	
