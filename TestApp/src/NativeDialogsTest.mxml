@@ -117,37 +117,40 @@
 				m.dispose();
 			}
 			
-			
+			private var _t:NativeTextInputDialog= null;
 			protected function onTextInputButtonClicked(event:MouseEvent):void
 			{
-				var t:NativeTextInputDialog = new NativeTextInputDialog();
-				t.addEventListener(NativeDialogEvent.CANCELED,mess);
-				t.addEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
-				
-				var v:Vector.<NativeTextField> = new Vector.<NativeTextField>();
-				
-				var message:NativeTextField = new NativeTextField(null);
-				message.text = "Message";
-				message.editable = false;
-				v.push(message);
-				
-				var serverAdressTextInput:NativeTextField = new NativeTextField("serverAdress");
-				serverAdressTextInput.displayAsPassword = true;
-				serverAdressTextInput.prompText = "prompt";
-				serverAdressTextInput.softKeyboardType = SoftKeyboardType.URL;
-				serverAdressTextInput.addEventListener(Event.CHANGE,function(event:Event):void{
-					var tf:NativeTextField = NativeTextField(event.target);
-					tf.nativeTextInputDialog.shake();
-				});
-				serverAdressTextInput.addEventListener(TextEvent.TEXT_INPUT,function(event:Event):void{
-					var tf:NativeTextField = NativeTextField(event.target);
-					tf.nativeTextInputDialog.hide(0);
-				});
-				v.push(serverAdressTextInput);
-				
-				t.textInputs = v;
-				t.title = "Title";
-				t.show();
+				if(_t==null){
+					var t:NativeTextInputDialog = new NativeTextInputDialog();
+					t.addEventListener(NativeDialogEvent.CANCELED,mess);
+					t.addEventListener(NativeDialogEvent.CLOSED,mess);//onCloseDialog);
+					
+					var v:Vector.<NativeTextField> = new Vector.<NativeTextField>();
+					
+					var message:NativeTextField = new NativeTextField(null);
+					message.text = "Message";
+					message.editable = false;
+					v.push(message);
+					
+					var serverAdressTextInput:NativeTextField = new NativeTextField("serverAdress");
+					serverAdressTextInput.displayAsPassword = true;
+					serverAdressTextInput.prompText = "prompt";
+					serverAdressTextInput.softKeyboardType = SoftKeyboardType.URL;
+					serverAdressTextInput.addEventListener(Event.CHANGE,function(event:Event):void{
+						var tf:NativeTextField = NativeTextField(event.target);
+						tf.nativeTextInputDialog.shake();
+					});
+					serverAdressTextInput.addEventListener(TextEvent.TEXT_INPUT,function(event:Event):void{
+						var tf:NativeTextField = NativeTextField(event.target);
+						tf.nativeTextInputDialog.hide(0);
+					});
+					v.push(serverAdressTextInput);
+					
+					t.textInputs = v;
+					t.title = "Title";
+					_t = t;
+				}
+				_t.show();
 				
 			}
 
@@ -235,7 +238,7 @@
 				d.title = "DatePicker";
 				d.message = "Select date:";
 				d.date = _date;
-				d.show(false);
+				d.show(true);
 			}
 			
 
@@ -293,6 +296,7 @@
 		</s:ArrayList>
 	</fx:Declarations>
 	
+	<s:TextInput width="100%"/>
 	
 	<s:TextArea id="textArea" width="100%" height="100%" editable="false" selectable="false" minHeight="150" maxHeight="250"/>
 	<s:Scroller width="100%" height="100%" >

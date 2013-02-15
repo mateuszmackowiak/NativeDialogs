@@ -28,10 +28,10 @@
 		9A03972916BD916800445AD1 /* NativeDialogControler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A03972716BD916800445AD1 /* NativeDialogControler.m */; };
 		9A199BAC16CD9B8F00953C37 /* WToast.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A199BAA16CD9B8F00953C37 /* WToast.h */; };
 		9A199BAD16CD9B8F00953C37 /* WToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A199BAB16CD9B8F00953C37 /* WToast.m */; };
-		9A2775A216BDD13E00298B22 /* SBTableAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2775A016BDD13E00298B22 /* SBTableAlert.h */; };
-		9A2775A316BDD13E00298B22 /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2775A116BDD13E00298B22 /* SBTableAlert.m */; };
 		9AA7AE3416C0262300CB48D4 /* SVProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */; };
 		9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */; };
+		9AADCCF216CEADE3008BB47C /* SBTableAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AADCCF016CEADE3008BB47C /* SBTableAlert.h */; };
+		9AADCCF316CEADE3008BB47C /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADCCF116CEADE3008BB47C /* SBTableAlert.m */; };
 		9AD71CBA16CBC2860086A206 /* error.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB616CBC2800086A206 /* error.png */; };
 		9AD71CBB16CBC2860086A206 /* error@2x.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB716CBC2800086A206 /* error@2x.png */; };
 		9AD71CBC16CBC2860086A206 /* success.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB816CBC2800086A206 /* success.png */; };
@@ -84,10 +84,10 @@
 		9A03972716BD916800445AD1 /* NativeDialogControler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeDialogControler.m; sourceTree = SOURCE_ROOT; };
 		9A199BAA16CD9B8F00953C37 /* WToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WToast.h; path = Toast/WToast.h; sourceTree = SOURCE_ROOT; };
 		9A199BAB16CD9B8F00953C37 /* WToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WToast.m; path = Toast/WToast.m; sourceTree = SOURCE_ROOT; };
-		9A2775A016BDD13E00298B22 /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBTableAlert.h; sourceTree = "<group>"; };
-		9A2775A116BDD13E00298B22 /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBTableAlert.m; sourceTree = "<group>"; };
 		9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = SVProgressHUD/SVProgressHUD.h; sourceTree = SOURCE_ROOT; };
 		9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD.m; sourceTree = SOURCE_ROOT; };
+		9AADCCF016CEADE3008BB47C /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBTableAlert.h; path = SBTableAlert/SBTableAlert.h; sourceTree = SOURCE_ROOT; };
+		9AADCCF116CEADE3008BB47C /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBTableAlert.m; path = SBTableAlert/SBTableAlert.m; sourceTree = SOURCE_ROOT; };
 		9AD71CB616CBC2800086A206 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = error.png; path = SVProgressHUD/error.png; sourceTree = SOURCE_ROOT; };
 		9AD71CB716CBC2800086A206 /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "error@2x.png"; path = "SVProgressHUD/error@2x.png"; sourceTree = SOURCE_ROOT; };
 		9AD71CB816CBC2800086A206 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = success.png; path = SVProgressHUD/success.png; sourceTree = SOURCE_ROOT; };
@@ -173,10 +173,7 @@
 		9A03971616BD905700445AD1 /* NativeDialogs */ = {
 			isa = PBXGroup;
 			children = (
-				9A199BAE16CD9B9300953C37 /* Toast */,
-				9AA7AE3616C0262800CB48D4 /* SVPRogressHUD */,
-				9AEF3E6716BFE9770003036B /* AlertTextView */,
-				9A2775A416BDD14400298B22 /* SBTableAlert */,
+				9AADCCEB16CE79FE008BB47C /* lib */,
 				9A03971A16BD905700445AD1 /* NativeDialogs.m */,
 				9A03971716BD905700445AD1 /* Supporting Files */,
 				9A03972616BD916800445AD1 /* NativeDialogControler.h */,
@@ -209,8 +206,8 @@
 		9A2775A416BDD14400298B22 /* SBTableAlert */ = {
 			isa = PBXGroup;
 			children = (
-				9A2775A016BDD13E00298B22 /* SBTableAlert.h */,
-				9A2775A116BDD13E00298B22 /* SBTableAlert.m */,
+				9AADCCF016CEADE3008BB47C /* SBTableAlert.h */,
+				9AADCCF116CEADE3008BB47C /* SBTableAlert.m */,
 			);
 			name = SBTableAlert;
 			sourceTree = "<group>";
@@ -226,6 +223,17 @@
 				9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */,
 			);
 			name = SVPRogressHUD;
+			sourceTree = "<group>";
+		};
+		9AADCCEB16CE79FE008BB47C /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				9A199BAE16CD9B9300953C37 /* Toast */,
+				9AA7AE3616C0262800CB48D4 /* SVPRogressHUD */,
+				9AEF3E6716BFE9770003036B /* AlertTextView */,
+				9A2775A416BDD14400298B22 /* SBTableAlert */,
+			);
+			name = lib;
 			sourceTree = "<group>";
 		};
 		9ADF1B0A16BF0F2200DA9AAA /* nativealert */ = {
@@ -267,10 +275,10 @@
 			files = (
 				9A03972516BD908000445AD1 /* FlashRuntimeExtensions.h in Headers */,
 				9A03972816BD916800445AD1 /* NativeDialogControler.h in Headers */,
-				9A2775A216BDD13E00298B22 /* SBTableAlert.h in Headers */,
 				9AEF3E6416BFE96A0003036B /* AlertTextView.h in Headers */,
 				9AA7AE3416C0262300CB48D4 /* SVProgressHUD.h in Headers */,
 				9A199BAC16CD9B8F00953C37 /* WToast.h in Headers */,
+				9AADCCF216CEADE3008BB47C /* SBTableAlert.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,10 +395,10 @@
 			files = (
 				9A03971B16BD905700445AD1 /* NativeDialogs.m in Sources */,
 				9A03972916BD916800445AD1 /* NativeDialogControler.m in Sources */,
-				9A2775A316BDD13E00298B22 /* SBTableAlert.m in Sources */,
 				9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */,
 				9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */,
 				9A199BAD16CD9B8F00953C37 /* WToast.m in Sources */,
+				9AADCCF316CEADE3008BB47C /* SBTableAlert.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

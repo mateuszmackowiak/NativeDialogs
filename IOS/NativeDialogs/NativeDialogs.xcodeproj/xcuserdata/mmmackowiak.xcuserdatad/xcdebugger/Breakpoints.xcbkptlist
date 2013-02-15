@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "NativeDialogs/NativeDialogs.m"
-         timestampString = "382570170.538071"
+         timestampString = "382634596.175491"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "459"
-         endingLineNumber = "459"
+         startingLineNumber = "476"
+         endingLineNumber = "476"
          landmarkName = "NativeDialogsContextInitializer()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -33,14 +33,53 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "NativeDialogs/NativeDialogs.m"
-         timestampString = "382570170.538071"
+         filePath = "NativeDialogControler.m"
+         timestampString = "382635921.584461"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "278"
-         endingLineNumber = "278"
-         landmarkName = "DEFINE_ANE_FUNCTION()"
-         landmarkType = "7">
+         startingLineNumber = "973"
+         endingLineNumber = "973"
+         landmarkName = "-isShowing"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "AlertTextView/AlertTextView.m"
+         timestampString = "382643743.35491"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "33"
+         endingLineNumber = "33"
+         landmarkName = "@implementation AlertTextView"
+         landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "NativeDialogControler.m"
+         timestampString = "382651982.705871"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "272"
+         endingLineNumber = "272"
+         landmarkName = "-didRotate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "NativeDialogControler.m"
+         timestampString = "382651995.221574"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "230"
+         endingLineNumber = "230"
+         landmarkName = "-showDatePickerWithTitle:andMessage:andDate:andStyle:andButtons:"
+         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

@@ -230,6 +230,8 @@
             [popoverContent release];
             popoverContent = nil;
             
+            [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
             
         }else{
             
@@ -266,10 +268,21 @@
     }
 
 }
+- (void) didRotate:(NSNotification *)notification{
+    if([popover isPopoverVisible]){
+        UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
+        
+        [popover setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
+        CGFloat viewWidth = wind.frame.size.width;
+        CGFloat viewHeight = wind.frame.size.height;
+        CGRect rect = CGRectMake(viewWidth/2, viewHeight/2, 1, 1);
+        
+        [popover presentPopoverFromRect:rect inView:wind permittedArrowDirections:0 animated:YES];
+    }
+}
 
 - (BOOL) popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
 {
-
     //FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_pressedOutside", (const uint8_t *)"-1");
     //return NO;
     
@@ -277,6 +290,9 @@
 }
 
 -(void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     
     FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)"-1");
     [popover autorelease];
@@ -296,6 +312,9 @@
     FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_closed", (const uint8_t *)[[NSString stringWithFormat:@"%d",[sender tag]] UTF8String]);
     
     if(popover){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+        [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+        
         [popover dismissPopoverAnimated:YES];
     }else{
         [actionSheet dismissWithClickedButtonIndex:[sender tag] animated:YES];
@@ -400,13 +419,21 @@
     FREDispatchStatusEventAsync(freContext, (uint8_t*)"change", (uint8_t*)[returnString UTF8String]);
     // [returnString release];
 }
--(void)textFieldDidPressReturn:(id)sender{
+
+
+-(void)textFieldDidPressReturn:(id)sender
+{
     int8_t index = 0;
+    [sender resignFirstResponder];
+    
     if(sender != [alert textFieldAtIndex:0])
         index =1;
     NSString* returnString = [NSString stringWithFormat:@"%i",index];
+    
     FREDispatchStatusEventAsync(freContext, (uint8_t*)"returnPressed", (uint8_t*)[returnString UTF8String]);
 }
+
+
 
 UIReturnKeyType getReturnKeyTypeFormChar(const char* type){
     if(strcmp(type, "done")==0){
@@ -962,7 +989,13 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-
+    
+    if([alertView alertViewStyle]!=UIAlertViewStyleDefault && [alertView alertViewStyle]!=AlertTextViewStyleDefault){
+        [[alertView textFieldAtIndex:0] resignFirstResponder];
+        if([alertView alertViewStyle]==UIAlertViewStyleLoginAndPasswordInput || [alertView alertViewStyle]==AlertTextViewStyleLoginAndPasswordInput){
+            [[alertView textFieldAtIndex:1] resignFirstResponder];
+        }
+    }
     //Create our params to pass to the event dispatcher.
     NSString *buttonID = [NSString stringWithFormat:@"%d", buttonIndex];
     FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_closed", (uint8_t*)[buttonID UTF8String]);

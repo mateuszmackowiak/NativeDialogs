@@ -15,7 +15,7 @@
 #pragma mark - dialog methods
 
 
-DEFINE_ANE_FUNCTION(showAlertWithTitleAndMessage){
+FREObject showAlertWithTitleAndMessage (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] ){
     NativeDialogControler *nativeDialogController = functionData;
     //Temporary values to hold our actionscript code.
 
@@ -56,7 +56,8 @@ DEFINE_ANE_FUNCTION(showAlertWithTitleAndMessage){
     return NULL;
 }
 
-DEFINE_ANE_FUNCTION(showListDialog){
+FREObject showListDialog (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
+{
     NativeDialogControler *nativeDialogController = functionData;
     
     //Temporary values to hold our actionscript code.
@@ -81,7 +82,7 @@ DEFINE_ANE_FUNCTION(showListDialog){
 }
 
 
-DEFINE_ANE_FUNCTION(showTextInputDialog)
+FREObject showTextInputDialog(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
 {
     NativeDialogControler *nativeDialogController = functionData;
     //Temporary values to hold our actionscript code.
@@ -107,7 +108,7 @@ DEFINE_ANE_FUNCTION(showTextInputDialog)
     return nil;
 }
 
-DEFINE_ANE_FUNCTION(isShowing){
+FREObject isShowing(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] ){
     NativeDialogControler *nativeDialogController = functionData;
 
     FREObject returnVal;
@@ -118,7 +119,7 @@ DEFINE_ANE_FUNCTION(isShowing){
 
 
 
-DEFINE_ANE_FUNCTION(updateMessage){
+FREObject updateMessage(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] ){
     NativeDialogControler *nativeDialogController = functionData;
     
     uint32_t messageLength;
@@ -137,7 +138,8 @@ DEFINE_ANE_FUNCTION(updateMessage){
 
 
 
-DEFINE_ANE_FUNCTION(updateTitle){
+FREObject updateTitle(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
+{
     NativeDialogControler *nativeDialogController = functionData;
     
     uint32_t titleLength;
@@ -155,13 +157,14 @@ DEFINE_ANE_FUNCTION(updateTitle){
 
 
 
-DEFINE_ANE_FUNCTION(shake){
+FREObject shake(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] ){
      NativeDialogControler *nativeDialogController = functionData;
     [nativeDialogController shake];
     return nil;
 }
 
-DEFINE_ANE_FUNCTION(dismiss){
+FREObject dismiss(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
+{
     NativeDialogControler *nativeDialogController = functionData;
     int32_t index = 0;
     if(argv[0])
@@ -173,7 +176,8 @@ DEFINE_ANE_FUNCTION(dismiss){
 }
 
 
-DEFINE_ANE_FUNCTION(showProgressPopup){
+FREObject showProgressPopup (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
+{
     NativeDialogControler *nativeDialogController = functionData;
     //Temporary values to hold our actionscript code.
     uint32_t stringLength;
@@ -261,7 +265,11 @@ DEFINE_ANE_FUNCTION(showProgressPopup){
     }
     return nil;
 }
-DEFINE_ANE_FUNCTION(updateProgress){
+
+
+
+FREObject updateProgress (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
+{
     NativeDialogControler *nativeDialogController = functionData;
     //Temporary values to hold our actionscript code.
     double perc;
@@ -272,7 +280,11 @@ DEFINE_ANE_FUNCTION(updateProgress){
     return nil;
 }
 
-DEFINE_ANE_FUNCTION(showDatePicker){
+
+
+
+FREObject showDatePicker(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
+{
     NativeDialogControler *nativeDialogController = functionData;
     uint32_t stringLength;
     
@@ -304,7 +316,10 @@ DEFINE_ANE_FUNCTION(showDatePicker){
     [nativeDialogController setCancelable:cancelable];
     return nil;
 }
-DEFINE_ANE_FUNCTION(setDate){
+
+
+FREObject setDate(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
+{
     NativeDialogControler *nativeDialogController = functionData;
     
     double timeStamp = 0;
@@ -314,7 +329,9 @@ DEFINE_ANE_FUNCTION(setDate){
     return nil;
 }
 
-DEFINE_ANE_FUNCTION(setCancelable){
+
+
+FREObject setCancelable(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] ){
     NativeDialogControler *nativeDialogController = functionData;
     
     uint32_t cancelable = 0;
