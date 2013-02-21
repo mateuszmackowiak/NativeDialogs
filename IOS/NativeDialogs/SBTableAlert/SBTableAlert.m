@@ -424,9 +424,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (_type == SBTableAlertTypeSingleSelect)
+	/*if (_type == SBTableAlertTypeSingleSelect)
 		[_alertView dismissWithClickedButtonIndex:-1 animated:YES];
-	
+	*/
 	if ([_delegate respondsToSelector:@selector(tableAlert:didSelectRowAtIndexPath:)])
 		[_delegate tableAlert:self didSelectRowAtIndexPath:indexPath];
 }

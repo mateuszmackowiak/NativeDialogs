@@ -30,8 +30,6 @@
     return self;
 }
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
 
@@ -203,14 +201,22 @@
         [[textFields objectAtIndex:0] becomeFirstResponder];
     }
     firstShown = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged_:)name:@"alert" object:nil];
-    
+  /*
+    [[NSNotificationCenter defaultCenter] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:)name:UIDeviceOrientationDidChangeNotification object:nil];
+    */
     [super show];
+}
+/*
+-(void)orientationChanged:(NSNotification *)notification{
 }
 
 
-
-
+-(void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [super dismissWithClickedButtonIndex:buttonIndex animated:animated];
+}
+*/
 
 - (void)dealloc
 {

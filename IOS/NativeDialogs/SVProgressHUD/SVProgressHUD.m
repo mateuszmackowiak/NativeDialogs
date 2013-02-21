@@ -1,6 +1,6 @@
 //
 //  SVProgressHUD.m
-//	
+//
 //  Created by Sam Vermette on 27.03.11.
 //  Copyright 2011 Sam Vermette. All rights reserved.
 //
@@ -185,7 +185,7 @@ static SVProgressHUD *sharedView = nil;
             
             size_t locationsCount = 2;
             CGFloat locations[2] = {0.0f, 1.0f};
-            CGFloat colors[8] = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.75f}; 
+            CGFloat colors[8] = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.75f};
             CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
             CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, colors, locations, locationsCount);
             CGColorSpaceRelease(colorSpace);
@@ -221,8 +221,8 @@ static SVProgressHUD *sharedView = nil;
             labelRect = CGRectMake(12, 66, hudWidth, stringHeight);
             hudWidth+=24;
         } else {
-            hudWidth+=24;  
-            labelRect = CGRectMake(0, 66, hudWidth, stringHeight);   
+            hudWidth+=24;
+            labelRect = CGRectMake(0, 66, hudWidth, stringHeight);
         }
     }
 	
@@ -254,30 +254,31 @@ static SVProgressHUD *sharedView = nil;
 
 
 - (void)registerNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(positionHUD:) 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(positionHUD:)
                                                  name:@"UIApplicationDidChangeStatusBarOrientationNotification"
-                                               object:nil];  
+                                               object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(positionHUD:) 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(positionHUD:)
                                                  name:@"UIKeyboardWillHideNotification"
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(positionHUD:) 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(positionHUD:)
                                                  name:@"UIKeyboardDidHideNotification"
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(positionHUD:) 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(positionHUD:)
                                                  name:@"UIKeyboardWillShowNotification"
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(positionHUD:) 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(positionHUD:)
                                                  name:@"UIKeyboardDidShowNotification"
                                                object:nil];
+    
 }
 
 
@@ -329,9 +330,9 @@ static SVProgressHUD *sharedView = nil;
     CGPoint newCenter;
     CGFloat rotateAngle;
     
-    switch (orientation) { 
+    switch (orientation) {
         case UIInterfaceOrientationPortraitUpsideDown:
-            rotateAngle = M_PI; 
+            rotateAngle = M_PI;
             newCenter = CGPointMake(posX, orientationFrame.size.height-posY);
             break;
         case UIInterfaceOrientationLandscapeLeft:
@@ -346,7 +347,7 @@ static SVProgressHUD *sharedView = nil;
             rotateAngle = 0.0;
             newCenter = CGPointMake(posX, posY);
             break;
-    } 
+    }
     
     if(notification) {
         
@@ -355,13 +356,13 @@ static SVProgressHUD *sharedView = nil;
         [UIView setAnimationDuration:animationDuration];
         [UIView commitAnimations];
         /*
-        [UIView animateWithDuration:animationDuration 
-                              delay:0 
-                            options:(1 <<  1) 
-                         animations:^{
-                             [self moveToPoint:newCenter rotateAngle:rotateAngle];
-                         } completion:NULL];*/
-    } 
+         [UIView animateWithDuration:animationDuration
+         delay:0
+         options:(1 <<  1)
+         animations:^{
+         [self moveToPoint:newCenter rotateAngle:rotateAngle];
+         } completion:NULL];*/
+    }
     
     else {
         [self moveToPoint:newCenter rotateAngle:rotateAngle];
@@ -370,13 +371,14 @@ static SVProgressHUD *sharedView = nil;
 }
 
 - (void)moveToPoint:(CGPoint)newCenter rotateAngle:(CGFloat)angle {
-    self.hudView.transform = CGAffineTransformMakeRotation(angle); 
+    self.hudView.transform = CGAffineTransformMakeRotation(angle);
     self.hudView.center = newCenter;
 }
 
 #pragma mark - Master show/dismiss methods
 
 - (void)showWithStatus:(NSString*)string maskType:(SVProgressHUDMaskType)hudMaskType networkIndicator:(BOOL)show {
+    
     
 	self.fadeOutTimer = nil;
 	
@@ -387,7 +389,7 @@ static SVProgressHUD *sharedView = nil;
     
     if(self.showNetworkIndicator)
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-
+    
 	self.imageView.hidden = YES;
     self.maskType = hudMaskType;
 	
@@ -403,8 +405,10 @@ static SVProgressHUD *sharedView = nil;
     [self.overlayWindow makeKeyAndVisible];
     [self positionHUD:nil];
     
+    [self registerNotifications];
+    
 	if(self.alpha != 1) {
-        [self registerNotifications];
+        
 		self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 1.3, 1.3);
 		
         
@@ -417,13 +421,13 @@ static SVProgressHUD *sharedView = nil;
         
         
 		/*[UIView animateWithDuration:0.15
-							  delay:0
-							options:(1 <<  1) | UIViewAnimationCurveEaseOut | (1 <<  2)
-						 animations:^{	
-							 self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 1/1.3, 1/1.3);
-                             self.alpha = 1;
-						 }
-						 completion:NULL];*/
+         delay:0
+         options:(1 <<  1) | UIViewAnimationCurveEaseOut | (1 <<  2)
+         animations:^{
+         self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 1/1.3, 1/1.3);
+         self.alpha = 1;
+         }
+         completion:NULL];*/
 	}
     
     [self setNeedsDisplay];
@@ -465,7 +469,7 @@ static SVProgressHUD *sharedView = nil;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         self.showNetworkIndicator = NO;
     }
-
+    
     [UIView beginAnimations:nil context:NULL];
     sharedView.hudView.transform = CGAffineTransformScale(sharedView.hudView.transform, 0.8, 0.8);
     sharedView.alpha = 0;
@@ -473,21 +477,23 @@ static SVProgressHUD *sharedView = nil;
     [UIView setAnimationDidStopSelector:@selector(animDismisEnd)];
     [UIView setAnimationDuration:0.15];
     [UIView commitAnimations];
-
+    
 }
 -(void)animDismisEnd{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     if(sharedView.alpha == 0) {
         [[NSNotificationCenter defaultCenter] removeObserver:sharedView];
         [overlayWindow release], overlayWindow = nil;
         [sharedView release], sharedView = nil;
-        
-        for (UIWindow* wind in [UIApplication sharedApplication].windows) {
-            if([wind isKindOfClass:[UIWindow class]] ) {
-                [wind makeKeyWindow];
-                // *stop = YES;
-            }
-        }
-    } 
+        /*
+         for (UIWindow* wind in [UIApplication sharedApplication].windows) {
+         if([wind isKindOfClass:[UIWindow class]] ) {
+         [wind makeKeyWindow];
+         // *stop = YES;
+         }
+         }*/
+    }
 }
 #pragma mark - Utilities
 
@@ -526,7 +532,7 @@ static SVProgressHUD *sharedView = nil;
 		stringLabel.textColor = [UIColor whiteColor];
 		stringLabel.backgroundColor = [UIColor clearColor];
 		stringLabel.adjustsFontSizeToFitWidth = YES;
-		stringLabel.textAlignment = UITextAlignmentCenter;
+		stringLabel.textAlignment = NSTextAlignmentCenter;
 		stringLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 		stringLabel.font = [UIFont boldSystemFontOfSize:16];
 		stringLabel.shadowColor = [UIColor blackColor];
@@ -566,15 +572,15 @@ static SVProgressHUD *sharedView = nil;
             break;
         }
     }
-
-    // Locate UIKeyboard.  
+    
+    // Locate UIKeyboard.
     UIView *foundKeyboard = nil;
     for (UIView *possibleKeyboard in [keyboardWindow subviews]) {
         
         // iOS 4 sticks the UIKeyboard inside a UIPeripheralHostView.
         if ([[possibleKeyboard description] hasPrefix:@"<UIPeripheralHostView"]) {
             possibleKeyboard = [[possibleKeyboard subviews] objectAtIndex:0];
-        }                                                                                
+        }
         
         if ([[possibleKeyboard description] hasPrefix:@"<UIKeyboard"]) {
             foundKeyboard = possibleKeyboard;
@@ -583,7 +589,7 @@ static SVProgressHUD *sharedView = nil;
     }
     
     [autoreleasePool release];
-        
+    
     if(foundKeyboard && foundKeyboard.bounds.size.height > 100)
         return foundKeyboard.bounds.size.height;
     
