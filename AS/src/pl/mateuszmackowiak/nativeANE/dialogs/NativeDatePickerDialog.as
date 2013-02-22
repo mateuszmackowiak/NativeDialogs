@@ -363,7 +363,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		{
 			return String(date.fullYear)
 					+","+String(date.month)
-					+","+String(date.day)
+					+","+String(date.date)
 					+","+String(date.hours)
 					+","+String(date.minutes);
 		}

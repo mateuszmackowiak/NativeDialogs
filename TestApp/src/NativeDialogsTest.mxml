@@ -24,6 +24,8 @@
 			private var progressPopup:NativeProgressDialog;
 			private var _date:Date = new Date();
 			private var isIOS:Boolean = Capabilities.os.toLowerCase().indexOf("ip")>-1;
+			private var _t:NativeTextInputDialog= null;
+			
 			
 			protected function creaComp(event:Event):void
 			{
@@ -117,7 +119,7 @@
 				m.dispose();
 			}
 			
-			private var _t:NativeTextInputDialog= null;
+			
 			protected function onTextInputButtonClicked(event:MouseEvent):void
 			{
 				if(_t==null){
