@@ -34,19 +34,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "NativeDialogControler.m"
-         timestampString = "382635921.584461"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "973"
-         endingLineNumber = "973"
-         landmarkName = "-isShowing"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "NativeDialogControler.m"
          timestampString = "382651982.705871"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
@@ -60,12 +47,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "NativeDialogControler.m"
-         timestampString = "382651995.221574"
+         timestampString = "384125931.314823"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "230"
-         endingLineNumber = "230"
-         landmarkName = "-showDatePickerWithTitle:andMessage:andDate:andStyle:andButtons:"
+         startingLineNumber = "1032"
+         endingLineNumber = "1032"
+         landmarkName = "-dealloc"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

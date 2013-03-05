@@ -13,6 +13,8 @@
     UIPopoverController     *popover;
     UIActionSheet           *actionSheet;
     BOOL                    cancelable;
+    
+    CGFloat oldX;
 }
 
 @property ( nonatomic, assign ) FREContext      *freContext;

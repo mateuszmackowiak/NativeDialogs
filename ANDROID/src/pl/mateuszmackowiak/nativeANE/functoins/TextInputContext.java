@@ -377,11 +377,11 @@ public class TextInputContext extends FREContext {
 			}else if("number".equals(softKeyboardType)){
 				type = InputType.TYPE_CLASS_NUMBER;
 				if(displayAsPassword)
-					type = type | InputType.TYPE_NUMBER_VARIATION_PASSWORD;
+					type = type | 0x000000010; //
 			}else if("contact".equals(softKeyboardType)){
 				type = InputType.TYPE_CLASS_PHONE;
 				if(displayAsPassword)
-					type = type | InputType.TYPE_NUMBER_VARIATION_PASSWORD;
+					type = type | 0x000000010;
 				
 			}else if("email".equals(softKeyboardType)){
 				type = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;

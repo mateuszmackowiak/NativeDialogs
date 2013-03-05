@@ -40,6 +40,16 @@
 		9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AEF3E6316BFE96A0003036B /* AlertTextView.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9A78AB4216E40CAF00082F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A0396EB16BD905700445AD1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A0396F416BD905700445AD1;
+			remoteInfo = NativeDialogs;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		9AD71CB016CBC1B90086A206 /* Copy Aditional Files */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -314,6 +324,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9A78AB4316E40CAF00082F82 /* PBXTargetDependency */,
 			);
 			name = nativealert;
 			productName = nativealert;
@@ -404,6 +415,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		9A78AB4316E40CAF00082F82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A0396F416BD905700445AD1 /* NativeDialogs */;
+			targetProxy = 9A78AB4216E40CAF00082F82 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		9ADF1B0D16BF0F2200DA9AAA /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -471,6 +490,7 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NativeDialogs/NativeDialogs-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -486,6 +506,7 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NativeDialogs/NativeDialogs-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -507,6 +528,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "nativealert/nativealert-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "nativealert/nativealert-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
@@ -529,6 +551,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "nativealert/nativealert-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "nativealert/nativealert-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;

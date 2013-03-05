@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" contentCreationComplete="creaComp(event)">
+			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" contentCreationComplete="creaComp(event)" initialize="appAdded(event)">
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="center"/>
 	</s:layout>
@@ -21,10 +21,16 @@
 			
 			
 			private var myTimer:Timer = new Timer(100);
-			private var progressPopup:NativeProgressDialog;
+			private var dialog:iNativeDialog;
 			private var _date:Date = new Date();
 			private var isIOS:Boolean = Capabilities.os.toLowerCase().indexOf("ip")>-1;
 			private var _t:NativeTextInputDialog= null;
+			
+			protected function appAdded(event:Event):void
+			{
+				onHorizontalProgressDialogButtonClicked(null);
+				
+			}
 			
 			
 			protected function creaComp(event:Event):void
@@ -38,6 +44,8 @@
 					themeSelector.dataProvider = themesAndroid;
 					themeSelector.selectedItem = themesAndroid.getItemAt(0);
 				}
+				
+				
 			}
 			
 			private function bindEvents():void
@@ -53,10 +61,18 @@
 				themeSelector.addEventListener(IndexChangeEvent.CHANGE,themeSelectorChangeHandler);
 				showToastButton.addEventListener(MouseEvent.CLICK,onToastButtonClicked);
 			}
+			private function fname(event:Event):void
+			{
+				myTimer.removeEventListener(TimerEvent.TIMER,fname);
+				dialog.hide(0);
+			}
 			
 			protected function onShowAlertButtonClicked(event:MouseEvent):void
 			{
-				NativeAlertDialog.show("Message","Title","OK","Cancle",mess,true);
+				dialog = NativeAlertDialog.show("Message","Title","OK","Cancle",mess,true);
+				
+				myTimer.addEventListener(TimerEvent.TIMER, fname);
+				myTimer.start();
 				/*
 				var a:NativeAlertDialog = new NativeAlertDialog();
 				a.closeHandler = function(e:NativeDialogEvent):void{
@@ -168,7 +184,7 @@
 			
 			protected function onHorizontalProgressDialogButtonClicked(event:MouseEvent):void
 			{
-				var p:NativeProgressDialog= new NativeProgressDialog();
+				var p:NativeProgressDialog= new NativeProgressDialog(-1,NativeProgressDialog.IOS_SVHUD_GRADIENT_BACKGROUND_THEME );
 				p.addEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
 				p.secondaryProgress = 45;
 				p.max = 50;
@@ -176,7 +192,7 @@
 				p.message ="Message";
 				p.showProgressbar();
 				
-				progressPopup = p;
+				dialog = p;
 				
 				myTimer.addEventListener(TimerEvent.TIMER, updateProgress);
 				myTimer.start();
@@ -191,7 +207,7 @@
 				p.message ="Message";
 				p.showSpinner();
 				
-				progressPopup = p;
+				dialog = p;
 				
 				myTimer.addEventListener(TimerEvent.TIMER, updateProgress);
 				myTimer.start();
@@ -200,23 +216,23 @@
 			
 			private function updateProgress(event:TimerEvent):void
 			{
-				var p:int = progressPopup.progress;
+				var p:int = NativeProgressDialog(dialog).progress;
 				p++;
 				if(p>=50){
 					p = 0;
-					progressPopup.hide(1);
+					dialog.hide(1);
 					myTimer.removeEventListener(TimerEvent.TIMER,updateProgress);
 					//progressPopup.hide("with some message",true);
 					(event.target as Timer).stop();
 				}
 				else{
 					if(p==25){
-						progressPopup.shake();
+						dialog.shake();
 						//progressPopup.setMessage("some message changed in between");
 						//progressPopup.setTitle("some title changed in between");
 					}
 					try{
-						progressPopup.setProgress(p);
+						NativeProgressDialog(dialog).setProgress(p);
 					}catch(e:Error){
 						mess("Error "+ e.message+"   "+e.toString());
 					}
@@ -235,7 +251,7 @@
 					mess(event);
 					mess("Date set to:"+String(_date));
 				});
-				d.buttons = Vector.<String>(["Cancle","OK"]);
+				//d.buttons = Vector.<String>(["Cancle","OK"]);
 				d.displayMode =NativeDatePickerDialog.DISPLAY_MODE_DATE;
 				d.title = "DatePicker";
 				d.message = "Select date:";
@@ -279,6 +295,8 @@
 			{
 				Toast.show("Message",Toast.LENGTH_SHORT);
 			}
+			
+			
 			
 		]]>
 	</fx:Script>

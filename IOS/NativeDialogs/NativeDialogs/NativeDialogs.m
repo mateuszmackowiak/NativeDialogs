@@ -588,10 +588,7 @@ void NativeDialogsContextFinalizer(FREContext ctx)
     NativeDialogControler* nativeDialogController;
     FREGetContextNativeData(ctx, (void**)&nativeDialogController);
     
-    if(nativeDialogController){
-        [nativeDialogController release];
-    }
-    
+    [nativeDialogController release];
 
     return;
 }

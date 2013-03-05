@@ -154,12 +154,16 @@
                 FREGetArrayElementAt(buttons, i, &button);
 
                 FREGetObjectAsUTF8(button, &stingLen, &buttonLabel);
-                
-                barButton = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithUTF8String:(char*)buttonLabel] style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
-                [barButton setTag:i];
-                [barItems addObject:barButton];
-                [barButton release];
-                barButton = nil;
+                if(buttonLabel){
+                    NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
+                    if(s && ![s isEqualToString:@""]){
+                        barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
+                        [barButton setTag:i];
+                        [barItems addObject:barButton];
+                        [barButton release];
+                        barButton = nil;
+                    }
+                }
             }
             
             
@@ -174,12 +178,16 @@
             FREGetArrayElementAt(buttons, buttons_len-1, &button2);
             
             FREGetObjectAsUTF8(button2, &stingLen, &buttonLabel);
-            
-            barButton = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithUTF8String:(char*)buttonLabel] style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
-            [barButton setTag:buttons_len-1];
-            [barItems addObject:barButton];
-            [barButton release];
-            barButton = nil;
+            if(buttonLabel){
+                NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
+                if(s && ![s isEqualToString:@""]){
+                    barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
+                    [barButton setTag:buttons_len-1];
+                    [barItems addObject:barButton];
+                    [barButton release];
+                    barButton = nil;
+                }
+            }
             
         }else{
             UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
@@ -244,8 +252,12 @@
             [aac addSubview:pickerDateToolbar];
             [aac addSubview:datePicker];
             
-            UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
-            
+            UIWindow* wind= [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+            if(!wind){
+                NSLog(@"Window is nil");
+                FREDispatchStatusEventAsync(freContext, (const uint8_t*)"error", (const uint8_t*)"Window is nil");
+                return;
+            }
             [aac showInView:wind];
             
             [aac setBounds:CGRectMake(0,0,320, 464)];
@@ -791,12 +803,9 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 
 
 - (UITableViewCell *)tableAlert:(SBTableAlert *)tableAlert cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell;
     
+    SBTableAlertCell *cell = [[SBTableAlertCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] ;
     
-    
-    cell = [[[SBTableAlertCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
-	
     if(tableItemList){
         ListItem* item = [tableItemList objectAtIndex:indexPath.row];
         [cell.textLabel setText: [NSString stringWithString:item.text]];
@@ -806,7 +815,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
             [cell setAccessoryType:UITableViewCellAccessoryNone];
 	}
   
-	return cell;
+	return [cell autorelease];
 }
 
 
@@ -853,7 +862,6 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_closed", (uint8_t*)[buttonID UTF8String]);
     //Cleanup references.
     
-    [tableItemList removeAllObjects];
     [tableItemList release];
     tableItemList = nil;
     [sbAlert release];
@@ -883,11 +891,25 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [alert dismissWithClickedButtonIndex:index animated:YES];
     [sbAlert.view dismissWithClickedButtonIndex:index animated:YES];
 }
+-(UIView*)getView{
+    UIView *u;
+    if(popover ){
+        u = popover.contentViewController.view;
+    }else if(alert && alert.isHidden==NO){
+        u = alert;
+    }
+    else if(sbAlert && sbAlert.view.isHidden==NO){
+        u = sbAlert.view;
+    }
+    return u;
+}
 
 -(void)shake{
     
-    if(popover ){
-        CGRect r = popover.contentViewController.view.frame;
+    UIView* u= [self getView];
+    if(u){
+        CGRect r = u.frame;
+        oldX = r.origin.x;
         r.origin.x = r.origin.x - r.origin.x * 0.1;
         
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -895,42 +917,21 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         [UIView setAnimationDuration:.1f];
         [UIView setAnimationRepeatCount:5];
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDidStopSelector:@selector(animationFinished:)];
         [UIView setAnimationRepeatAutoreverses:NO];
-        [popover.contentViewController.view setFrame:r];
-        
-        [UIView commitAnimations];
-    }
-    if(alert && alert.isHidden==NO){
-        CGRect r = alert.frame;
-        r.origin.x = r.origin.x - r.origin.x * 0.1;
-        
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        [UIView beginAnimations:nil context:context];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [UIView setAnimationDuration:.1f];
-        [UIView setAnimationRepeatCount:5];
-        [UIView setAnimationRepeatAutoreverses:NO];
-        [alert setFrame:r];
-        
-        [UIView commitAnimations];
-        
-        
-    }
-    else if(sbAlert && sbAlert.view.isHidden==NO){
-        CGRect r = sbAlert.view.frame;
-        r.origin.x = r.origin.x - r.origin.x * 0.1;
-        
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        [UIView beginAnimations:nil context:context];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [UIView setAnimationDuration:.1f];
-        [UIView setAnimationRepeatCount:5];
-        [UIView setAnimationRepeatAutoreverses:NO];
-        [sbAlert.view setFrame:r];
+        [u setFrame:r];
         
         [UIView commitAnimations];
     }
 }
+-(void)animationFinished:(NSString*)animationID{
+    UIView* u= [self getView];
+    CGRect r = u.frame;
+    r.origin.x = oldX;
+    [u setFrame:r];
+}
+
 -(void)updateMessage:(NSString*)message
 {
     #ifdef MYDEBUG
@@ -989,11 +990,13 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    
-    if([alertView alertViewStyle]!=UIAlertViewStyleDefault && [alertView alertViewStyle]!=AlertTextViewStyleDefault){
-        [[alertView textFieldAtIndex:0] resignFirstResponder];
-        if([alertView alertViewStyle]==UIAlertViewStyleLoginAndPasswordInput || [alertView alertViewStyle]==AlertTextViewStyleLoginAndPasswordInput){
-            [[alertView textFieldAtIndex:1] resignFirstResponder];
+    BOOL isIOS_5OrLater = [[[UIDevice currentDevice] systemVersion] floatValue]>=5.0;
+    if(isIOS_5OrLater){
+        if([alertView alertViewStyle]!=UIAlertViewStyleDefault && [alertView alertViewStyle]!=AlertTextViewStyleDefault){
+            [[alertView textFieldAtIndex:0] resignFirstResponder];
+            if([alertView alertViewStyle]==UIAlertViewStyleLoginAndPasswordInput || [alertView alertViewStyle]==AlertTextViewStyleLoginAndPasswordInput){
+                [[alertView textFieldAtIndex:1] resignFirstResponder];
+            }
         }
     }
     //Create our params to pass to the event dispatcher.
@@ -1001,13 +1004,11 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_closed", (uint8_t*)[buttonID UTF8String]);
     
     //Cleanup references.
-    [alertView release];
+    [alert release];
     alert = nil;
-    
-    if(progressView){
-        [progressView release];
-        progressView = nil;
-    }
+
+    [progressView release];
+    progressView = nil;
     
 }
 /*
@@ -1035,8 +1036,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
         NSLog(@"dealloc");
     #endif
 
-    if(tableItemList)
-        [tableItemList release];
+    [tableItemList release];
     
     [popover release];
     [alert release];
