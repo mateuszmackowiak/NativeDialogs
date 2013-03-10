@@ -5,11 +5,15 @@ Adobe Air Native Extension for mobile native dialogs (IOS,Andoid) - Toast, Text 
 
 
 ***
-If You like what I make pleas donate:
+If You like what I make please donate:
 [![Foo](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CMYHNG32SVXZ4)
 ***
 
-
+Before creating an Issue. Please:
+- Please make sure that Your code is not the reason of the error.
+- On Android: Try downloading the Android sdk and use "androidSDK/platform-tools/adb logcat" to pin to the android logs of the device. If something goes wrong there should be some output.
+- On IOS: To see the answers of the console with the terminal (IOS Simulator) type: "tail -f /var/log/system.log" in the console. To see it on the device download form the app store a free app "Console" and if the app crashes go to the app.
+- Please send part of Your code that causes the problem.
 
 
 ## NativeDatePickerDialog (IOS/Andorid) ##
