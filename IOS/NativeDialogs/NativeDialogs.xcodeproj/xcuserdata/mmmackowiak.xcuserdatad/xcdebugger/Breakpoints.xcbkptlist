@@ -39,7 +39,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "272"
          endingLineNumber = "272"
-         landmarkName = "-didRotate:"
+         landmarkName = "-showDatePickerWithTitle:andMessage:andDate:andStyle:andButtons:andHasMinMax:andMin:andMax:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -52,7 +52,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1032"
          endingLineNumber = "1032"
-         landmarkName = "-dealloc"
+         landmarkName = "-updateMessageWithSt:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
