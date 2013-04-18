@@ -8,7 +8,7 @@
 #import "FlashRuntimeExtensions.h"
 #import "SBTableAlert.h"
 
-@interface NativeDialogControler : NSObject <UIAlertViewDelegate,SBTableAlertDelegate,SBTableAlertDataSource,UIActionSheetDelegate,UIPopoverControllerDelegate>
+@interface NativeDialogControler : NSObject <UIAlertViewDelegate,SBTableAlertDelegate,SBTableAlertDataSource,UIActionSheetDelegate,UIPopoverControllerDelegate,UIPickerViewDelegate>
 {
     UIPopoverController     *popover;
     UIActionSheet           *actionSheet;
@@ -43,6 +43,7 @@
 
 -(void)showSelectDialogWithTitle: (NSString *)title
                          message: (NSString*)message
+                            type: (uint32_t)type
                          options: (FREObject*)options
                          checked: (FREObject*)checked
                          buttons: (FREObject*)buttons;

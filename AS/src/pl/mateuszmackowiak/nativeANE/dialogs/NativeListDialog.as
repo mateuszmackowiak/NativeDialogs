@@ -45,6 +45,11 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 */
 		public static const ANDROID_HOLO_LIGHT_THEME:uint = 0x00000003;
 		/**
+		 * use a picker instead of a popup to draw the list
+		 * <br>Constant Value: 6 (0x00000006)
+		 */
+		public static const IOS_PICKER_THEME:uint = 0x00000006;
+		/**
 		 * use the traditional (pre-Holo) alert dialog theme
 		 * <br>the default style for Android devices
 		 * <br>Constant Value: 1 (0x00000001)
@@ -163,7 +168,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 						_context.call("show",_title,_buttons,labels,_selectedIndex,_cancelable,_theme);
 						return true;
 					}else if(isIOS()){
-						_context.call("show",_title,_message,_buttons,labels,_selectedIndex);
+						_context.call("show",_title,_message,_theme,_buttons,labels,_selectedIndex);
 						return true;
 					}
 				}else{
@@ -408,7 +413,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		}
 		
 		/**@private*/
-		public function set slectedIndex(value:int):void
+		public function set selectedIndex(value:int):void
 		{
 			if(_isShowing){
 				trace("slectedIndex can't be changed when isShowing==true ");

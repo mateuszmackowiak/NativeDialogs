@@ -65,9 +65,8 @@ FREObject showListDialog (FREContext ctx, void* functionData, uint32_t argc, FRE
     const uint8_t *title;
     const uint8_t *message;
     
-    
     NSString *titleString = nil;
-    NSString *messageString =nil;
+    NSString *messageString = nil;
     
     if(argv[0] && (FREGetObjectAsUTF8(argv[0], &stringLength, &title)==FRE_OK)){
         titleString = [NSString stringWithUTF8String:(char*)title];
@@ -76,7 +75,10 @@ FREObject showListDialog (FREContext ctx, void* functionData, uint32_t argc, FRE
         messageString = [NSString stringWithUTF8String:(char*)message];
     }
     
-    [nativeDialogController showSelectDialogWithTitle:titleString message:messageString options:argv[3] checked: argv[4] buttons:argv[2] ];
+    uint32_t type;
+    FREGetObjectAsUint32(argv[2], &type);
+
+    [nativeDialogController showSelectDialogWithTitle:titleString message:messageString type:type options:argv[4] checked: argv[5] buttons:argv[3]];
 
     return NULL;
 }
