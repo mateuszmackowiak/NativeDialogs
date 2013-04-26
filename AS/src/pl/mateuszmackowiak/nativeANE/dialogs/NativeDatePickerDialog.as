@@ -104,6 +104,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		private var _displayMode:String = DISPLAY_MODE_DATE;
 		/**@private*/
 		private var _is24HourView:Boolean = false;
+		private var _startDate:Date;
 		//---------------------------------------------------------------------
 		//
 		// Public Methods.
@@ -344,6 +345,12 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				if(!_buttons || _buttons.length==0){
 					_buttons = Vector.<String>(["OK"]);
 				}
+				if(_buttons.length==1 && _cancelable && isIOS())
+				{
+					_buttons.push("Cancel");
+				}
+				_startDate = date;
+
 				if(isAndroid()){
 					_context.call("show", _title,_message,dateToString(_date),_buttons,_displayMode, _is24HourView,_cancelable, _theme);
 				}else if(isIOS()){
@@ -510,9 +517,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					var timestamp:Number = Number(event.level)*1000;
 					_date.time = timestamp;
 				}
-				if(hasEventListener(Event.CHANGE)){
-					dispatchEvent(new Event(Event.CHANGE));
-				}
+				dispatchChange();
 			}
 			else if( event.code == NativeDialogEvent.CLOSED)
 			{
@@ -522,12 +527,27 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			
 			}else if(event.code == NativeDialogEvent.CANCELED){
 				_isShowing = false;
+				reset();
 				if(hasEventListener(NativeDialogEvent.CANCELED))
 					dispatchEvent(new NativeDialogEvent(NativeDialogEvent.CANCELED,event.level));
 				
 			}
 			else{
 				showError(event);
+			}
+		}
+
+		private function reset():void
+		{
+			_date = _startDate;
+			dispatchChange();
+		}
+
+		private function dispatchChange():void
+		{
+			if (hasEventListener(Event.CHANGE))
+			{
+				dispatchEvent(new Event(Event.CHANGE));
 			}
 		}
 	}

@@ -64,6 +64,8 @@ FREObject showListDialog (FREContext ctx, void* functionData, uint32_t argc, FRE
     uint32_t stringLength;
     const uint8_t *title;
     const uint8_t *message;
+    uint32_t cancelableInt;
+    BOOL cancelable;
     
     NSString *titleString = nil;
     NSString *messageString = nil;
@@ -71,14 +73,19 @@ FREObject showListDialog (FREContext ctx, void* functionData, uint32_t argc, FRE
     if(argv[0] && (FREGetObjectAsUTF8(argv[0], &stringLength, &title)==FRE_OK)){
         titleString = [NSString stringWithUTF8String:(char*)title];
     }
-    if(argv[1] && (FREGetObjectAsUTF8(argv[1], &stringLength, &message)==FRE_OK)){
-        messageString = [NSString stringWithUTF8String:(char*)message];
+    if(argv[4] && (FREGetObjectAsBool(argv[4], &cancelableInt)==FRE_OK)) {
+        cancelable = cancelableInt == 1;
     }
     
     uint32_t type;
-    FREGetObjectAsUint32(argv[2], &type);
-
-    [nativeDialogController showSelectDialogWithTitle:titleString message:messageString type:type options:argv[4] checked: argv[5] buttons:argv[3]];
+    FREGetObjectAsUint32(argv[5], &type);
+    
+    if(argv[6] && (FREGetObjectAsUTF8(argv[6], &stringLength, &message)==FRE_OK)){
+        messageString = [NSString stringWithUTF8String:(char*)message];
+    }
+    
+    [nativeDialogController showSelectDialogWithTitle:titleString message:messageString type:type options:argv[2] checked: argv[3] buttons:argv[1]];
+    [nativeDialogController setCancelable:cancelable];
 
     return NULL;
 }

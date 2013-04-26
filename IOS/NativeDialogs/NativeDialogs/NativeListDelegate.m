@@ -49,8 +49,16 @@
 
 
 #pragma mark - List Dialog
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent:(NSInteger)component {
-    [target performSelector:action withObject:pickerView];
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    NSMethodSignature *sig = [target methodSignatureForSelector:action];
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    NSLog(@"Row %D", row);
+    [inv setTarget:target];
+    [inv setSelector:action];
+    [inv setArgument:&pickerView atIndex:2]; //arguments 0 and 1 are self and _cmd respectively, automatically set by NSInvocation
+    [inv setArgument:&row atIndex:3];
+    [inv invoke];
 }
 
 // tell the picker how many rows are available for a given component
@@ -75,8 +83,8 @@
 
 - (void)dealloc
 {
-    [super dealloc];
     [options release];
+    [super dealloc];
 }
 
 @end

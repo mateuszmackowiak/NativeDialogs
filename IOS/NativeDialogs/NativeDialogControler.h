@@ -7,12 +7,15 @@
 //
 #import "FlashRuntimeExtensions.h"
 #import "SBTableAlert.h"
+#import "NativeListDelegate.h"
 
 @interface NativeDialogControler : NSObject <UIAlertViewDelegate,SBTableAlertDelegate,SBTableAlertDataSource,UIActionSheetDelegate,UIPopoverControllerDelegate,UIPickerViewDelegate>
 {
     UIPopoverController     *popover;
     UIActionSheet           *actionSheet;
     BOOL                    cancelable;
+    NativeListDelegate      *delegate;
+    UIPickerView *picker;
     
     CGFloat oldX;
 }

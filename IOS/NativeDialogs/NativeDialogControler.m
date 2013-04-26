@@ -124,7 +124,7 @@
         uint32_t stingLen;
         const uint8_t *buttonLabel;
         UIBarButtonItem *barButton;
-        for (int i = 0; i<buttons_len-1; i++) {
+        for (int i = 1; i<buttons_len; i++) {
             FREObject button;
             FREGetArrayElementAt(buttons, i, &button);
             
@@ -150,14 +150,14 @@
         
         
         FREObject button2;
-        FREGetArrayElementAt(buttons, buttons_len-1, &button2);
+        FREGetArrayElementAt(buttons, 0, &button2);
         
         FREGetObjectAsUTF8(button2, &stingLen, &buttonLabel);
         if(buttonLabel){
             NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
             if(s && ![s isEqualToString:@""]){
                 barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
-                [barButton setTag:buttons_len-1];
+                [barButton setTag:0];
                 [barItems addObject:barButton];
                 [barButton release];
                 barButton = nil;
@@ -319,11 +319,6 @@
     
 }
 
--(void)selectionChanged:(id)sender{
-    NSInteger row = [sender selectedRowInComponent:0];
-    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeListDialog_change", (const uint8_t *)[[NSString stringWithFormat:@"%X",row]UTF8String]);
-}
-
 -(void)dateChanged:(id)sender{
     
     NSDate *date = [sender date];
@@ -332,7 +327,15 @@
     FREDispatchStatusEventAsync(freContext, (const uint8_t *)"change", (const uint8_t *)[[NSString stringWithFormat:@"%f",timeInterval]UTF8String]);
 }
 - (void)actionSheetButtonClicked:(UIBarButtonItem*)sender {
-    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_closed", (const uint8_t *)[[NSString stringWithFormat:@"%d",[sender tag]] UTF8String]);
+    NSInteger index = [sender tag];
+    if(cancelable && index == 1)
+    {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
+    }
+    else
+    {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_closed", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
+    }
     
     if(popover){
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -666,6 +669,10 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [alert show];
 }
 
+-(void)selectionChanged:(id)sender
+                withRow:(NSInteger)row{
+    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeListDialog_change", (const uint8_t *)[[NSString stringWithFormat:@"%D",row]UTF8String]);
+}
 
 -(void)showSelectPopupWithTitle: (NSString*)title
                         message: (NSString*)message
@@ -681,9 +688,9 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
             FREGetObjectAsUint32(checked, &checkedEntry);
         }
         UIToolbar *toolbar = [self initToolbar:buttons];
-        UIPickerView *picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 0, 0)];
+        picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 0, 0)];
         picker.showsSelectionIndicator = YES;
-        NativeListDelegate *delegate = [[NativeListDelegate alloc] initWithOptions:options target:self action:@selector(selectionChanged:)];
+        delegate = [[NativeListDelegate alloc] initWithOptions:options target:self action:@selector(selectionChanged:withRow:)];
         picker.delegate = delegate;
         toolbar.barStyle = UIBarStyleBlackOpaque;
         [picker selectRow:checkedEntry inComponent:0 animated:false];
@@ -700,8 +707,6 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
         [aac setBounds:CGRectMake(0,0,320, 464)];
     
         [toolbar sizeToFit];
-    
-        [picker release];
         [toolbar release];
         
         UIWindow* wind= [[[UIApplication sharedApplication] windows] objectAtIndex:0];
@@ -729,7 +734,6 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
                          buttons: (FREObject*)buttons{
     
     FREObjectType type;
-    NSLog(@"After getting type %X I am feeling confused", displayType);
     if(displayType == 6)
     {
         [self showSelectPopupWithTitle:title message:message options:options checked:checked buttons:buttons];
@@ -782,7 +786,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
             
             FREObject element;
             
-            for(int32_t i=options_len-1; i>=0;i--){
+            for(int32_t i=0; i<options_len;++i){
                 
                 // get an element at index
                 if(FREGetArrayElementAt(options, i, &element)==FRE_OK){
@@ -928,7 +932,12 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 - (void)tableAlert:(SBTableAlert *)tableAlert didDismissWithButtonIndex:(NSInteger)buttonIndex{
 
     NSString *buttonID = [NSString stringWithFormat:@"%d", buttonIndex];
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_closed", (uint8_t*)[buttonID UTF8String]);
+    uint8_t* event = (uint8_t*)"nativeDialog_closed";
+    if(cancelable && buttonIndex == 1)
+    {
+        event = (uint8_t*)"nativeDialog_canceled";
+    }
+    FREDispatchStatusEventAsync(freContext, event, (uint8_t*)[buttonID UTF8String]);
     //Cleanup references.
     
     [tableItemList release];
@@ -1101,12 +1110,14 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 */
 
 -(void)dealloc{
-    #ifdef MYDEBUG
-        NSLog(@"dealloc");
-    #endif
-
-    [tableItemList release];
     
+    picker.delegate = NULL;
+    [picker release];
+    #ifdef MYDEBUG
+        NSLog(@"main dealloc");
+    #endif
+    [tableItemList release];
+    [delegate release];
     [popover release];
     [alert release];
     [actionSheet release];

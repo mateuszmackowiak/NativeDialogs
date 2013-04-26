@@ -246,13 +246,13 @@ public class ListDialogContext extends FREContext {
 				context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT, KEY+"  labels are empty or the list of labels is not equal to list of selected labels ");
 			
 			if(buttons!=null && buttons.length>0){
-				builder.setPositiveButton(buttons[0], new ConfitmListener(context,0));
+				builder.setPositiveButton(buttons[0], new ConfitmListener(context,0,cancelable));
 				if(buttons.length>1)
-					builder.setNeutralButton(buttons[1], new ConfitmListener(context,1));
+					builder.setNeutralButton(buttons[1], new ConfitmListener(context,1,cancelable));
 				if(buttons.length>2)
-					builder.setNegativeButton(buttons[2], new ConfitmListener(context,2));
+					builder.setNegativeButton(buttons[2], new ConfitmListener(context,2,cancelable));
 			}else
-				builder.setPositiveButton("OK",new ConfitmListener(context,0));
+				builder.setPositiveButton("OK",new ConfitmListener(context,0,cancelable));
 			
 		}catch(Exception e){
 			context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,KEY+"   "+e.toString());
@@ -273,15 +273,23 @@ public class ListDialogContext extends FREContext {
     }
 	private static class ConfitmListener implements DialogInterface.OnClickListener{
     	private int index;
-    	ConfitmListener(FREContext context,int index)
+    	private boolean cancelable;
+    	
+    	ConfitmListener(FREContext context,int index,boolean cancelable)
     	{
+    		this.cancelable = cancelable;
     		this.index = index;
     	}
  
         @Override
 		public void onClick(DialogInterface dialog,int id) 
         {
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(index));//Math.abs(id-1)));
+        	String event = NativeDialogsExtension.CLOSED;
+        	if(cancelable && index == 1)
+        	{
+        		event = NativeDialogsExtension.CANCELED;
+        	}
+			NativeDialogsExtension.context.dispatchStatusEventAsync(event,String.valueOf(index));//Math.abs(id-1)));
         	dialog.dismiss();
         }
     }
