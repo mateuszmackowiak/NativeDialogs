@@ -37,6 +37,7 @@ public class NativeDialogsExtension implements FREExtension
 	public FREContext createContext(String extId)
 	{
 		Log.d(TAG, "Extension.createContext extId: " + extId);
+		System.setProperty("log.tag."+DatePickerDialogContext.KEY, "VERBOSE");
 
 		if(ProgressDialogContext.KEY.equals(extId))
 			return context = new ProgressDialogContext();

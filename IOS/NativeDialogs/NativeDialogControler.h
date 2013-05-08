@@ -15,7 +15,8 @@
     UIActionSheet           *actionSheet;
     BOOL                    cancelable;
     NativeListDelegate      *delegate;
-    UIPickerView *picker;
+    UIView                  *view;
+    UIPickerView            *picker;
     
     CGFloat oldX;
 }
@@ -60,14 +61,17 @@
                    style: (int32_t)style
                  message: (NSString*)message
                 progress: (NSNumber*)progress
-            showActivity:(Boolean)showActivity
-               cancleble:(Boolean)cancleble;
+            showActivity: (Boolean)showActivity
+               cancleble: (Boolean)cancleble;
 
 -(void)showDatePickerWithTitle:(NSString *)title
                     andMessage:(NSString *)message
                        andDate:(double)date
                       andStyle:(const uint8_t*)style
-                    andButtons:(FREObject*)buttons;
+                    andButtons:(FREObject*)buttons
+                  andHasMinMax:(bool)hasMinMax
+                        andMin:(double)min
+                        andMax:(double)max;
 
 -(void)updateDateWithTimestamp:(double)timeStamp;
 -(void)setCancelable:(uint32_t)cancelable;

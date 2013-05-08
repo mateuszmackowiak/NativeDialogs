@@ -1,8 +1,8 @@
 package pl.mateuszmackowiak.nativeANE.functoins;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
 import pl.mateuszmackowiak.nativeANE.FREUtilities;
 import pl.mateuszmackowiak.nativeANE.NativeDialogsExtension;
 import android.app.AlertDialog;
@@ -29,6 +29,9 @@ public class DatePickerDialogContext extends FREContext {
 
 	private AlertDialog _dialog = null;
 	
+
+
+
 	
 	@Override
 	public void dispose() 
@@ -206,7 +209,7 @@ public class DatePickerDialogContext extends FREContext {
 		@Override
 	    public FREObject call(FREContext context, FREObject[] args)
 	    {
-	        String title="",message="";
+		    String title="",message="";
 	        boolean cancelable=false, is24HourView = false;
 	        String buttons[] = null;
 	        int theme=1;
@@ -221,13 +224,20 @@ public class DatePickerDialogContext extends FREContext {
 		        
 		        style = args[4].getAsString();
 		        is24HourView = args[5].getAsBool();
-			    cancelable= args[6].getAsBool();
-				theme= args[7].getAsInt();
+			    cancelable = args[6].getAsBool();
+				theme = args[7].getAsInt();
 				if(_dialog!=null){
 					_dialog.dismiss();
 				}
-
-				_dialog = creatDateDialog(context,title,message,date,buttons,style,is24HourView,cancelable,theme);
+				boolean hasMinMax = args.length >= 10;
+				long minDate = -1;
+				long maxDate = -1;
+				if(hasMinMax)
+				{
+					minDate = (long) args[8].getAsDouble();
+					maxDate = (long) args[9].getAsDouble();
+				}
+				_dialog = creatDateDialog(context,title,message,date,buttons,style,is24HourView,cancelable,theme,hasMinMax,minDate,maxDate);
 			    _dialog.show();
 			    
 			    context.dispatchStatusEventAsync(NativeDialogsExtension.OPENED,"-1");
@@ -240,38 +250,30 @@ public class DatePickerDialogContext extends FREContext {
 	    }
 	}
 	
-
 	
-	private static final AlertDialog creatDateDialog(FREContext context,String title,String message,String date,String buttons[], String style, boolean is24HourView,boolean cancelable,int theme)
+	private static final AlertDialog creatDateDialog(FREContext context,String title,String message,String date,String buttons[], String style, boolean is24HourView,boolean cancelable,int theme,boolean hasMinMax,long minDate,long maxDate)
     {
 		try{
 			String[] dateArr = date.split(",");
 			
 			AlertDialog dialog = null;
+			int year = Integer.valueOf(dateArr[0]).intValue();
+			int month = Integer.valueOf(dateArr[1]).intValue();
+			int day = Integer.valueOf(dateArr[2]).intValue();
+			int hour = Integer.valueOf(dateArr[3]).intValue();
+			int minute = Integer.valueOf(dateArr[4]).intValue();
 			
 			if("time".equals(style)){
 				if(android.os.Build.VERSION.SDK_INT<11){
-					dialog = new MyTimePickerDialog(context.getActivity()
-							, Integer.valueOf(dateArr[3]).intValue()
-							, Integer.valueOf(dateArr[4]).intValue()
-							, is24HourView);
+					dialog = new MyTimePickerDialog(context.getActivity(), hour, minute, is24HourView);
 				}else{
-						dialog = new MyTimePickerDialog(context.getActivity(),theme
-							, Integer.valueOf(dateArr[3]).intValue()
-							, Integer.valueOf(dateArr[4]).intValue()
-							, is24HourView);
+					dialog = new MyTimePickerDialog(context.getActivity(), hour, minute, is24HourView, theme);
 				}
 			}else{
 				if(android.os.Build.VERSION.SDK_INT<11){
-						dialog = new MyDatePickerDialog(context.getActivity()
-								, Integer.valueOf(dateArr[0]).intValue()
-								, Integer.valueOf(dateArr[1]).intValue()
-								, Integer.valueOf(dateArr[2]).intValue());
+					dialog = new MyDatePickerDialog(context.getActivity(), year, month, day, hasMinMax, minDate, maxDate);
 				}else{
-						dialog = new MyDatePickerDialog(context.getActivity(),theme
-							, Integer.valueOf(dateArr[0]).intValue()
-							, Integer.valueOf(dateArr[1]).intValue()
-							, Integer.valueOf(dateArr[2]).intValue());
+					dialog = new MyDatePickerDialog(context.getActivity(), year, month, day, hasMinMax, minDate, maxDate, theme);
 				}
 			}
 			
@@ -306,7 +308,7 @@ public class DatePickerDialogContext extends FREContext {
 	
 	private static class MyTimePickerDialog extends TimePickerDialog{
 
-		public MyTimePickerDialog(Context context, int theme, int hourOfDay, int minute,boolean is24HourView) {
+		public MyTimePickerDialog(Context context, int hourOfDay, int minute,boolean is24HourView, int theme) {
 			super(context, theme, null, hourOfDay, minute, is24HourView);
 		}
 		public MyTimePickerDialog(Context context, int hourOfDay, int minute,boolean is24HourView) {
@@ -319,22 +321,66 @@ public class DatePickerDialogContext extends FREContext {
 			NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
 		}
 	}
+	
 	private static class MyDatePickerDialog extends DatePickerDialog{
-		
-		public MyDatePickerDialog (Context context, int year, int monthOfYear, int dayOfMonth){
+
+		private long minDate;
+		private long maxDate;
+		private boolean hasMinMax;
+
+		public MyDatePickerDialog (Context context, int year, int monthOfYear, int dayOfMonth, boolean hasMinMax, long minDate, long maxDate){
 			super(context,null,year,monthOfYear,dayOfMonth);
+			setMinMax(hasMinMax, minDate, maxDate);
+		}
+
+		public MyDatePickerDialog (Context context, int year, int monthOfYear, int dayOfMonth, boolean hasMinMax, long minDate, long maxDate,int theme){
+			super(context,theme,null,year,monthOfYear,dayOfMonth);
+			setMinMax(hasMinMax, minDate, maxDate);
+		} 
+		
+		private void setMinMax(boolean hasMinMax, long minDate, long maxDate) {
+			this.hasMinMax = hasMinMax;
+			this.minDate = minDate;
+			this.maxDate = maxDate;
+		}
+
+		@Override
+		public void onDateChanged(DatePicker view, int year, int month, int day) {
+			Calendar date = validate(year, month, day);
+			int newYear = date.get(Calendar.YEAR);
+			int newMonth = date.get(Calendar.MONTH);
+			int newDay = date.get(Calendar.DAY_OF_MONTH);
+			if(newYear != year || newMonth != month || newDay != day)
+			{
+				view.updateDate(newYear, newMonth, newDay);
+			}
+			else
+			{
+				String returnDateString = "day,"+String.valueOf(year)+","+String.valueOf(month)+","+String.valueOf(day);
+				NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
+			}
 		}
 		
-		public MyDatePickerDialog (Context context,int theme, int year, int monthOfYear, int dayOfMonth){
-			super(context,theme,null,year,monthOfYear,dayOfMonth);
-		}     
-		public void onDateChanged(DatePicker view, int year, int month, int day) {
-			super.onDateChanged(view, year, month, day);
-			String returnDateString = "day,"+String.valueOf(year)+","+String.valueOf(month)+","+String.valueOf(day);
-			NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
+		private Calendar validate(int year, int month, int day) {
+			Calendar cal = (Calendar) Calendar.getInstance().clone();
+			cal.set(Calendar.YEAR, year);
+			cal.set(Calendar.MONTH, month);
+			cal.set(Calendar.DAY_OF_MONTH, day);
+			if(hasMinMax)
+			{
+				Long calTime = cal.getTimeInMillis();
+				if(calTime < minDate)
+				{
+					cal.setTimeInMillis(minDate);
+				}
+				else if(calTime > maxDate)
+				{
+					cal.setTimeInMillis(maxDate);
+				}
+			}
+			return cal;
 		}
 	}
-
 	
 	private static class CancelListener implements DialogInterface.OnCancelListener{
         @Override

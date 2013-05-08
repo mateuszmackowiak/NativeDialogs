@@ -308,18 +308,37 @@ FREObject showDatePicker(FREContext ctx, void* functionData, uint32_t argc, FREO
         if(title)
             titleString = [NSString stringWithUTF8String:(char*)title];
     }
+    
     if(FREGetObjectAsUTF8(argv[1], &stringLength, &message)==FRE_OK){
         if(message)
             messageString =[NSString stringWithUTF8String:(char*)message];
     }
     
-    FREGetObjectAsUTF8(argv[4], &stringLength, &style);
-    
     double date;
     FREGetObjectAsDouble(argv[2], &date);
     
+    FREGetObjectAsUTF8(argv[4], &stringLength, &style);
     
-    [nativeDialogController showDatePickerWithTitle:titleString andMessage:messageString andDate:date andStyle:style andButtons:argv[3]];
+    bool hasMinMax = FALSE;
+    
+    double min;
+    double max;
+    
+    if(argc >= 10)
+    {
+        NSLog(@"We have enough arguments for min/max %d", argc);
+        hasMinMax = FREGetObjectAsDouble(argv[8], &min) == FRE_OK && FREGetObjectAsDouble(argv[9], &max) == FRE_OK;
+        FREObjectType minType;
+        FREGetObjectType(argv[8], &minType);
+        NSLog(@"Type: %d", minType);
+        NSLog(@"hasMinMax? %@, max: %f, min: %f", hasMinMax ? @"yes" : @"no", min, max);
+    }
+    else
+    {
+        NSLog(@"Not enough arguments for min/max");
+    }
+    
+    [nativeDialogController showDatePickerWithTitle:titleString andMessage:messageString andDate:date andStyle:style andButtons:argv[3] andHasMinMax:hasMinMax andMin:min andMax:max];
     uint32_t cancelable;
     FREGetObjectAsBool(argv[6], &cancelable);
     [nativeDialogController setCancelable:cancelable];
@@ -383,6 +402,8 @@ static const char * PROGRESS_CONTEXT = "ProgressContext";
 static const char * TOAST_CONTEXT = "ToastContext";
 static const char * DATE_PICKER_CONTEX = "DatePickerDialogContext";
 
+NativeDialogControler* nativeDialogController;
+
 /* NativeDialogsContextInitializer()
  * The context initializer is called when the runtime creates the extension context instance.
  */
@@ -419,7 +440,7 @@ void NativeDialogsContextInitializer(void* extData, const uint8_t* ctxType, FREC
 
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * (*numFunctionsToTest));
 
-    NativeDialogControler* nativeDialogController = [[NativeDialogControler alloc]init];
+    nativeDialogController = [[NativeDialogControler alloc]init];
     nativeDialogController.freContext = ctx;
     
     FRESetContextNativeData( ctx, nativeDialogController );
@@ -581,7 +602,7 @@ void NativeDialogsContextInitializer(void* extData, const uint8_t* ctxType, FREC
 
 void NativeDialogsExtFinalizer(void* extData)
 {
-   
+    
     return;
 }
 
@@ -592,11 +613,9 @@ void NativeDialogsExtFinalizer(void* extData)
  * calls the ExtensionContext instance's dispose() method.
  * If the AIR runtime garbage collector disposes of the ExtensionContext instance, the runtime also calls ContextFinalizer().
  */
-void NativeDialogsContextFinalizer(FREContext ctx) 
+void NativeDialogsContextFinalizer(FREContext ctx)
 {
-    NativeDialogControler* nativeDialogController;
-    FREGetContextNativeData(ctx, (void**)&nativeDialogController);
-    
+    NSLog(@"Finalize!");
     [nativeDialogController release];
 
     return;
@@ -610,9 +629,7 @@ void NativeDialogsContextFinalizer(FREContext ctx)
  */
 void NativeDialogsExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, FREContextFinalizer* ctxFinalizerToSet)
 {
-    #ifdef MYDEBUG
-        NSLog(@"Entering NativeDialogsExtInitializer()");
-    #endif
+    NSLog(@"Entering NativeDialogsExtInitializer()");
     
     *extDataToSet = NULL;
     *ctxInitializerToSet = &NativeDialogsContextInitializer;

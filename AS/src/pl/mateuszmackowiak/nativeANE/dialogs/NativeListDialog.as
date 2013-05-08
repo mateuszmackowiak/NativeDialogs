@@ -167,7 +167,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				}
 				if(_buttons.length==1 && _cancelable)
 				{
-					_buttons.unshift("Cancel");
+					_buttons.push("Cancel");
 				}
 
 				var selected: * = isSingleMode() ? _selectedIndex : _selectedValues;
@@ -706,6 +706,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					
 				}else if(event.code == NativeDialogListEvent.LIST_CHANGE){
 					var index:int = -1;
+					trace("List Change", event.level)
 					if(event.level.indexOf("_")>-1){
 						const args:Array = event.level.split("_");
 						index = int(args[0]);

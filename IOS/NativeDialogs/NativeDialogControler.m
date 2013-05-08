@@ -187,7 +187,10 @@
                     andMessage:(NSString *)message
                        andDate:(double)date
                       andStyle:(const uint8_t*)style
-                    andButtons:(FREObject*)buttons{
+                    andButtons:(FREObject*)buttons
+                  andHasMinMax:(bool)hasMinMax
+                        andMin:(double)minDate
+                        andMax:(double)maxDate {
     @try {
 
        
@@ -202,13 +205,18 @@
             datePicker.datePickerMode = UIDatePickerModeTime;
         }else if(strcmp((const char *)style, (const char *)"date")==0)
         {
-             datePicker.datePickerMode = UIDatePickerModeDate;
+            datePicker.datePickerMode = UIDatePickerModeDate;
         }else if(strcmp((const char *)style, (const char *)"dateAndTime")==0)
         {
             datePicker.datePickerMode = UIDatePickerModeDateAndTime;
         }
         
-
+        if(hasMinMax && datePicker.datePickerMode != UIDatePickerModeTime)
+        {
+            datePicker.minimumDate = [NSDate dateWithTimeIntervalSince1970:minDate];
+            datePicker.maximumDate = [NSDate dateWithTimeIntervalSince1970:maxDate];
+        }
+        
         [datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
         
         UIToolbar *pickerDateToolbar = [self initToolbar:buttons];
@@ -365,10 +373,10 @@
         }
         
     }else if(popover){
-        UIView* view =  [[popover contentViewController] view];
-        for (int i = 0; i < [[view subviews] count]; i++) {
-            if ([[view.subviews objectAtIndex:i] class] == [UIDatePicker class]) {
-                UIDatePicker* datepicker = (UIDatePicker*)[view.subviews objectAtIndex:i];
+        UIView* contentView =  [[popover contentViewController] view];
+        for (int i = 0; i < [[contentView subviews] count]; i++) {
+            if ([[contentView.subviews objectAtIndex:i] class] == [UIDatePicker class]) {
+                UIDatePicker* datepicker = (UIDatePicker*)[contentView.subviews objectAtIndex:i];
                 [datepicker setDate:[NSDate dateWithTimeIntervalSinceNow:-99999] animated:YES];
                 break;
             }
@@ -1111,13 +1119,17 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 
 -(void)dealloc{
     
-    picker.delegate = NULL;
+    picker.delegate = nil;
     [picker release];
-    #ifdef MYDEBUG
-        NSLog(@"main dealloc");
-    #endif
+    if(view)
+    {
+        [view release];
+        view = nil;
+    }
+    NSLog(@"main dealloc");
     [tableItemList release];
     [delegate release];
+    popover.delegate = nil;
     [popover release];
     [alert release];
     [actionSheet release];
