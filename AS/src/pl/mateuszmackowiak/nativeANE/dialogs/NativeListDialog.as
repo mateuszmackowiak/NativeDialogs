@@ -45,6 +45,11 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 */
 		public static const ANDROID_HOLO_LIGHT_THEME:uint = 0x00000003;
 		/**
+		 * use a picker instead of a popup to draw the list
+		 * <br>Constant Value: 6 (0x00000006)
+		 */
+		public static const IOS_PICKER_THEME:uint = 0x00000006;
+		/**
 		 * use the traditional (pre-Holo) alert dialog theme
 		 * <br>the default style for Android devices
 		 * <br>Constant Value: 1 (0x00000001)
@@ -86,6 +91,8 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		private var _labelField:String = null;
 		/**@private*/
 		private var _labelFunction:Function = null;
+		private var _indexSelectedOnStart:int;
+		private var _valuesSelectedOnStart:Vector.<Boolean>;
 		
 		/**
 
@@ -110,11 +117,12 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		
 		/**@private*/
 		override protected function init():void{
+			var e:Error;
 			try{
 				_context = ExtensionContext.createExtensionContext(NativeAlertDialog.EXTENSION_ID, "ListDialogContext");
 				_context.addEventListener(StatusEvent.STATUS, onStatus);
 			}catch(e:Error){
-				throw new Error("Error initiating contex of the NativeListDialog extension: "+e.message,e.errorID);
+				throw new Error("Error initiating contex of the NativeListDialog extension: "+e.message+", "+e.getStackTrace(),e.errorID);
 			}
 		}
 		
@@ -157,28 +165,34 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				if(!_buttons || _buttons.length==0){
 					_buttons = Vector.<String>(["OK"]);
 				}
-				
-				if(_displayMode==DISPLAY_MODE_SINGLE){
-					if(isAndroid()){
-						_context.call("show",_title,_buttons,labels,_selectedIndex,_cancelable,_theme);
-						return true;
-					}else if(isIOS()){
-						_context.call("show",_title,_message,_buttons,labels,_selectedIndex);
-						return true;
-					}
-				}else{
-					if(isAndroid()){
-						_context.call("show",_title,_buttons,labels,_selectedValues,_cancelable,_theme);
-						return true;
-					}else if(isIOS()){
-						_context.call("show",_title,_message,_buttons,labels,_selectedValues);
-						return true;
-					}
+				if(_buttons.length==1 && _cancelable)
+				{
+					_buttons.push("Cancel");
+				}
+
+				var selected: * = isSingleMode() ? _selectedIndex : _selectedValues;
+
+				_valuesSelectedOnStart = _selectedValues.concat();
+				_indexSelectedOnStart = _selectedIndex;
+
+				if(isAndroid()) {
+					_context.call("show",_title,_buttons,labels,selected,_cancelable,_theme);
+					return true;
+				} else if(isIOS()) {
+					_context.call("show",_title,_buttons,labels,selected,_cancelable,_theme,_message);
+					return true;
+				} else {
+					return false;
 				}
 			}catch(error:Error){
 				showError("Error calling show method "+error.message,error.errorID);
 			}
 			return false;
+		}
+
+		private function isSingleMode():Boolean
+		{
+			return _displayMode == DISPLAY_MODE_SINGLE;
 		}
 		
 		
@@ -408,7 +422,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		}
 		
 		/**@private*/
-		public function set slectedIndex(value:int):void
+		public function set selectedIndex(value:int):void
 		{
 			if(_isShowing){
 				trace("slectedIndex can't be changed when isShowing==true ");
@@ -681,6 +695,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					
 				}else if(event.code == NativeDialogEvent.CANCELED){
 					_isShowing = false;
+					dispatchStartState();
 					if(hasEventListener(NativeDialogEvent.CANCELED))
 						dispatchEvent(new NativeDialogEvent(NativeDialogEvent.CANCELED,event.level));
 					
@@ -691,28 +706,21 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					
 				}else if(event.code == NativeDialogListEvent.LIST_CHANGE){
 					var index:int = -1;
+					trace("List Change", event.level)
 					if(event.level.indexOf("_")>-1){
 						const args:Array = event.level.split("_");
-						if(isAndroid())
-							index = int(args[0]);
-						else
-							index = _dataProvider.length-1-int(args[0]);
+						index = int(args[0]);
 						var selected:Boolean=false;
 						const selectedStr:String= String(args[1]).toLowerCase();
 						if(selectedStr=="true" || selectedStr=="1")
 							selected = true;
 						_selectedValues[index] = selected;
 						
-						if(hasEventListener(NativeDialogListEvent.LIST_CHANGE))
-							dispatchEvent(new NativeDialogListEvent(NativeDialogListEvent.LIST_CHANGE,index,selected));
-					}else{
-						if(isAndroid())
-							index = int(event.level);
-						else 
-							index = _dataProvider.length-1-int(event.level);
+						dispatchChange(index, selected);
+					} else {
+						index = int(event.level);
 						_selectedIndex = index;
-						if(hasEventListener(NativeDialogListEvent.LIST_CHANGE))
-							dispatchEvent(new NativeDialogListEvent(NativeDialogListEvent.LIST_CHANGE,index,true));
+						dispatchChange(index, true);
 					}
 					
 				}else{
@@ -722,6 +730,33 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			}catch(e:Error){
 				showError(e.message,e.errorID);
 			}
+		}
+
+		private function dispatchStartState():void
+		{
+			_selectedIndex = _indexSelectedOnStart;
+			_selectedValues = _valuesSelectedOnStart.concat();
+			if(isSingleMode())
+			{
+				dispatchChange(_indexSelectedOnStart,true);
+			}
+			else
+			{
+				for(var index:int =0;index<_valuesSelectedOnStart.length;++index)
+				{
+					var wasSelected:Boolean = _valuesSelectedOnStart[index];
+					if(_selectedValues[index] != wasSelected)
+					{
+						dispatchChange(index,wasSelected);
+					}
+				}
+			}
+		}
+
+		private function dispatchChange(index:int, selected:Boolean):void
+		{
+			if (hasEventListener(NativeDialogListEvent.LIST_CHANGE))
+				dispatchEvent(new NativeDialogListEvent(NativeDialogListEvent.LIST_CHANGE, index, selected));
 		}
 	}
 }

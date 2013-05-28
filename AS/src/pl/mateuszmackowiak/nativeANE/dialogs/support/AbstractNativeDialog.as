@@ -4,7 +4,8 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 	import flash.events.EventDispatcher;
 	import flash.external.ExtensionContext;
 	import flash.system.Capabilities;
-	import flash.utils.getQualifiedClassName;
+import flash.utils.Dictionary;
+import flash.utils.getQualifiedClassName;
 	
 	import pl.mateuszmackowiak.nativeANE.nativeDialogNamespace;
 	
@@ -15,6 +16,8 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 	 */
 	public class AbstractNativeDialog extends EventDispatcher implements iNativeDialog
 	{
+		private static const SUPER_CACHE:Dictionary = new Dictionary();
+
 		//---------------------------------------------------------------------
 		//
 		// Private Properties.
@@ -41,6 +44,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 			if(k!=abstractKey){
 				throw new Error("[AbstractNativeDialog] is an abstract class. It must not be directly instantiated.");
 			}
+			SUPER_CACHE[this] = true;
 		}
 		
 		/**@private*/
@@ -205,8 +209,9 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 		{
 			_isShowing = false;
 			try{
-				
+				delete SUPER_CACHE[this];
 				if(_context){
+					trace("Disposing on .dispose");
 					_context.dispose();
 					_wasDisposed = true;
 					_context = null;
@@ -217,22 +222,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 				showError("Error calling dispose method "+e.message,e.errorID);
 			}
 		}
-		
-		
-		
-		
-		protected function isIOS():Boolean
-		{
-			return Capabilities.os.toLowerCase().indexOf("ip")>-1;
-		}
-		protected function isAndroid():Boolean
-		{
-			return Capabilities.os.toLowerCase().indexOf("linux")>-1;
-		}
-		
-		
-		
-		
+
 		public static function isIOS():Boolean
 		{
 			return Capabilities.os.toLowerCase().indexOf("ip")>-1;
@@ -245,9 +235,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 		{
 			return Capabilities.os.toLowerCase().indexOf("win")>-1;
 		}
-		
-		
-		
+
 		/**
 		 * Returns the class name of an object.
 		 */

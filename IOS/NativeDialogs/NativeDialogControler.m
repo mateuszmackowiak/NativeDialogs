@@ -7,6 +7,7 @@
 //
 
 #import "NativeDialogControler.h"
+#import "NativeListDelegate.h"
 #import "AlertTextView.h"
 
 
@@ -109,11 +110,87 @@
 
 #pragma mark - Date Picker
 
+- (UIToolbar *)initToolbar:(FREObject *)buttons
+{
+    UIToolbar *pickerDateToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    pickerDateToolbar.barStyle = UIBarStyleBlackOpaque;
+    
+    NSMutableArray* barItems = [[NSMutableArray alloc]init];
+    
+    uint32_t buttons_len;
+    FREGetArrayLength(buttons, &buttons_len);
+    
+    if(buttons_len>0){
+        uint32_t stingLen;
+        const uint8_t *buttonLabel;
+        UIBarButtonItem *barButton;
+        for (int i = 1; i<buttons_len; i++) {
+            FREObject button;
+            FREGetArrayElementAt(buttons, i, &button);
+            
+            FREGetObjectAsUTF8(button, &stingLen, &buttonLabel);
+            if(buttonLabel){
+                NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
+                if(s && ![s isEqualToString:@""]){
+                    barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
+                    [barButton setTag:i];
+                    [barItems addObject:barButton];
+                    [barButton release];
+                    barButton = nil;
+                }
+            }
+        }
+        
+        
+        UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+        [barItems addObject:flexSpace];
+        [flexSpace release];
+        flexSpace = nil;
+        
+        
+        
+        FREObject button2;
+        FREGetArrayElementAt(buttons, 0, &button2);
+        
+        FREGetObjectAsUTF8(button2, &stingLen, &buttonLabel);
+        if(buttonLabel){
+            NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
+            if(s && ![s isEqualToString:@""]){
+                barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
+                [barButton setTag:0];
+                [barItems addObject:barButton];
+                [barButton release];
+                barButton = nil;
+            }
+        }   
+        
+    }else{
+        UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+        UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(actionSheetButtonClicked:)];
+        [doneBtn setTag:1];
+        
+        [barItems addObject:flexSpace];
+        [barItems addObject:doneBtn];
+        
+        [flexSpace release];
+        [doneBtn release];
+    }
+    
+    
+    [pickerDateToolbar setItems:barItems animated:NO];
+    [barItems release];
+    barItems = nil;
+    return pickerDateToolbar;
+}
+
 -(void)showDatePickerWithTitle:(NSString *)title
                     andMessage:(NSString *)message
                        andDate:(double)date
                       andStyle:(const uint8_t*)style
-                    andButtons:(FREObject*)buttons{
+                    andButtons:(FREObject*)buttons
+                  andHasMinMax:(bool)hasMinMax
+                        andMin:(double)minDate
+                        andMax:(double)maxDate {
     @try {
 
        
@@ -128,83 +205,21 @@
             datePicker.datePickerMode = UIDatePickerModeTime;
         }else if(strcmp((const char *)style, (const char *)"date")==0)
         {
-             datePicker.datePickerMode = UIDatePickerModeDate;
+            datePicker.datePickerMode = UIDatePickerModeDate;
         }else if(strcmp((const char *)style, (const char *)"dateAndTime")==0)
         {
             datePicker.datePickerMode = UIDatePickerModeDateAndTime;
         }
         
-
-        [datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
-        
-        UIToolbar *pickerDateToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-        pickerDateToolbar.barStyle = UIBarStyleBlackOpaque;
-        
-        NSMutableArray* barItems = [[NSMutableArray alloc]init];
-        
-        uint32_t buttons_len;
-        FREGetArrayLength(buttons, &buttons_len);
-        
-        if(buttons_len>0){
-            uint32_t stingLen;
-            const uint8_t *buttonLabel;
-            UIBarButtonItem *barButton;
-            for (int i = 0; i<buttons_len-1; i++) {
-                FREObject button;
-                FREGetArrayElementAt(buttons, i, &button);
-
-                FREGetObjectAsUTF8(button, &stingLen, &buttonLabel);
-                if(buttonLabel){
-                    NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
-                    if(s && ![s isEqualToString:@""]){
-                        barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
-                        [barButton setTag:i];
-                        [barItems addObject:barButton];
-                        [barButton release];
-                        barButton = nil;
-                    }
-                }
-            }
-            
-            
-            UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-            [barItems addObject:flexSpace];
-            [flexSpace release];
-            flexSpace = nil;
-            
-            
-            
-            FREObject button2;
-            FREGetArrayElementAt(buttons, buttons_len-1, &button2);
-            
-            FREGetObjectAsUTF8(button2, &stingLen, &buttonLabel);
-            if(buttonLabel){
-                NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
-                if(s && ![s isEqualToString:@""]){
-                    barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
-                    [barButton setTag:buttons_len-1];
-                    [barItems addObject:barButton];
-                    [barButton release];
-                    barButton = nil;
-                }
-            }
-            
-        }else{
-            UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-            UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(actionSheetButtonClicked:)];
-            [doneBtn setTag:1];
-            
-            [barItems addObject:flexSpace];
-            [barItems addObject:doneBtn];
-
-            [flexSpace release];
-            [doneBtn release];
+        if(hasMinMax && datePicker.datePickerMode != UIDatePickerModeTime)
+        {
+            datePicker.minimumDate = [NSDate dateWithTimeIntervalSince1970:minDate];
+            datePicker.maximumDate = [NSDate dateWithTimeIntervalSince1970:maxDate];
         }
         
+        [datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
         
-        [pickerDateToolbar setItems:barItems animated:NO];
-        [barItems release];
-        barItems = nil;
+        UIToolbar *pickerDateToolbar = [self initToolbar:buttons];
         
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -312,7 +327,6 @@
     
 }
 
-
 -(void)dateChanged:(id)sender{
     
     NSDate *date = [sender date];
@@ -321,7 +335,15 @@
     FREDispatchStatusEventAsync(freContext, (const uint8_t *)"change", (const uint8_t *)[[NSString stringWithFormat:@"%f",timeInterval]UTF8String]);
 }
 - (void)actionSheetButtonClicked:(UIBarButtonItem*)sender {
-    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_closed", (const uint8_t *)[[NSString stringWithFormat:@"%d",[sender tag]] UTF8String]);
+    NSInteger index = [sender tag];
+    if(cancelable && index == 1)
+    {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
+    }
+    else
+    {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_closed", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
+    }
     
     if(popover){
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -351,10 +373,10 @@
         }
         
     }else if(popover){
-        UIView* view =  [[popover contentViewController] view];
-        for (int i = 0; i < [[view subviews] count]; i++) {
-            if ([[view.subviews objectAtIndex:i] class] == [UIDatePicker class]) {
-                UIDatePicker* datepicker = (UIDatePicker*)[view.subviews objectAtIndex:i];
+        UIView* contentView =  [[popover contentViewController] view];
+        for (int i = 0; i < [[contentView subviews] count]; i++) {
+            if ([[contentView.subviews objectAtIndex:i] class] == [UIDatePicker class]) {
+                UIDatePicker* datepicker = (UIDatePicker*)[contentView.subviews objectAtIndex:i];
                 [datepicker setDate:[NSDate dateWithTimeIntervalSinceNow:-99999] animated:YES];
                 break;
             }
@@ -655,128 +677,187 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [alert show];
 }
 
+-(void)selectionChanged:(id)sender
+                withRow:(NSInteger)row{
+    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeListDialog_change", (const uint8_t *)[[NSString stringWithFormat:@"%D",row]UTF8String]);
+}
 
-#pragma mark - List Dialog
-
-
-
-
--(void)showSelectDialogWithTitle: (NSString *)title
+-(void)showSelectPopupWithTitle: (NSString*)title
+                        message: (NSString*)message
+                        options: (FREObject*)options
+                        checked: (FREObject*)checked
+                        buttons: (FREObject*)buttons{
+    @try {
+        FREObjectType type;
+        uint32_t checkedEntry = 0;
+        FREGetObjectType(checked, &type);
+        if(type == FRE_TYPE_NUMBER)
+        {
+            FREGetObjectAsUint32(checked, &checkedEntry);
+        }
+        UIToolbar *toolbar = [self initToolbar:buttons];
+        picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 0, 0)];
+        picker.showsSelectionIndicator = YES;
+        delegate = [[NativeListDelegate alloc] initWithOptions:options target:self action:@selector(selectionChanged:withRow:)];
+        picker.delegate = delegate;
+        toolbar.barStyle = UIBarStyleBlackOpaque;
+        [picker selectRow:checkedEntry inComponent:0 animated:false];
+        UIActionSheet *aac = [[UIActionSheet alloc] initWithTitle:title
+                                                         delegate:self
+                                                cancelButtonTitle:nil
+                                           destructiveButtonTitle:nil
+                                                otherButtonTitles:nil];
+        
+        [self dismissWithButtonIndex:0];
+        [aac addSubview:toolbar];
+        [aac addSubview:picker];
+    
+        [aac setBounds:CGRectMake(0,0,320, 464)];
+    
+        [toolbar sizeToFit];
+        [toolbar release];
+        
+        UIWindow* wind= [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+        if(!wind){
+            NSLog(@"Window is nil");
+            FREDispatchStatusEventAsync(freContext, (const uint8_t*)"error", (const uint8_t*)"Window is nil");
+            return;
+        }
+        [aac showInView:wind];
+        
+        [aac setBounds:CGRectMake(0,0,320, 464)];
+        
+        actionSheet = aac;
+    
+    }
+    @catch (NSException *exception) {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"error", (const uint8_t *)[[exception reason] UTF8String]);
+    }
+}
+-(void)showSelectDialogWithTitle: (NSString*)title
                          message: (NSString*)message
+                            type: (uint32_t)displayType
                          options: (FREObject*)options
                          checked: (FREObject*)checked
                          buttons: (FREObject*)buttons{
     
-    [self dismissWithButtonIndex:0];
-    
-    NSString* closeLabel=nil;
-    NSString* otherLabel=nil;
-    
-    uint32_t buttons_len;
-    if(buttons && FREGetArrayLength(buttons, &buttons_len)==FRE_OK){
-        if(buttons_len>0){
-            FREObject button;
-            FREGetArrayElementAt(buttons, 0, &button);
-            
-            uint32_t buttonLabelLength;
-            const uint8_t *buttonLabel;
-            if(button){
-                FREGetObjectAsUTF8(button, &buttonLabelLength, &buttonLabel);
-                closeLabel = [NSString stringWithUTF8String:(char*)buttonLabel];
-            }
-            if(buttons_len>1){
-                FREObject button1;
-                FREGetArrayElementAt(buttons, 1, &button1);
-                if(button1){
-                    FREGetObjectAsUTF8(button1, &buttonLabelLength, &buttonLabel);
-                    otherLabel = [NSString stringWithUTF8String:(char*)buttonLabel];
-                }
-            }
-        }
-    }
-    if(!closeLabel || [closeLabel isEqualToString:@""]){
-        closeLabel = [NSLocalizedString(@"OK", nil) autorelease];
-    }
-    
-
-    //Create our alert.
-    sbAlert = [[SBTableAlert alloc] initWithTitle:title cancelButtonTitle:closeLabel messageFormat: message];//retain];
-
-    
-    if(otherLabel && ![otherLabel isEqualToString:@""])
+    FREObjectType type;
+    if(displayType == 6)
     {
-        [sbAlert.view addButtonWithTitle:otherLabel ];
+        [self showSelectPopupWithTitle:title message:message options:options checked:checked buttons:buttons];
     }
-
-    uint32_t options_len; // array length
-    if(options && FREGetArrayLength(options, &options_len)==FRE_OK){
+    else
+    {
+        [self dismissWithButtonIndex:0];
         
-        FREObject element;
+        NSString* closeLabel=nil;
+        NSString* otherLabel=nil;
         
-        for(int32_t i=options_len-1; i>=0;i--){
-            
-            // get an element at index
-            if(FREGetArrayElementAt(options, i, &element)==FRE_OK){
-                if(element){
-                    uint32_t elementLength;
-                    const uint8_t *elementLabel;
-                    if(FREGetObjectAsUTF8(element, &elementLength, &elementLabel)==FRE_OK){
-                        ListItem* item = [ListItem listItemWithText:[NSString stringWithUTF8String:(char*)elementLabel]] ;
-                        
-                        if(!tableItemList)
-                            tableItemList= [[NSMutableArray alloc] init];
-                        [tableItemList addObject:item];
+        uint32_t buttons_len;
+        if(buttons && FREGetArrayLength(buttons, &buttons_len)==FRE_OK){
+            if(buttons_len>0){
+                FREObject button;
+                FREGetArrayElementAt(buttons, 0, &button);
+                
+                uint32_t buttonLabelLength;
+                const uint8_t *buttonLabel;
+                if(button){
+                    FREGetObjectAsUTF8(button, &buttonLabelLength, &buttonLabel);
+                    closeLabel = [NSString stringWithUTF8String:(char*)buttonLabel];
+                }
+                if(buttons_len>1){
+                    FREObject button1;
+                    FREGetArrayElementAt(buttons, 1, &button1);
+                    if(button1){
+                        FREGetObjectAsUTF8(button1, &buttonLabelLength, &buttonLabel);
+                        otherLabel = [NSString stringWithUTF8String:(char*)buttonLabel];
                     }
                 }
             }
         }
+        if(!closeLabel || [closeLabel isEqualToString:@""]){
+            closeLabel = [NSLocalizedString(@"Done", nil) autorelease];
+        }
         
-        // options
-        if(checked){
-            FREObjectType type;
-            FREGetObjectType(checked, &type);
-            if(type == FRE_TYPE_NUMBER){
+        
+        //Create our alert.
+        sbAlert = [[SBTableAlert alloc] initWithTitle:title cancelButtonTitle:closeLabel messageFormat: message];//retain];
+        
+        
+        if(otherLabel && ![otherLabel isEqualToString:@""])
+        {
+            [sbAlert.view addButtonWithTitle:otherLabel ];
+        }
+        
+        uint32_t options_len; // array length
+        if(options && FREGetArrayLength(options, &options_len)==FRE_OK){
+            
+            FREObject element;
+            
+            for(int32_t i=0; i<options_len;++i){
                 
-                int32_t checkedValue;
-                FREGetObjectAsInt32(checked, &checkedValue);
-                
-                if(checkedValue>=0 || checkedValue< options_len){
-                    ListItem* item = [tableItemList objectAtIndex:checkedValue];
-                    if(item)
-                        item.selected = YES;
-                }
-                [sbAlert setType:SBTableAlertTypeSingleSelect];
-                [sbAlert setStyle:SBTableAlertStyleApple];
-                [sbAlert setDataSource:self];
-                [sbAlert setDelegate:self];
-                [sbAlert show];
-                
-                FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_opened", (uint8_t*)"-1");
-                
-            }else if(type ==FRE_TYPE_VECTOR || type ==FRE_TYPE_ARRAY){
-                
-                uint32_t checkedItems_len; // array length
-                FREGetArrayLength(checked, &checkedItems_len);
-                if(tableItemList && checkedItems_len == options_len){
-                    for(int32_t i=checkedItems_len-1; i>=0;i--){
-                        // get an element at index
-                        FREObject checkedListItem;
-                        FREGetArrayElementAt(checked, i, &checkedListItem);
-                        if(checkedListItem){
-                            uint32_t boolean;
-                            if(FREGetObjectAsBool(checkedListItem, &boolean)==FRE_OK){
-                                ListItem* item = [tableItemList objectAtIndex:i];
-                                if(item)
-                                    item.selected = boolean;
-                            }
+                // get an element at index
+                if(FREGetArrayElementAt(options, i, &element)==FRE_OK){
+                    if(element){
+                        uint32_t elementLength;
+                        const uint8_t *elementLabel;
+                        if(FREGetObjectAsUTF8(element, &elementLength, &elementLabel)==FRE_OK){
+                            ListItem* item = [ListItem listItemWithText:[NSString stringWithUTF8String:(char*)elementLabel]] ;
+                            
+                            if(!tableItemList)
+                                tableItemList= [[NSMutableArray alloc] init];
+                            [tableItemList addObject:item];
                         }
                     }
                 }
-                [self createMultiChoice];
-                
             }
-        }else{
-            [self createMultiChoice];
+            
+            // options
+            if(checked){
+                FREGetObjectType(checked, &type);
+                if(type == FRE_TYPE_NUMBER){
+                    
+                    int32_t checkedValue;
+                    FREGetObjectAsInt32(checked, &checkedValue);
+                    
+                    if(checkedValue>=0 || checkedValue< options_len){
+                        ListItem* item = [tableItemList objectAtIndex:checkedValue];
+                        if(item)
+                            item.selected = YES;
+                    }
+                    [sbAlert setType:SBTableAlertTypeSingleSelect];
+                    [sbAlert setStyle:SBTableAlertStyleApple];
+                    [sbAlert setDataSource:self];
+                    [sbAlert setDelegate:self];
+                    [sbAlert show];
+                    
+                    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_opened", (uint8_t*)"-1");
+                    
+                }else if(type ==FRE_TYPE_VECTOR || type ==FRE_TYPE_ARRAY){
+                    
+                    uint32_t checkedItems_len; // array length
+                    FREGetArrayLength(checked, &checkedItems_len);
+                    if(tableItemList && checkedItems_len == options_len){
+                        for(int32_t i=checkedItems_len-1; i>=0;i--){
+                            // get an element at index
+                            FREObject checkedListItem;
+                            FREGetArrayElementAt(checked, i, &checkedListItem);
+                            if(checkedListItem){
+                                uint32_t boolean;
+                                if(FREGetObjectAsBool(checkedListItem, &boolean)==FRE_OK){
+                                    ListItem* item = [tableItemList objectAtIndex:i];
+                                    if(item)
+                                        item.selected = boolean;
+                                }
+                            }
+                        }
+                    }
+                    [self createMultiChoice];
+                    
+                }
+            }else{
+                [self createMultiChoice];
+            }
         }
     }
 }
@@ -859,7 +940,12 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 - (void)tableAlert:(SBTableAlert *)tableAlert didDismissWithButtonIndex:(NSInteger)buttonIndex{
 
     NSString *buttonID = [NSString stringWithFormat:@"%d", buttonIndex];
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_closed", (uint8_t*)[buttonID UTF8String]);
+    uint8_t* event = (uint8_t*)"nativeDialog_closed";
+    if(cancelable && buttonIndex == 1)
+    {
+        event = (uint8_t*)"nativeDialog_canceled";
+    }
+    FREDispatchStatusEventAsync(freContext, event, (uint8_t*)[buttonID UTF8String]);
     //Cleanup references.
     
     [tableItemList release];
@@ -1032,12 +1118,18 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 */
 
 -(void)dealloc{
-    #ifdef MYDEBUG
-        NSLog(@"dealloc");
-    #endif
-
-    [tableItemList release];
     
+    picker.delegate = nil;
+    [picker release];
+    if(view)
+    {
+        [view release];
+        view = nil;
+    }
+    NSLog(@"main dealloc");
+    [tableItemList release];
+    [delegate release];
+    popover.delegate = nil;
     [popover release];
     [alert release];
     [actionSheet release];

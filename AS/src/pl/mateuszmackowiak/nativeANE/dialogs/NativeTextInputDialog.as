@@ -166,7 +166,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					return true;
 				}
 				if(isIOS()){
-					var message:String = (textInputs[0].editable==false)? message = textInputs[0].text :null;
+					var message:String = (textInputs[0].editable==false)? textInputs[0].text :null;
 					
 					if(buttons.length>2){
 						trace("Warning: There can be only 2 buttons on IOS NativeTextInputDialog");

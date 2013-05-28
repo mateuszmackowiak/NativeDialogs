@@ -7,12 +7,16 @@
 //
 #import "FlashRuntimeExtensions.h"
 #import "SBTableAlert.h"
+#import "NativeListDelegate.h"
 
-@interface NativeDialogControler : NSObject <UIAlertViewDelegate,SBTableAlertDelegate,SBTableAlertDataSource,UIActionSheetDelegate,UIPopoverControllerDelegate>
+@interface NativeDialogControler : NSObject <UIAlertViewDelegate,SBTableAlertDelegate,SBTableAlertDataSource,UIActionSheetDelegate,UIPopoverControllerDelegate,UIPickerViewDelegate>
 {
     UIPopoverController     *popover;
     UIActionSheet           *actionSheet;
     BOOL                    cancelable;
+    NativeListDelegate      *delegate;
+    UIView                  *view;
+    UIPickerView            *picker;
     
     CGFloat oldX;
 }
@@ -43,6 +47,7 @@
 
 -(void)showSelectDialogWithTitle: (NSString *)title
                          message: (NSString*)message
+                            type: (uint32_t)type
                          options: (FREObject*)options
                          checked: (FREObject*)checked
                          buttons: (FREObject*)buttons;
@@ -56,14 +61,17 @@
                    style: (int32_t)style
                  message: (NSString*)message
                 progress: (NSNumber*)progress
-            showActivity:(Boolean)showActivity
-               cancleble:(Boolean)cancleble;
+            showActivity: (Boolean)showActivity
+               cancleble: (Boolean)cancleble;
 
 -(void)showDatePickerWithTitle:(NSString *)title
                     andMessage:(NSString *)message
                        andDate:(double)date
                       andStyle:(const uint8_t*)style
-                    andButtons:(FREObject*)buttons;
+                    andButtons:(FREObject*)buttons
+                  andHasMinMax:(bool)hasMinMax
+                        andMin:(double)min
+                        andMax:(double)max;
 
 -(void)updateDateWithTimestamp:(double)timeStamp;
 -(void)setCancelable:(uint32_t)cancelable;

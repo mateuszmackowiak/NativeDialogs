@@ -18,7 +18,7 @@ import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 
 /**
-* @author Mateusz Maçkowiak
+* @author Mateusz Ma¬çkowiak
 */
 public class NativeAlertContext  extends FREContext {
 

@@ -104,6 +104,9 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		private var _displayMode:String = DISPLAY_MODE_DATE;
 		/**@private*/
 		private var _is24HourView:Boolean = false;
+		private var _startDate:Date;
+		private var _maxDate:Date;
+		private var _minDate:Date;
 		//---------------------------------------------------------------------
 		//
 		// Public Methods.
@@ -219,6 +222,17 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			}
 			_message = value;
 		}
+
+		public function set maxDate(date:Date):void
+		{
+			_maxDate = date;
+		}
+
+		public function set minDate(date:Date):void
+		{
+			_minDate = date;
+		}
+
 		/**
 		 * The message of the dialog
 		 * @see setMessage()
@@ -344,10 +358,28 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				if(!_buttons || _buttons.length==0){
 					_buttons = Vector.<String>(["OK"]);
 				}
-				if(isAndroid()){
-					_context.call("show", _title,_message,dateToString(_date),_buttons,_displayMode, _is24HourView,_cancelable, _theme);
-				}else if(isIOS()){
-					_context.call("show", _title,_message,dateToIOSTimestamp(_date),_buttons,_displayMode, _is24HourView,_cancelable, _theme);
+				if(_buttons.length==1 && _cancelable && isIOS())
+				{
+					_buttons.push("Cancel");
+				}
+				_startDate = date;
+
+
+				if(_minDate != null && _maxDate != null)
+				{
+					if(isAndroid()){
+						_context.call("show", _title,_message,dateToString(_date),_buttons,_displayMode, _is24HourView,_cancelable, _theme, _minDate.time, _maxDate.time);
+					}else if(isIOS()){
+						_context.call("show", _title,_message,dateToIOSTimestamp(_date),_buttons,_displayMode, _is24HourView,_cancelable, _theme, dateToIOSTimestamp(_minDate), dateToIOSTimestamp(_maxDate));
+					}
+				}
+				else
+				{
+					if(isAndroid()){
+						_context.call("show", _title,_message,dateToString(_date),_buttons,_displayMode, _is24HourView,_cancelable, _theme);
+					}else if(isIOS()){
+						_context.call("show", _title,_message,dateToIOSTimestamp(_date),_buttons,_displayMode, _is24HourView,_cancelable, _theme);
+					}
 				}
 				
 				return true;
@@ -497,22 +529,25 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					dispatchEvent(new NativeDialogEvent(NativeDialogEvent.OPENED,event.level));
 				}
 			}
+			else if( event.code == 'log') {
+				trace(event.level);
+			}
 			else if( event.code == Event.CHANGE)
 			{
 				if(isAndroid()){
 					var a:Array = event.level.split(",");
+					trace("reading date", a[1],a[2],a[3]);
 					if(a[0]=="day"){
 						_date = stringDateToDate(a[1],a[2],a[3],_date);
 					}else{
 						_date = stringTimeToDate(a[1],a[2],_date);
 					}
+					trace(_date.toString());
 				}else{
 					var timestamp:Number = Number(event.level)*1000;
 					_date.time = timestamp;
 				}
-				if(hasEventListener(Event.CHANGE)){
-					dispatchEvent(new Event(Event.CHANGE));
-				}
+				dispatchChange();
 			}
 			else if( event.code == NativeDialogEvent.CLOSED)
 			{
@@ -522,12 +557,27 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			
 			}else if(event.code == NativeDialogEvent.CANCELED){
 				_isShowing = false;
+				reset();
 				if(hasEventListener(NativeDialogEvent.CANCELED))
 					dispatchEvent(new NativeDialogEvent(NativeDialogEvent.CANCELED,event.level));
 				
 			}
 			else{
 				showError(event);
+			}
+		}
+
+		private function reset():void
+		{
+			_date = _startDate;
+			dispatchChange();
+		}
+
+		private function dispatchChange():void
+		{
+			if (hasEventListener(Event.CHANGE))
+			{
+				dispatchEvent(new Event(Event.CHANGE));
 			}
 		}
 	}

@@ -38,6 +38,7 @@
 		9AD71CBD16CBC2860086A206 /* success@2x.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB916CBC2800086A206 /* success@2x.png */; };
 		9AEF3E6416BFE96A0003036B /* AlertTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AEF3E6216BFE96A0003036B /* AlertTextView.h */; };
 		9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AEF3E6316BFE96A0003036B /* AlertTextView.m */; };
+		B1CCA51B171EA35900716F40 /* NativeListDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B1CCA51A171EA35900716F40 /* NativeListDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +112,8 @@
 		9ADF1B1416BF0F2200DA9AAA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9AEF3E6216BFE96A0003036B /* AlertTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlertTextView.h; path = AlertTextView/AlertTextView.h; sourceTree = SOURCE_ROOT; };
 		9AEF3E6316BFE96A0003036B /* AlertTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlertTextView.m; path = AlertTextView/AlertTextView.m; sourceTree = SOURCE_ROOT; };
+		B1CCA519171EA2FD00716F40 /* NativeListDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeListDelegate.h; sourceTree = "<group>"; };
+		B1CCA51A171EA35900716F40 /* NativeListDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeListDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +191,8 @@
 				9A03971716BD905700445AD1 /* Supporting Files */,
 				9A03972616BD916800445AD1 /* NativeDialogControler.h */,
 				9A03972716BD916800445AD1 /* NativeDialogControler.m */,
+				B1CCA519171EA2FD00716F40 /* NativeListDelegate.h */,
+				B1CCA51A171EA35900716F40 /* NativeListDelegate.m */,
 			);
 			path = NativeDialogs;
 			sourceTree = "<group>";
@@ -410,6 +415,7 @@
 				9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */,
 				9A199BAD16CD9B8F00953C37 /* WToast.m in Sources */,
 				9AADCCF316CEADE3008BB47C /* SBTableAlert.m in Sources */,
+				B1CCA51B171EA35900716F40 /* NativeListDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
