@@ -152,15 +152,14 @@
                                                 cancelButtonTitle:nil
                                            destructiveButtonTitle:nil
                                                 otherButtonTitles:nil];
+        NSLog(@"Createf aac");
         
-        [self dismissWithButtonIndex:0];
         [aac addSubview:toolbar];
         [aac addSubview:viewToPresent];
         
-        [aac setBounds:CGRectMake(0,0,320, 464)];
         
-        [toolbar sizeToFit];
-        [toolbar release];
+        NSLog(@"toolbar release");
+        [aac setBounds:CGRectMake(0,0,320, 464)];
         
         UIWindow* wind= [[[UIApplication sharedApplication] windows] objectAtIndex:0];
         if(!wind){
@@ -175,11 +174,9 @@
         actionSheet = aac;
         
     }
-    
     [toolbar sizeToFit];
-    
-    //[viewToPresent release];
     [toolbar release];
+    
 }
 
 
@@ -480,6 +477,7 @@
     
     
 }
+
 
 #pragma mark - UIPopoverControllerDelegate
 

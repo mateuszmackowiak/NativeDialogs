@@ -49,7 +49,7 @@
         action = changeAction;
         target = changeTarget;
         options = [[NSMutableArray alloc] init];
-        widths = [NSMutableArray array];
+        widths = [[NSMutableArray alloc] init];
         uint32_t options_len;
         if (FREGetArrayLength(opts, &options_len) == FRE_OK)
         {
@@ -65,9 +65,9 @@
                 if(FREGetArrayElementAt(wds, i, &item) == FRE_OK){
                     double width = 300;
                     if (FREGetObjectAsDouble(item, &width)==FRE_OK) {
-                        [widths addObject:[NSNumber numberWithDouble:width]];
+                        [widths addObject:[[NSNumber alloc]initWithDouble:width]];
                     }else{
-                        [widths addObject:[NSNumber numberWithDouble:300/options_len]];
+                        [widths addObject:[[NSNumber alloc]initWithDouble:300/options_len]];
                     }
                     
                 }else{
@@ -155,13 +155,14 @@
 // tell the picker the width of each row for a given component
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
     if (multipleOptions) {
-        return ((NSNumber*)[widths objectAtIndex:component]).floatValue;
+        return ((NSNumber*)[widths objectAtIndex:component]).doubleValue;
     }
     return 300;
 }
 
 - (void)dealloc
 {
+    [widths release];
     [options release];
     [super dealloc];
 }
