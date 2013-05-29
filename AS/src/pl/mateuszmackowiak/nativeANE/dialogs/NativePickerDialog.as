@@ -145,6 +145,9 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				if(isIOS()){
 					_context.call("show",_title,_message,_buttons, data, indexes,widths,cancelable, _theme);
 				}
+				else if(isAndroid()){
+					_context.call("show",_title,_message,_buttons, data, indexes,widths,cancelable, _theme);
+				}
 				return true;
 			}catch(e:Error){
 				showError("While calling show method: "+e.message,e.errorID);
@@ -197,6 +200,19 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		}
 		
 		
+		
+		
+		override public function set title(value:String):void
+		{
+		}
+		override public function setTitle(value:String):Boolean
+		{
+			return true;
+		}
+		override public function shake():void
+		{
+		}
+	
 		//---------------------------------------------------------------------
 		//
 		// STATIC Content

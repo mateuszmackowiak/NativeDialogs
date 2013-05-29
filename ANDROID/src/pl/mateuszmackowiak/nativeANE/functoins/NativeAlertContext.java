@@ -18,7 +18,7 @@ import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 
 /**
-* @author Mateusz Makowiak
+* @author Mateusz Mackowiak
 */
 public class NativeAlertContext  extends FREContext {
 
@@ -205,7 +205,7 @@ public class NativeAlertContext  extends FREContext {
 	
 	
 	@SuppressLint("NewApi")
-	private static final AlertDialog creatAlert(FREContext context,String message,String title,String closeLabel,String otherLabel,boolean cancelable,int theme)
+	private static AlertDialog creatAlert(FREContext context,String message,String title,String closeLabel,String otherLabel,boolean cancelable,int theme)
     {  
     	AlertDialog.Builder builder = (android.os.Build.VERSION.SDK_INT<11)?new AlertDialog.Builder(context.getActivity()): new AlertDialog.Builder(context.getActivity(),theme);
     	
