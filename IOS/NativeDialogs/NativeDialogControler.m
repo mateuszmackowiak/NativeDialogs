@@ -107,8 +107,81 @@
 
 
 
+#pragma mark - Toolbar and Pickers Utilities
 
-#pragma mark - Date Picker
+
+-(void)presentView:(UIView*)viewToPresent withToolBar:(UIToolbar*)toolbar andTitle:(NSString*)title{
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        UIViewController* popoverContent = [[UIViewController alloc] init];
+        
+        UIView *popoverView = [[UIView alloc] init];
+        popoverView.backgroundColor = [UIColor blackColor];
+        
+        [popoverView addSubview:viewToPresent];
+        [popoverView addSubview:toolbar];
+        
+        popoverContent.view = popoverView;
+        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
+        popoverController.delegate=self;
+        
+        UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
+        
+        [popoverController setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
+        CGFloat viewWidth = wind.frame.size.width;
+        CGFloat viewHeight = wind.frame.size.height;
+        CGRect rect = CGRectMake(viewWidth/2, viewHeight/2, 1, 1);
+        
+        [popoverController presentPopoverFromRect:rect inView:wind permittedArrowDirections:0 animated:YES];
+        
+        popover = popoverController;
+        
+        [popoverView release];
+        popoverView = nil;
+        [popoverContent release];
+        popoverContent = nil;
+        
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        
+    }else{
+        UIActionSheet *aac = [[UIActionSheet alloc] initWithTitle:title
+                                                         delegate:self
+                                                cancelButtonTitle:nil
+                                           destructiveButtonTitle:nil
+                                                otherButtonTitles:nil];
+        
+        [self dismissWithButtonIndex:0];
+        [aac addSubview:toolbar];
+        [aac addSubview:viewToPresent];
+        
+        [aac setBounds:CGRectMake(0,0,320, 464)];
+        
+        [toolbar sizeToFit];
+        [toolbar release];
+        
+        UIWindow* wind= [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+        if(!wind){
+            NSLog(@"Window is nil");
+            FREDispatchStatusEventAsync(freContext, (const uint8_t*)"error", (const uint8_t*)"Window is nil");
+            return;
+        }
+        [aac showInView:wind];
+        
+        [aac setBounds:CGRectMake(0,0,320, 464)];
+        
+        actionSheet = aac;
+        
+    }
+    
+    [toolbar sizeToFit];
+    
+    //[viewToPresent release];
+    [toolbar release];
+}
+
 
 - (UIToolbar *)initToolbar:(FREObject *)buttons
 {
@@ -183,6 +256,147 @@
     return pickerDateToolbar;
 }
 
+
+
+- (void)actionSheetButtonClicked:(UIBarButtonItem*)sender {
+    NSInteger index = [sender tag];
+    if(cancelable && index == 1)
+    {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
+    }
+    else
+    {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_closed", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
+    }
+    
+    if(popover){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+        [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+        
+        [popover dismissPopoverAnimated:YES];
+    }else{
+        [actionSheet dismissWithClickedButtonIndex:[sender tag] animated:YES];
+        [actionSheet autorelease];
+        actionSheet = nil;
+    }
+}
+#pragma mark pickers rotation 
+
+- (void) didRotate:(NSNotification *)notification{
+    if([popover isPopoverVisible]){
+        UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
+        
+        [popover setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
+        CGFloat viewWidth = wind.frame.size.width;
+        CGFloat viewHeight = wind.frame.size.height;
+        CGRect rect = CGRectMake(viewWidth/2, viewHeight/2, 1, 1);
+        
+        [popover presentPopoverFromRect:rect inView:wind permittedArrowDirections:0 animated:YES];
+    }
+}
+
+
+
+#pragma mark - Picker
+
+-(void)showPickerWithOptions:(FREObject*)options
+                  andIndexes:(FREObject*)indexes
+                   withTitle:(NSString*)title
+                  andMessage:(NSString*)message
+                  andButtons:(FREObject*)buttons
+                    andWidths:(FREObject*)widths{
+#ifdef MYDEBUG
+    NSLog(@"Show picker with options");
+#endif
+    @try {
+        uint32_t options_len;
+        if (FREGetArrayLength(options, &options_len) == FRE_OK)
+        {
+            if (options_len==1) {
+                FREObject singleOptions;
+                FREObject index;
+                if(FREGetArrayElementAt(options, 0, &singleOptions) == FRE_OK){
+                    if (FREGetArrayElementAt(indexes, 0, &index) == FRE_OK) {
+                        int32_t checkedEntry =-1;
+                        if(FREGetObjectAsInt32(index, &checkedEntry)!=FRE_OK){
+                            checkedEntry = -1;
+                        }
+                        [self showSingleOptionsPickerWithTitle:title message:message options:singleOptions checked:checkedEntry buttons:buttons];
+                    }
+                }
+            }else{
+                UIToolbar *toolbar = [self initToolbar:buttons];
+                picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 0, 0)];
+                picker.showsSelectionIndicator = YES;
+                delegate = [[NativeListDelegate alloc] initWithMultipleOptions:options andWidths:widths target:self action:@selector(selectionChanged:withRow:andComponent:)];
+                picker.delegate = delegate;
+                toolbar.barStyle = UIBarStyleBlackOpaque;
+                
+                uint32_t indexes_len;
+                if (FREGetArrayLength(indexes, &indexes_len) == FRE_OK)
+                {
+                    for(int i=0; i<indexes_len; ++i)
+                    {
+                        FREObject item;
+                        FREResult result = FREGetArrayElementAt(indexes, i, &item);
+                        if(result == FRE_OK){
+                            int32_t checkedEntry =-1;
+                            if(FREGetObjectAsInt32(index, &checkedEntry)==FRE_OK){
+                                if(checkedEntry>-1){
+                                    [picker selectRow:checkedEntry inComponent:i animated:NO];
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+                
+                [self presentView:picker withToolBar:toolbar andTitle:title];
+            }
+
+        }
+    }
+    @catch (NSException *exception) {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"error", (const uint8_t *)[[exception reason] UTF8String]);
+    }
+#ifdef MYDEBUG
+    NSLog(@"Show picker with options ended");
+#endif
+}
+
+
+-(void)setSelectedRow:(NSInteger)index andSection:(NSInteger)section{
+    [picker selectRow:index inComponent:section animated:YES];
+}
+
+
+-(void)showSingleOptionsPickerWithTitle: (NSString*)title
+                        message: (NSString*)message
+                        options: (FREObject*)options
+                        checked: (NSInteger)checked
+                        buttons: (FREObject*)buttons{
+    @try {
+        
+        UIToolbar *toolbar = [self initToolbar:buttons];
+        picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 0, 0)];
+        picker.showsSelectionIndicator = YES;
+        delegate = [[NativeListDelegate alloc] initWithOptions:options target:self action:@selector(selectionChanged:withRow:)];
+        picker.delegate = delegate;
+        toolbar.barStyle = UIBarStyleBlackOpaque;
+        if(checked>-1){
+            [picker selectRow:checked inComponent:0 animated:NO];
+        }
+        
+        [self presentView:picker withToolBar:toolbar andTitle:title];
+        
+        
+    }
+    @catch (NSException *exception) {
+        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"error", (const uint8_t *)[[exception reason] UTF8String]);
+    }
+}
+
+#pragma mark - Date Picker
 -(void)showDatePickerWithTitle:(NSString *)title
                     andMessage:(NSString *)message
                        andDate:(double)date
@@ -219,75 +433,9 @@
         
         [datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
         
-        UIToolbar *pickerDateToolbar = [self initToolbar:buttons];
+        UIToolbar *toolbar = [self initToolbar:buttons];
         
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            UIViewController* popoverContent = [[UIViewController alloc] init];
-            
-            UIView *popoverView = [[UIView alloc] init];
-            popoverView.backgroundColor = [UIColor blackColor];
-            
-            [popoverView addSubview:datePicker];
-            [popoverView addSubview:pickerDateToolbar];
-            
-            popoverContent.view = popoverView;
-            UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
-            popoverController.delegate=self;
-            
-            UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
-                             
-            [popoverController setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
-            CGFloat viewWidth = wind.frame.size.width;
-            CGFloat viewHeight = wind.frame.size.height;
-            CGRect rect = CGRectMake(viewWidth/2, viewHeight/2, 1, 1);
-            
-            [popoverController presentPopoverFromRect:rect inView:wind permittedArrowDirections:0 animated:YES];
-            
-            popover = popoverController;
-            
-            //[popoverController release];
-            [popoverView release];
-            popoverView = nil;
-            [popoverContent release];
-            popoverContent = nil;
-            
-            [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
-            
-        }else{
-            
-            UIActionSheet *aac = [[UIActionSheet alloc] initWithTitle:title
-                                                             delegate:self
-                                                    cancelButtonTitle:nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:nil];
-            
-            [aac addSubview:pickerDateToolbar];
-            [aac addSubview:datePicker];
-            
-            UIWindow* wind= [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-            if(!wind){
-                NSLog(@"Window is nil");
-                FREDispatchStatusEventAsync(freContext, (const uint8_t*)"error", (const uint8_t*)"Window is nil");
-                return;
-            }
-            [aac showInView:wind];
-            
-            [aac setBounds:CGRectMake(0,0,320, 464)];
-            
-            
-            actionSheet = aac;
-            //[aac release];
-        }
-        
-        [pickerDateToolbar sizeToFit];
-        
-        
-        [datePicker release];
-        [pickerDateToolbar release];
-        
+        [self presentView:datePicker withToolBar:toolbar andTitle:title];
 
     }
     @catch (NSException *exception) {
@@ -295,37 +443,9 @@
     }
 
 }
-- (void) didRotate:(NSNotification *)notification{
-    if([popover isPopoverVisible]){
-        UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
-        
-        [popover setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
-        CGFloat viewWidth = wind.frame.size.width;
-        CGFloat viewHeight = wind.frame.size.height;
-        CGRect rect = CGRectMake(viewWidth/2, viewHeight/2, 1, 1);
-        
-        [popover presentPopoverFromRect:rect inView:wind permittedArrowDirections:0 animated:YES];
-    }
-}
 
-- (BOOL) popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
-{
-    //FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_pressedOutside", (const uint8_t *)"-1");
-    //return NO;
-    
-    return cancelable;
-}
 
--(void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-    [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
-    
-    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)"-1");
-    [popover autorelease];
-    popover = nil;
-    
-}
+
 
 -(void)dateChanged:(id)sender{
     
@@ -334,31 +454,6 @@
     
     FREDispatchStatusEventAsync(freContext, (const uint8_t *)"change", (const uint8_t *)[[NSString stringWithFormat:@"%f",timeInterval]UTF8String]);
 }
-- (void)actionSheetButtonClicked:(UIBarButtonItem*)sender {
-    NSInteger index = [sender tag];
-    if(cancelable && index == 1)
-    {
-        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
-    }
-    else
-    {
-        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_closed", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
-    }
-    
-    if(popover){
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-        [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
-        
-        [popover dismissPopoverAnimated:YES];
-    }else{
-        [actionSheet dismissWithClickedButtonIndex:[sender tag] animated:YES];
-        [actionSheet autorelease];
-        actionSheet = nil;
-    }
-   
-//    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_pressedButton", (const uint8_t *)[[NSString stringWithFormat:@"%d",[sender tag]] UTF8String]);
-}
-
 
 -(void)updateDateWithTimestamp:(double)timeStamp{
 
@@ -386,6 +481,26 @@
     
 }
 
+#pragma mark - UIPopoverControllerDelegate
+
+- (BOOL) popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
+{
+    //FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_pressedOutside", (const uint8_t *)"-1");
+    //return NO;
+    
+    return cancelable;
+}
+
+-(void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
+    
+    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)"-1");
+    [popover autorelease];
+    popover = nil;
+    
+}
 
 
 #pragma mark - Progress Dialog
@@ -435,6 +550,7 @@
 
 
 - (void) updateProgressBar:(NSNumber*)num {
+    
     if(progressView)
         progressView.progress=[num floatValue];
 }
@@ -677,63 +793,19 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [alert show];
 }
 
+
+#pragma mark - ListDialog
+
 -(void)selectionChanged:(id)sender
                 withRow:(NSInteger)row{
-    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeListDialog_change", (const uint8_t *)[[NSString stringWithFormat:@"%D",row]UTF8String]);
+    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeListDialog_change", (const uint8_t *)[[NSString stringWithFormat:@"%D",row] UTF8String]);
+}
+-(void)selectionChanged:(id)sender
+                withRow:(NSInteger)row
+           andComponent:(NSInteger)component{
+    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeListDialog_change", (const uint8_t *)[[NSString stringWithFormat:@"%D_%D",component,row] UTF8String]);
 }
 
--(void)showSelectPopupWithTitle: (NSString*)title
-                        message: (NSString*)message
-                        options: (FREObject*)options
-                        checked: (FREObject*)checked
-                        buttons: (FREObject*)buttons{
-    @try {
-        FREObjectType type;
-        uint32_t checkedEntry = 0;
-        FREGetObjectType(checked, &type);
-        if(type == FRE_TYPE_NUMBER)
-        {
-            FREGetObjectAsUint32(checked, &checkedEntry);
-        }
-        UIToolbar *toolbar = [self initToolbar:buttons];
-        picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 0, 0)];
-        picker.showsSelectionIndicator = YES;
-        delegate = [[NativeListDelegate alloc] initWithOptions:options target:self action:@selector(selectionChanged:withRow:)];
-        picker.delegate = delegate;
-        toolbar.barStyle = UIBarStyleBlackOpaque;
-        [picker selectRow:checkedEntry inComponent:0 animated:false];
-        UIActionSheet *aac = [[UIActionSheet alloc] initWithTitle:title
-                                                         delegate:self
-                                                cancelButtonTitle:nil
-                                           destructiveButtonTitle:nil
-                                                otherButtonTitles:nil];
-        
-        [self dismissWithButtonIndex:0];
-        [aac addSubview:toolbar];
-        [aac addSubview:picker];
-    
-        [aac setBounds:CGRectMake(0,0,320, 464)];
-    
-        [toolbar sizeToFit];
-        [toolbar release];
-        
-        UIWindow* wind= [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-        if(!wind){
-            NSLog(@"Window is nil");
-            FREDispatchStatusEventAsync(freContext, (const uint8_t*)"error", (const uint8_t*)"Window is nil");
-            return;
-        }
-        [aac showInView:wind];
-        
-        [aac setBounds:CGRectMake(0,0,320, 464)];
-        
-        actionSheet = aac;
-    
-    }
-    @catch (NSException *exception) {
-        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"error", (const uint8_t *)[[exception reason] UTF8String]);
-    }
-}
 -(void)showSelectDialogWithTitle: (NSString*)title
                          message: (NSString*)message
                             type: (uint32_t)displayType
@@ -744,7 +816,12 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     FREObjectType type;
     if(displayType == 6)
     {
-        [self showSelectPopupWithTitle:title message:message options:options checked:checked buttons:buttons];
+        uint32_t checkedEntry =-1;
+        if(FREGetObjectAsUint32(checked, &checkedEntry)!=FRE_OK){
+            checkedEntry = -1;
+        }
+
+        [self showSingleOptionsPickerWithTitle:title message:message options:options checked:checkedEntry buttons:buttons];
     }
     else
     {
@@ -863,6 +940,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 }
 
 
+
 -(void)createMultiChoice{
 
     
@@ -978,6 +1056,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [sbAlert.view dismissWithClickedButtonIndex:index animated:YES];
 }
 -(UIView*)getView{
+    NSLog(@"Getting View");
     UIView *u;
     if(popover ){
         u = popover.contentViewController.view;
@@ -987,11 +1066,14 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     else if(sbAlert && sbAlert.view.isHidden==NO){
         u = sbAlert.view;
     }
+    NSLog(@"Got View %@",u);
     return u;
 }
 
 -(void)shake{
-    
+    #ifdef MYDEBUG
+        NSLog(@"shake");
+#endif
     UIView* u= [self getView];
     if(u){
         CGRect r = u.frame;
@@ -1012,10 +1094,15 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     }
 }
 -(void)animationFinished:(NSString*)animationID{
+    
     UIView* u= [self getView];
     CGRect r = u.frame;
     r.origin.x = oldX;
     [u setFrame:r];
+    
+#ifdef MYDEBUG
+    NSLog(@"Finished shake");
+#endif
 }
 
 -(void)updateMessage:(NSString*)message

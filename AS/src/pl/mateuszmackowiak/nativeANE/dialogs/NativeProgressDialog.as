@@ -110,7 +110,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 * 
 		 * @playerversion 3.0
 		 */
-		public function NativeProgressDialog(androidTheme:int=-1,IOSTheme:int=-1)
+		public function NativeProgressDialog(androidTheme:int=-1,iOSTheme:int=-1)
 		{
 			super(abstractKey);
 			if(!isNaN(androidTheme) && androidTheme>-1)
@@ -118,12 +118,11 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			else
 				_androidTheme = _defaultAndroidTheme;
 			
-			if(!isNaN(IOSTheme) && IOSTheme>-1)
-				_iosTheme = IOSTheme;
+			if(!isNaN(iOSTheme) && iOSTheme>-1)
+				_iosTheme = iOSTheme;
 			else
 				_iosTheme = _defaultIOSTheme;
 			
-			init();
 		}
 		
 		/**@private*/
@@ -326,10 +325,11 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			if(!isNaN(value) && _progress!==value  && value>=0 && value<= _maxProgress){
 				try{
 					if(_isShowing){
-						if(isAndroid())
+						if(isAndroid()){
 							_context.call("updateProgress",value);
-						else
+						}else if(_iosTheme == DEFAULT_THEME){
 							_context.call("updateProgress",value/_maxProgress);
+						}
 						_progress = value;
 						return true;
 					}else{
@@ -415,6 +415,12 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		}
 		
 		
+		
+		override public function shake():void{
+			if(_context && ((isIOS() && _iosTheme==DEFAULT_THEME) || isAndroid())){
+				super.shake();
+			}
+		}
 		
 		/**
 		 * The message of the dialog. Changes the title even if isShowing.

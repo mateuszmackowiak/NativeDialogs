@@ -137,7 +137,6 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			else
 				_theme = _defaultTheme;
 			
-			init();
 		}
 		/**@private*/
 		override protected function init():void{

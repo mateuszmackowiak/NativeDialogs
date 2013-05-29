@@ -12,16 +12,16 @@
 #define NativeDialogs_NativeListDelegate_h
 
 @interface NativeListDelegate : NSObject <UIPickerViewDelegate>
-{
-    NSMutableArray *options;
-    uint32_t options_len;
-    SEL action;
-    id target;
-    
-}
+
+
 -(NativeListDelegate*) initWithOptions: (FREObject*) options
-                                target: changeTarget
+                                target: (id) changeTarget
                                 action: (SEL) changeAction;
+
+-(NativeListDelegate*) initWithMultipleOptions: (FREObject*) options
+                                     andWidths:(FREObject*)widths
+                                        target: (id) changeTarget
+                                        action: (SEL) changeAction;
 @end
 
 #endif

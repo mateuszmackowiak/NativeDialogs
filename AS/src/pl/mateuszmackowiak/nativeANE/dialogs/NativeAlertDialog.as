@@ -36,7 +36,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		/**
 		 * The current Version of the Extension.
 		 */
-		public static const VERSION:String = "0.9 Beta";
+		public static const VERSION:String = "0.9.5 Beta";
 		/**
 		 * Uses the device's default alert theme with a dark background.
 		 * <br>Constant Value: 4 (0x00000004)
@@ -80,7 +80,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		/**@private*/
 		private var _closeLabel:String="OK";
 		/**@private*/
-		private var _otherLabels:String ="";
+		private var _buttons:Vector.<String> = null;
 		/**@private*/
 		private var _theme:int = -1;
 		/**@private*/
@@ -116,8 +116,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				_theme = theme;
 			else
 				_theme = _defaultTheme;
-			
-			init();
+		
 		}
 		
 		
@@ -155,23 +154,50 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			return _closeHandler;
 		}
 		
+		
+		[Deprecated]
 		/**
 		 * List of buttons as a string with comma as separator.
 		 */
 		public function set otherLabels(value:String):void
 		{
-			_otherLabels = value;
+			if(value){
+				_buttons = Vector.<String>(value.split(",")); 
+			}else{
+				_buttons = null;
+			}
 		}
 		/**
 		 * @private
 		 */
 		public function get otherLabels():String
 		{
-			return _otherLabels;
+			if(_buttons){
+				return _buttons.join(",");
+			}
+			return null;
+		}
+
+		
+		/**
+		 * List of buttons.
+		 */
+		public function set buttons(value:Vector.<String>):void
+		{
+			_buttons = value;
+		}
+		/**
+		 * @private
+		 */
+		public function get buttons():Vector.<String>
+		{
+			return _buttons;
 		}
 		
 		
 		
+		
+		[Deprecated]
 		/**
 		 * Cancle button label for the alert.
 		 * @default "OK"
@@ -283,7 +309,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					_message="";
 				
 				
-				_context.call("showAlertWithTitleAndMessage", _title, _message, _closeLabel, _otherLabels, cancelable, _theme);
+				_context.call("showAlertWithTitleAndMessage", _title, _message, _closeLabel, _buttons.join(","), cancelable, _theme);
 				
 				return true;
 			}catch(e:Error){
@@ -311,6 +337,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		}
 		
 	
+		[Deprecated(replacement="pl.mateuszmackowiak.nativeANE.dialogs.NativeAlertDialog#showAlert()")] 
 		/**
 		 * Creates and shows a NativeAlertDialog dialog. <b><br>Use event.prevetDefault() to prevent disposing.</b>
 		 * @param text message showed in the Alert control.
@@ -324,6 +351,8 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 * @throws Error if the call was unsuccessful.
 		 * 
 		 * @event pl.mateuszmackowiak.nativeANE.events.NativeDialogEvent
+		 * 
+		 * @see pl.mateuszmackowiak.nativeANE.dialogs.NativeAlertDialog.showAlert
 		 */
 		public static function show(message:String = "", title:String = "Error", closeLabel : String="OK", otherLabels : String = "" , closeHandler:Function = null ,cancelable:Boolean = true, theme:int = -1):NativeAlertDialog
 		{
@@ -341,6 +370,35 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			return alert;
 		}
 		
+		
+		/**
+		 * Creates and shows a NativeAlertDialog dialog. <b><br>Use event.prevetDefault() to prevent disposing.</b>
+		 * @param text message showed in the Alert control.
+		 * @param buttons vector of labels for dialog buttons
+		 * @param title title of the Alert control.
+		 * @param otherLabels text of the other buttons. Sepperated with "," adds aditional buttons. In the close event answer look for the index of the button.
+		 * @param closeHandler function called when dialog closes (NativeDialogEvent). <i>Called only once and if not </i><code>event.preventDefault()</code><i> will be removed.</i> 
+		 * @param cancelable on back button or outside relese closes with index -1 (only Android)
+		 * @param androidTheme default -1 uses the defaultAndroidTheme 
+		 * 
+		 * @throws Error if the call was unsuccessful.
+		 * 
+		 * @event pl.mateuszmackowiak.nativeANE.events.NativeDialogEvent
+		 */
+		public static function showAlert(message:String = "", title:String = "Error", buttons:Vector.<String> = null , closeHandler:Function = null ,cancelable:Boolean = true, theme:int = -1):NativeAlertDialog
+		{
+			var alert:NativeAlertDialog = new NativeAlertDialog(theme);
+			if (closeHandler !== null){
+				alert.closeHandler = closeHandler;
+			}
+			alert._disposeAfterClose = true;
+			alert.title = title;
+			alert.message = message;
+			alert.buttons = buttons;
+			alert.show(cancelable);
+			
+			return alert;
+		}
 		
 
 		

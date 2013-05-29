@@ -75,4 +75,14 @@
 
 -(void)updateDateWithTimestamp:(double)timeStamp;
 -(void)setCancelable:(uint32_t)cancelable;
+
+
+-(void)showPickerWithOptions:(FREObject*)options
+                  andIndexes:(FREObject*)indexes
+                   withTitle:(NSString*)titleString
+                  andMessage:(NSString*)messageString
+                  andButtons:(FREObject*)buttons
+                    andWidths:(FREObject*)widths;
+
+-(void)setSelectedRow:(NSInteger)index andSection:(NSInteger)section;
 @end

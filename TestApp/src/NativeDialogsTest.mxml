@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" contentCreationComplete="creaComp(event)" initialize="appAdded(event)">
+			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" contentCreationComplete="creaComp(event)" initialize="init()">
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="center"/>
 	</s:layout>
 	<fx:Script>
 		<![CDATA[
-			import spark.events.IndexChangeEvent;
-			
 			import pl.mateuszmackowiak.nativeANE.dialogs.NativeAlertDialog;
 			import pl.mateuszmackowiak.nativeANE.dialogs.NativeDatePickerDialog;
 			import pl.mateuszmackowiak.nativeANE.dialogs.NativeListDialog;
+			import pl.mateuszmackowiak.nativeANE.dialogs.NativePickerDialog;
 			import pl.mateuszmackowiak.nativeANE.dialogs.NativeProgressDialog;
 			import pl.mateuszmackowiak.nativeANE.dialogs.NativeTextInputDialog;
 			import pl.mateuszmackowiak.nativeANE.dialogs.support.NativeTextField;
+			import pl.mateuszmackowiak.nativeANE.dialogs.support.PickerList;
 			import pl.mateuszmackowiak.nativeANE.dialogs.support.iNativeDialog;
 			import pl.mateuszmackowiak.nativeANE.events.NativeDialogEvent;
 			import pl.mateuszmackowiak.nativeANE.events.NativeDialogListEvent;
@@ -25,27 +25,17 @@
 			private var _date:Date = new Date();
 			private var isIOS:Boolean = Capabilities.os.toLowerCase().indexOf("ip")>-1;
 			private var _t:NativeTextInputDialog= null;
+		
 			
-			protected function appAdded(event:Event):void
-			{
-				onHorizontalProgressDialogButtonClicked(null);
-				
+			private function init():void{
+				//ąonHorizontalProgressDialogButtonClicked(null);
 			}
 			
 			
 			protected function creaComp(event:Event):void
 			{
 				bindEvents();
-				
-				if(isIOS){
-					themeSelector.dataProvider = themesIOS;
-					themeSelector.selectedItem = themesIOS.getItemAt(0);
-				}else{
-					themeSelector.dataProvider = themesAndroid;
-					themeSelector.selectedItem = themesAndroid.getItemAt(0);
-				}
-				
-				
+
 			}
 			
 			private function bindEvents():void
@@ -58,8 +48,9 @@
 				showHorizontalProgressDialogButton.addEventListener(MouseEvent.CLICK,onHorizontalProgressDialogButtonClicked);
 				showSpinnerProgressDialogButton.addEventListener(MouseEvent.CLICK,onSpinnerProgressDialogButtonClicked);
 				showDatePickerDialog.addEventListener(MouseEvent.CLICK,onDatePickerButtonClicked);
-				themeSelector.addEventListener(IndexChangeEvent.CHANGE,themeSelectorChangeHandler);
 				showToastButton.addEventListener(MouseEvent.CLICK,onToastButtonClicked);
+				
+				showPickerButton.addEventListener(MouseEvent.CLICK,onsPickerButtonClicked);
 			}
 			private function fname(event:Event):void
 			{
@@ -69,10 +60,8 @@
 			
 			protected function onShowAlertButtonClicked(event:MouseEvent):void
 			{
-				dialog = NativeAlertDialog.show("Message","Title","OK","Cancle",mess,true);
-				
-				myTimer.addEventListener(TimerEvent.TIMER, fname);
-				myTimer.start();
+				//dialog = NativeAlertDialog.show("Message","Title","OK","Cancle",mess,true);
+				NativeAlertDialog.showAlert("Message", "Title",Vector.<String>(["OK","Cancle"]),mess,true);
 				/*
 				var a:NativeAlertDialog = new NativeAlertDialog();
 				a.closeHandler = function(e:NativeDialogEvent):void{
@@ -86,7 +75,7 @@
 
 			protected function onMultiChoiceButtonClicked(event:MouseEvent):void
 			{
-				var m:NativeListDialog = new NativeListDialog();
+				var m:NativeListDialog = new NativeListDialog(0,NativeListDialog.IOS_PICKER_THEME);
 				
 				m.addEventListener(NativeDialogEvent.CLOSED,readSelected);
 				m.addEventListener(NativeDialogListEvent.LIST_CHANGE,function(event:NativeDialogListEvent):void
@@ -105,7 +94,7 @@
 			}
 			protected function onShowSingleChoiceButtonClicked(event:MouseEvent):void
 			{
-				var m:NativeListDialog = new NativeListDialog();
+				var m:NativeListDialog = new NativeListDialog(0,NativeListDialog.IOS_PICKER_THEME);
 				
 				m.addEventListener(NativeDialogEvent.CLOSED,readSelected);
 				m.addEventListener(NativeDialogListEvent.LIST_CHANGE,mess);
@@ -184,7 +173,7 @@
 			
 			protected function onHorizontalProgressDialogButtonClicked(event:MouseEvent):void
 			{
-				var p:NativeProgressDialog= new NativeProgressDialog(-1,NativeProgressDialog.IOS_SVHUD_GRADIENT_BACKGROUND_THEME );
+				var p:NativeProgressDialog= new NativeProgressDialog(-1,NativeProgressDialog.IOS_SVHUD_NON_BACKGROUND_THEME);
 				p.addEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
 				p.secondaryProgress = 45;
 				p.max = 50;
@@ -277,44 +266,59 @@
 				trace(s+"\n");
 			}
 			
-			protected function themeSelectorChangeHandler(event:IndexChangeEvent):void
-			{
-				if(isIOS){
-					NativeProgressDialog.defaultIOSTheme = themeSelector.selectedItem.data;
-				}else{
-					var itemSelected:int = themeSelector.selectedItem.data;
-					NativeAlertDialog.defaultTheme = itemSelected;
-					NativeListDialog.defaultTheme = itemSelected;
-					NativeTextInputDialog.defaultTheme = itemSelected;
-					NativeDatePickerDialog.defaultTheme = itemSelected;
-					NativeProgressDialog.defaultAndroidTheme = itemSelected;
-				}
-			}
-			
 			protected function onToastButtonClicked(event:MouseEvent):void
 			{
 				Toast.show("Message",Toast.LENGTH_SHORT);
 			}
 			
 			
+			protected function onsPickerButtonClicked(event:MouseEvent):void
+			{
+				var picker:NativePickerDialog = new NativePickerDialog();
+				var pickerlist1:PickerList = new PickerList(["HAHAHA","ATATAT","tatasd"],1);
+				pickerlist1.addEventListener(NativeDialogListEvent.LIST_CHANGE,mess);
+				
+				var pickerlist2:PickerList = new PickerList(["affasf","sagasdg","ah5we","fdsad"],2);
+				pickerlist2.addEventListener(NativeDialogListEvent.LIST_CHANGE,mess);
+				
+				
+				picker.dataProvider = Vector.<PickerList>([pickerlist1,pickerlist2]);
+				
+				picker.addEventListener(NativeDialogEvent.CLOSED,readAllSelectedValuesFromPickers);
 			
+				picker.show();
+			}
+			
+			private function readSelectedValuesFromPickerList(event:NativeDialogListEvent):void
+			{
+				var pickerList:PickerList = PickerList(event.target);
+				mess("\n=====00000========000000");
+				mess(event);
+				mess("selectedIndex: "+pickerList.selectedIndex);
+				mess("selectedItem: "+pickerList.selectedItem);
+				mess("=====00000========000000\n");
+			}
+			
+			private function readAllSelectedValuesFromPickers(event:NativeDialogEvent):void
+			{
+				var picker:NativePickerDialog = NativePickerDialog(event.target);
+				var v:Vector.<PickerList> = picker.dataProvider;
+				var pickerList:PickerList;
+				mess("\n=====00000========000000");
+				mess(event);
+				for (var i:int = 0; i < v.length; i++) 
+				{
+					pickerList = v[i];
+					mess("pickerlist "+i);
+					mess("selectedIndex: "+pickerList.selectedIndex);
+					mess("selectedItem: "+pickerList.selectedItem);
+				}
+				mess("=====00000========000000\n");
+				
+				picker.dispose();
+			}
 		]]>
 	</fx:Script>
-	<fx:Declarations>
-		<s:ArrayList id="themesAndroid">
-			<fx:Object name="ANDROID_DEVICE_DEFAULT_DARK_THEME" data="0x00000004"/>
-			<fx:Object name="ANDROID_DEVICE_DEFAULT_LIGHT_THEME" data="0x00000005"/>
-			<fx:Object name="ANDROID_HOLO_DARK_THEME" data="0x00000002"/>
-			<fx:Object name="ANDROID_HOLO_LIGHT_THEME" data="0x00000003"/>
-			<fx:Object name="DEFAULT_THEME" data="0x00000001"/>
-		</s:ArrayList>
-		<s:ArrayList id="themesIOS">
-			<fx:Object name="IOS_SVHUD_GRADIENT_BACKGROUND_THEME" data="0x00000004" />
-			<fx:Object name="IOS_SVHUD_BLACK_BACKGROUND_THEME" data="0x00000002" />
-			<fx:Object name="IOS_SVHUD_NON_BACKGROUND_THEME" data="0x00000003" />
-			<fx:Object name="DEFAULT_THEME" data="0x00000001"/>
-		</s:ArrayList>
-	</fx:Declarations>
 	
 	<s:TextInput width="100%"/>
 	
@@ -339,14 +343,13 @@
 			
 			<s:Button label="show Toast" id="showToastButton" width="100%" height="40"/>
 			
+			<s:Button label="show Picker" id="showPickerButton" width="100%" height="40"/>
+			
 			<s:HGroup width="100%" includeInLayout="{NativeProgressDialog.isSupported}" verticalAlign="middle">
 				<s:Button width="100%" label="horizontal progress popup" id="showHorizontalProgressDialogButton" height="40"/>
 				<s:Button width="100%" label="spinner progress popup"  id="showSpinnerProgressDialogButton" height="40"/>
 			</s:HGroup>
 
-			<s:SpinnerListContainer width="100%">
-				<s:SpinnerList id="themeSelector" fontWeight="bold" labelField="name" minWidth="100" width="100%"/>
-			</s:SpinnerListContainer>
 		</s:Group>
 	</s:Scroller>
 	

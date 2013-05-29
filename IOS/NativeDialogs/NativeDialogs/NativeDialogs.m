@@ -2,7 +2,7 @@
  * NativeDialogs
  *
  * Created by Mateusz Mackowiak on 02.02.2013.
- * Copyright (c) 2013 __MyCompanyName__. All rights reserved.
+ * Copyright (c) 2013 MateuszMackowia. All rights reserved.
  */
 
 #import "FlashRuntimeExtensions.h"
@@ -10,7 +10,16 @@
 #import "SVProgressHUD.h"
 #import "WToast.h"
 
-#define MYDEBUG
+
+
+#define LIST_DIALOG_CONTEXT "ListDialogContext"
+#define ALERT_CONTEXT "NativeAlertContext"
+#define TEXT_INPUT_CONTEXT "TextInputDialogContext"
+#define PROGRESS_CONTEXT  "ProgressContext"
+#define TOAST_CONTEXT  "ToastContext"
+#define DATE_PICKER_CONTEX "DatePickerDialogContext"
+
+#define PICKER_CONTEXT "PickerDialogContext"
 
 #pragma mark - dialog methods
 
@@ -174,6 +183,9 @@ FREObject shake(FREContext ctx, void* functionData, uint32_t argc, FREObject arg
 
 FREObject dismiss(FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
 {
+#ifdef MYDEBUG
+    NSLog(@"Dismiss");
+#endif
     NativeDialogControler *nativeDialogController = functionData;
     int32_t index = 0;
     if(argv[0])
@@ -181,6 +193,10 @@ FREObject dismiss(FREContext ctx, void* functionData, uint32_t argc, FREObject a
     
     [nativeDialogController dismissWithButtonIndex:index];
     [SVProgressHUD dismiss];
+    
+#ifdef MYDEBUG
+    NSLog(@"Dismis end");
+#endif
     return nil;
 }
 
@@ -276,9 +292,70 @@ FREObject showProgressPopup (FREContext ctx, void* functionData, uint32_t argc, 
 }
 
 
+FREObject showPicker (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
+{
+#ifdef MYDEBUG
+    NSLog(@"Show picker");
+#endif
+    NativeDialogControler *nativeDialogController = functionData;
+    
+    uint32_t stringLength;
+    
+    const uint8_t *title = nil;
+    const uint8_t *message = nil;
+    
+    NSString *titleString = nil;
+    NSString *messageString = nil;
+    
+    if(FREGetObjectAsUTF8(argv[0], &stringLength, &title)==FRE_OK){
+        if(title)
+            titleString = [NSString stringWithUTF8String:(char*)title];
+    }
+    
+    if(FREGetObjectAsUTF8(argv[1], &stringLength, &message)==FRE_OK){
+        if(message)
+            messageString =[NSString stringWithUTF8String:(char*)message];
+    }
+
+    [nativeDialogController showPickerWithOptions:argv[3] andIndexes:argv[4] withTitle:titleString andMessage:messageString andButtons:argv[2] andWidths:argv[5]];
+    
+    uint32_t cancelable;
+    FREGetObjectAsBool(argv[6], &cancelable);
+    [nativeDialogController setCancelable:cancelable];
+    
+#ifdef MYDEBUG
+    NSLog(@"Show picker end");
+#endif
+    return nil;
+}
+
+
+FREObject setSelectedIndex (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] ){
+#ifdef MYDEBUG
+    NSLog(@"setSelectedIndex");
+#endif
+    NativeDialogControler *nativeDialogController = functionData;
+    
+    uint32_t section;
+    if(FREGetObjectAsBool(argv[0], &section)==FRE_OK){
+        uint32_t index;
+        if(FREGetObjectAsBool(argv[0], &section)==FRE_OK){
+            [nativeDialogController setSelectedRow:index andSection:section];
+        }
+    }
+  
+    
+#ifdef MYDEBUG
+    NSLog(@"setSelectedIndex end");
+#endif
+    return nil;
+}
 
 FREObject updateProgress (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] )
 {
+#ifdef MYDEBUG
+    NSLog(@"Update Progress");
+#endif
     NativeDialogControler *nativeDialogController = functionData;
     //Temporary values to hold our actionscript code.
     double perc;
@@ -286,6 +363,10 @@ FREObject updateProgress (FREContext ctx, void* functionData, uint32_t argc, FRE
     if(FREGetObjectAsDouble(argv[0], &perc)==FRE_OK)
         [nativeDialogController updateProgress:perc];
     //Create our Strings for our Alert.
+    
+#ifdef MYDEBUG
+    NSLog(@"Update Progress End");
+#endif
     return nil;
 }
 
@@ -395,14 +476,8 @@ FREObject showToast(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
 
 #pragma mark - ANE setup
 
-static const char * LIST_DIALOG_CONTEXT ="ListDialogContext";
-static const char * ALERT_CONTEXT ="NativeAlertContext";
-static const char * TEXT_INPUT_CONTEXT ="TextInputDialogContext";
-static const char * PROGRESS_CONTEXT = "ProgressContext";
-static const char * TOAST_CONTEXT = "ToastContext";
-static const char * DATE_PICKER_CONTEX = "DatePickerDialogContext";
 
-NativeDialogControler* nativeDialogController;
+
 
 /* NativeDialogsContextInitializer()
  * The context initializer is called when the runtime creates the extension context instance.
@@ -436,11 +511,14 @@ void NativeDialogsContextInitializer(void* extData, const uint8_t* ctxType, FREC
     }else if(strcmp((const char *)ctxType, DATE_PICKER_CONTEX)==0)
     {
         *numFunctionsToTest = 8;
+    }else if(strcmp((const char *)ctxType, PICKER_CONTEXT)==0)
+    {
+        *numFunctionsToTest = 6;
     }
 
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * (*numFunctionsToTest));
 
-    nativeDialogController = [[NativeDialogControler alloc]init];
+    NativeDialogControler* nativeDialogController = [[NativeDialogControler alloc]init];
     nativeDialogController.freContext = ctx;
     
     FRESetContextNativeData( ctx, nativeDialogController );
@@ -556,6 +634,34 @@ void NativeDialogsContextInitializer(void* extData, const uint8_t* ctxType, FREC
         func[7].function = &setCancelable;
         
     }
+    
+    else if(strcmp((const char *)ctxType, PICKER_CONTEXT)==0){
+        
+        func[0].name = (const uint8_t*) "isShowing";
+        func[0].functionData = nativeDialogController;
+        func[0].function = &isShowing;
+        
+        func[1].name = (const uint8_t *) "show";
+        func[1].functionData = nativeDialogController;
+        func[1].function = &showPicker;
+        
+        func[2].name = (const uint8_t*) "dismiss";
+        func[2].functionData = nativeDialogController;
+        func[2].function = &dismiss;
+        
+        func[3].name = (const uint8_t*) "shake";
+        func[3].functionData = nativeDialogController;
+        func[3].function = &shake;
+        
+        func[4].name = (const uint8_t*) "setCancelable";
+        func[4].functionData = nativeDialogController;
+        func[4].function = &setCancelable;
+        
+        func[5].name = (const uint8_t*) "setSelectedIndex";
+        func[5].functionData = nativeDialogController;
+        func[5].function = &setSelectedIndex;
+        
+    }
     else if(strcmp((const char *)ctxType, PROGRESS_CONTEXT)==0){
         
         func[0].name = (const uint8_t*) "isShowing";
@@ -615,6 +721,8 @@ void NativeDialogsExtFinalizer(void* extData)
  */
 void NativeDialogsContextFinalizer(FREContext ctx)
 {
+    NativeDialogControler* nativeDialogController;
+    FREGetContextNativeData(ctx, (void**)&nativeDialogController);
     NSLog(@"Finalize!");
     [nativeDialogController release];
 

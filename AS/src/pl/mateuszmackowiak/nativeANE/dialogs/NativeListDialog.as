@@ -66,7 +66,9 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		//
 		//---------------------------------------------------------------------
 		/**@private*/
-		private static var _defaultTheme:int = DEFAULT_THEME;
+		private static var _defaultAndroidTheme:uint = DEFAULT_THEME;
+		/**@private*/
+		private static var _defaultIOSTheme:uint = DEFAULT_THEME;
 		
 		//---------------------------------------------------------------------
 		//
@@ -76,7 +78,9 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		/**@private*/
 		private var _buttons:Vector.<String>=null;
 		/**@private*/
-		private var _theme:int = -1;
+		private var _androidTheme:int = NaN;
+		/**@private*/
+		private var _iosTheme:int = NaN;
 		/**@private*/
 		private var _cancelable:Boolean = false;
 		/**@private*/
@@ -104,15 +108,20 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 * <br>pl.mateuszmackowiak.nativeANE.NativeDialogEvent
 		 * <br>pl.mateuszmackowiak.nativeANE.NativeDialogListEvent
 		 */
-		public function NativeListDialog(theme:int=-1)
+		public function NativeListDialog(androidTheme:int=-1,iOSTheme:int=-1)
 		{
 			super(abstractKey);
-			if(!isNaN(theme) && theme>-1)
-				_theme = theme;
-			else
-				_theme = _defaultTheme;
 			
-			init();
+			if(!isNaN(androidTheme) && androidTheme>-1)
+				_androidTheme = androidTheme;
+			else
+				_androidTheme = _defaultAndroidTheme;
+			
+			if(!isNaN(iOSTheme) && iOSTheme>-1)
+				_iosTheme = iOSTheme;
+			else
+				_iosTheme = _defaultIOSTheme;
+			
 		}
 		
 		/**@private*/
@@ -147,8 +156,6 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				showError("dataProvider can't be empty while showing");
 				return false;	
 			}
-			if(_theme ==-1)
-				_theme = defaultTheme;
 			
 			var labels:Vector.<String> = new Vector.<String>();
 			try{
@@ -176,10 +183,10 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				_indexSelectedOnStart = _selectedIndex;
 
 				if(isAndroid()) {
-					_context.call("show",_title,_buttons,labels,selected,_cancelable,_theme);
+					_context.call("show",_title,_buttons,labels,selected,_cancelable,_androidTheme);
 					return true;
 				} else if(isIOS()) {
-					_context.call("show",_title,_buttons,labels,selected,_cancelable,_theme,_message);
+					_context.call("show",_title,_buttons,labels,selected,_cancelable,_iosTheme,_message);
 					return true;
 				} else {
 					return false;
@@ -192,7 +199,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 
 		private function isSingleMode():Boolean
 		{
-			return _displayMode == DISPLAY_MODE_SINGLE;
+			return _displayMode == DISPLAY_MODE_SINGLE || _iosTheme != DEFAULT_THEME;
 		}
 		
 		
@@ -331,7 +338,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			var returnVec:Vector.<Object> = new Vector.<Object>();
 			if(_dataProvider!==null && _dataProvider.length>0){
 				const len:int = _dataProvider.length;
-				if(_displayMode==DISPLAY_MODE_SINGLE){
+				if(isSingleMode()){
 					if(_selectedIndex>-1 && _selectedIndex<len){
 						returnVec.push(_dataProvider[_selectedIndex]);
 					}
@@ -387,7 +394,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			var indexes:Vector.<int> = new Vector.<int>();
 			if(_dataProvider!==null && _dataProvider.length>0){
 				const len:int = _dataProvider.length;
-				if(_displayMode==DISPLAY_MODE_SINGLE){
+				if(isSingleMode()){
 					if(_selectedIndex>-1 && _selectedIndex<len){
 						indexes.push(_selectedIndex);
 					}
@@ -449,7 +456,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 * @default -1 (no selected item).
 		 */
 		public function get selectedIndex():int{
-			if(_displayMode==DISPLAY_MODE_SINGLE)
+			if(isSingleMode())
 				return _selectedIndex;
 				
 			else if(_dataProvider!==null && _dataProvider.length>0){
@@ -492,7 +499,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 * @default null
 		 */
 		public function get selectedItem():Object{
-			if(_displayMode==DISPLAY_MODE_SINGLE){
+			if(isSingleMode()){
 				if(_selectedIndex>-1 && _dataProvider!=null && _dataProvider.length>0 && _selectedIndex<_dataProvider.length)
 					return _dataProvider[_selectedIndex];
 				else
@@ -623,23 +630,41 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		
 		/**
 		 * The theme of the dialog on Android.
-		 * (if isShowing will be ignored until next show)
+		 * (if isShowing will be ignored until next call of the <code>show()</code> method.)
 		 */
-		public function set theme(value:int):void
+		public function set androidTheme(value:uint):void
 		{
 			if(!isNaN(value))
-				_theme = value;
+				_androidTheme = value;
 			else
-				_theme = _defaultTheme;
+				_androidTheme = _defaultAndroidTheme;
 		}
 		/**
 		 * @private
 		 */
-		public function get theme():int
+		public function get androidTheme():uint
 		{
-			return _theme;
+			return _androidTheme;
 		}
 		
+		/**
+		 * The theme of the dialog on IOS.
+		 * (if isShowing will be ignored until next call of the <code>show()</code> method.)
+		 */
+		public function set iosTheme(value:int):void
+		{
+			if(!isNaN(value))
+				_iosTheme = value;
+			else
+				_iosTheme = _defaultIOSTheme;
+		}
+		/**
+		 * @private
+		 */
+		public function get iosTheme():int
+		{
+			return _iosTheme;
+		}
 		
 		
 		
@@ -657,22 +682,38 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			else 
 				return false;
 		}
+
 		
 		/**
-		 * The theme from all NativeListDialogs on Android. 
+		 * The Andorid default theme of all NativeListDialogs dialogs
+		 * @default pl.mateuszmackowiak.nativeANE.dialogs.NativeListDialogs#DEFAULT_THEME
 		 */
-		public static function set defaultTheme(value:int):void
+		public static function set defaultAndroidTheme(value:uint):void
 		{
-			_defaultTheme = value;
+			_defaultAndroidTheme = value;
 		}
 		/**
 		 * @private
 		 */
-		public static function get defaultTheme():int
+		public static function get defaultAndroidTheme():uint
 		{
-			return _defaultTheme;
+			return _defaultAndroidTheme;
 		}
-		
+		/**
+		 * The IOS default theme of all NativeListDialogs dialogs
+		 * @default pl.mateuszmackowiak.nativeANE.dialogs.NativeListDialogs#DEFAULT_THEME
+		 */
+		public static function set defaultIOSTheme(value:uint):void
+		{
+			_defaultIOSTheme = value;
+		}
+		/**
+		 * @private
+		 */
+		public static function get defaultIOSTheme():uint
+		{
+			return _defaultIOSTheme;
+		}
 		
 
 		

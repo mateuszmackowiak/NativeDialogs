@@ -45,6 +45,7 @@ import flash.utils.getQualifiedClassName;
 				throw new Error("[AbstractNativeDialog] is an abstract class. It must not be directly instantiated.");
 			}
 			SUPER_CACHE[this] = true;
+			init();
 		}
 		
 		/**@private*/

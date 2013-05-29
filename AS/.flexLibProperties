@@ -10,6 +10,8 @@
     <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.support.AbstractNativeDialog"/>
     <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.NativeDatePickerDialog"/>
     <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.support.iNativeDialog"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.NativePickerDialog"/>
+    <classEntry path="pl.mateuszmackowiak.nativeANE.dialogs.support.PickerList"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
