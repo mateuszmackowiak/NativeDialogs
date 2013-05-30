@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9ADF1B0516BF0F2200DA9AAA"
-               BuildableName = "NativeDialogsTest.app"
+               BuildableName = "As3TestProject.app"
                BlueprintName = "nativealert"
                ReferencedContainer = "container:NativeDialogs.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9ADF1B0516BF0F2200DA9AAA"
-            BuildableName = "NativeDialogsTest.app"
+            BuildableName = "As3TestProject.app"
             BlueprintName = "nativealert"
             ReferencedContainer = "container:NativeDialogs.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9ADF1B0516BF0F2200DA9AAA"
-            BuildableName = "NativeDialogsTest.app"
+            BuildableName = "As3TestProject.app"
             BlueprintName = "nativealert"
             ReferencedContainer = "container:NativeDialogs.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9ADF1B0516BF0F2200DA9AAA"
-            BuildableName = "NativeDialogsTest.app"
+            BuildableName = "As3TestProject.app"
             BlueprintName = "nativealert"
             ReferencedContainer = "container:NativeDialogs.xcodeproj">
          </BuildableReference>

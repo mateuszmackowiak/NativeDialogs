@@ -152,24 +152,25 @@
                                                 cancelButtonTitle:nil
                                            destructiveButtonTitle:nil
                                                 otherButtonTitles:nil];
-        NSLog(@"Createf aac");
-        
         [aac addSubview:toolbar];
         [aac addSubview:viewToPresent];
         
         
-        NSLog(@"toolbar release");
-        [aac setBounds:CGRectMake(0,0,320, 464)];
-        
-        UIWindow* wind= [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+        UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
         if(!wind){
             NSLog(@"Window is nil");
             FREDispatchStatusEventAsync(freContext, (const uint8_t*)"error", (const uint8_t*)"Window is nil");
             return;
         }
-        [aac showInView:wind];
         
-        [aac setBounds:CGRectMake(0,0,320, 464)];
+        [aac showInView:wind.rootViewController.view];
+        
+        if (UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+            [aac setBounds:CGRectMake(0,0,[UIScreen mainScreen].bounds.size.height, 370)];
+        } else {
+            [aac setBounds:CGRectMake(0,0,[UIScreen mainScreen].bounds.size.width, 464)];
+        }
+        [viewToPresent sizeToFit];
         
         actionSheet = aac;
         
