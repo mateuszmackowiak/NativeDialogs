@@ -1207,12 +1207,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     
     picker.delegate = nil;
     [picker release];
-    if(view)
-    {
-        [view release];
-        view = nil;
-    }
-    NSLog(@"main dealloc");
+    
     [tableItemList release];
     [delegate release];
     popover.delegate = nil;
@@ -1223,6 +1218,8 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [progressView release];
     
     freContext = nil;
+    
+    NSLog(@"Controllers dealloc");
     [super dealloc];
 }
 

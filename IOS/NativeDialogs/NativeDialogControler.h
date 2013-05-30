@@ -15,7 +15,6 @@
     UIActionSheet           *actionSheet;
     BOOL                    cancelable;
     NativeListDelegate      *delegate;
-    UIView                  *view;
     UIPickerView            *picker;
     
     CGFloat oldX;

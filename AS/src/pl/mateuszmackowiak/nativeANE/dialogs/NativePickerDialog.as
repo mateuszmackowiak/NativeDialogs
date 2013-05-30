@@ -143,9 +143,11 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				
 				
 				if(isIOS()){
+					_locked = true;
 					_context.call("show",_title,_message,_buttons, data, indexes,widths,cancelable, _theme);
 				}
 				else if(isAndroid()){
+					_locked = true;
 					_context.call("show",_title,_message,_buttons, data, indexes,widths,cancelable, _theme);
 				}
 				return true;
@@ -245,7 +247,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		
 		
 		override public function dispose():void{
-			
+			_locked = false;
 			if(_dataProvider){
 				var p:PickerList;
 				const len:uint = _dataProvider.length;
@@ -313,11 +315,13 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			}
 			else if( event.code == NativeDialogEvent.CLOSED)
 			{
+				_locked = false;
 				_isShowing = false;
 				if(hasEventListener(NativeDialogEvent.CLOSED))
 					dispatchEvent(new NativeDialogEvent(NativeDialogEvent.CLOSED,event.level));
 				
 			}else if(event.code == NativeDialogEvent.CANCELED){
+				_locked = false;
 				_isShowing = false;
 				if(hasEventListener(NativeDialogEvent.CANCELED))
 					dispatchEvent(new NativeDialogEvent(NativeDialogEvent.CANCELED,event.level));

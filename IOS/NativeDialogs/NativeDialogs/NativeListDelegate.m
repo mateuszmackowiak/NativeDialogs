@@ -32,7 +32,7 @@
         multipleOptions = NO;
         action = changeAction;
         target = changeTarget;
-        
+        widths = nil;
         options = [self parseList:opts];
     }
     return self;
@@ -65,9 +65,9 @@
                 if(FREGetArrayElementAt(wds, i, &item) == FRE_OK){
                     double width = 300;
                     if (FREGetObjectAsDouble(item, &width)==FRE_OK) {
-                        [widths addObject:[[NSNumber alloc]initWithDouble:width]];
+                        [widths addObject:[NSNumber numberWithDouble:width]];
                     }else{
-                        [widths addObject:[[NSNumber alloc]initWithDouble:300/options_len]];
+                        [widths addObject:[NSNumber numberWithDouble:300/options_len]];
                     }
                     
                 }else{
