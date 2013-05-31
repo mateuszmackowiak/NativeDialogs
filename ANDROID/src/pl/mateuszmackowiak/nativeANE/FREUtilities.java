@@ -24,6 +24,39 @@ public class FREUtilities {
 		return null;
 	}
 
+	
+	public static int[] convertFREArrayToIntArray(FREArray freArray) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException {
+		
+    	int lenth= (int)freArray.getLength();
+    	if(lenth>0){
+    		
+    		int[] sa = new int[lenth];
+        	FREObject obj=null;
+        	for (int i = 0; i < lenth; i++) {
+        		obj = freArray.getObjectAt(i);
+        		sa[i] = obj.getAsInt();
+			}
+        	return sa;
+    	}
+		return null;
+	}
+
+	public static double[] convertFREArrayToDoubleArray(FREArray freArray) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException {
+		
+    	int lenth= (int)freArray.getLength();
+    	if(lenth>0){
+    		
+    		double[] sa = new double[lenth];
+        	FREObject obj=null;
+        	for (int i = 0; i < lenth; i++) {
+        		obj = freArray.getObjectAt(i);
+        		sa[i] = obj.getAsDouble();
+			}
+        	return sa;
+    	}
+		return null;
+	}
+
 	public static String[] convertFREArrayToStringArray(FREArray freArray) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException {
 		
     	int lenth= (int)freArray.getLength();

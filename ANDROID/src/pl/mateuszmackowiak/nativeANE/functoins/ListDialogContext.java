@@ -33,7 +33,6 @@ public class ListDialogContext extends FREContext {
 			dialog.dismiss();
 			dialog = null;
 		}
-		NativeDialogsExtension.context = null;
 	}
 
 	@Override
@@ -88,7 +87,7 @@ public class ListDialogContext extends FREContext {
 			try{
 				if(dialog!=null){
 					int v = args[0].getAsInt();
-					NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
+					context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
 					dialog.dismiss();
 					dialog = null;
 				}
@@ -129,7 +128,7 @@ public class ListDialogContext extends FREContext {
 					boolean cancelable = args[0].getAsBool();
 					dialog.setCancelable(cancelable);
 					 if(cancelable==true){
-						 dialog.setOnCancelListener(new CancelListener());
+						 dialog.setOnCancelListener(new CancelListener(context));
 					 }
 				}
 			}catch (Exception e){
@@ -224,11 +223,11 @@ public class ListDialogContext extends FREContext {
 	
 	
 	@SuppressLint("NewApi")
-	public static AlertDialog createPopup(FREContext context, String title, String buttons[], CharSequence choices[],boolean checkedItems[],Integer checkedItem, boolean cancelable, int theme) {
+	public static AlertDialog createPopup(FREContext frecontext, String title, String buttons[], CharSequence choices[],boolean checkedItems[],Integer checkedItem, boolean cancelable, int theme) {
 		
 		AlertDialog.Builder builder = (android.os.Build.VERSION.SDK_INT<11)?
-				new AlertDialog.Builder(context.getActivity())
-				:new AlertDialog.Builder(context.getActivity(),theme);
+				new AlertDialog.Builder(frecontext.getActivity())
+				:new AlertDialog.Builder(frecontext.getActivity(),theme);
 		
 		try{
 			if(title!=null && !"".equals(title))
@@ -236,26 +235,26 @@ public class ListDialogContext extends FREContext {
 			
 			builder.setCancelable(cancelable);
 			if(cancelable==true)
-				builder.setOnCancelListener(new CancelListener());
+				builder.setOnCancelListener(new CancelListener(frecontext));
 			
 			if(choices!=null && checkedItem!=null){
-				builder.setSingleChoiceItems(choices, checkedItem.intValue(), new SingleChoiceClickListener());
+				builder.setSingleChoiceItems(choices, checkedItem.intValue(), new SingleChoiceClickListener(frecontext));
 			}else if(choices!=null && (checkedItems==null || checkedItems.length == choices.length)){
-				builder.setMultiChoiceItems(choices, checkedItems, new IndexChange());
+				builder.setMultiChoiceItems(choices, checkedItems, new IndexChange(frecontext));
 			}else
-				context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT, KEY+"  labels are empty or the list of labels is not equal to list of selected labels ");
+				frecontext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT, KEY+"  labels are empty or the list of labels is not equal to list of selected labels ");
 			
 			if(buttons!=null && buttons.length>0){
-				builder.setPositiveButton(buttons[0], new ConfitmListener(context,0,cancelable));
+				builder.setPositiveButton(buttons[0], new ConfitmListener(frecontext,0,cancelable));
 				if(buttons.length>1)
-					builder.setNeutralButton(buttons[1], new ConfitmListener(context,1,cancelable));
+					builder.setNeutralButton(buttons[1], new ConfitmListener(frecontext,1,cancelable));
 				if(buttons.length>2)
-					builder.setNegativeButton(buttons[2], new ConfitmListener(context,2,cancelable));
+					builder.setNegativeButton(buttons[2], new ConfitmListener(frecontext,2,cancelable));
 			}else
-				builder.setPositiveButton("OK",new ConfitmListener(context,0,cancelable));
+				builder.setPositiveButton("OK",new ConfitmListener(frecontext,0,cancelable));
 			
 		}catch(Exception e){
-			context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,KEY+"   "+e.toString());
+			frecontext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,KEY+"   "+e.toString());
 		}
 		return builder.create();
 	}
@@ -263,20 +262,28 @@ public class ListDialogContext extends FREContext {
 	
 	
 	private static class CancelListener implements DialogInterface.OnCancelListener{
+		FREContext freContext;
+		
+		public CancelListener(FREContext freContext) {
+			this.freContext = freContext;
+		}
+		
         @Override
 		public void onCancel(DialogInterface dialog) 
         {
         	Log.e("List Dialog","onCancle");
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CANCELED,String.valueOf(-1));   
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.CANCELED,String.valueOf(-1));   
      	   dialog.dismiss();
         }
     }
 	private static class ConfitmListener implements DialogInterface.OnClickListener{
     	private int index;
     	private boolean cancelable;
+    	FREContext freContext;
     	
     	ConfitmListener(FREContext context,int index,boolean cancelable)
     	{
+    		this.freContext = context;
     		this.cancelable = cancelable;
     		this.index = index;
     	}
@@ -289,28 +296,38 @@ public class ListDialogContext extends FREContext {
         	{
         		event = NativeDialogsExtension.CANCELED;
         	}
-			NativeDialogsExtension.context.dispatchStatusEventAsync(event,String.valueOf(index));//Math.abs(id-1)));
+			freContext.dispatchStatusEventAsync(event,String.valueOf(index));//Math.abs(id-1)));
         	dialog.dismiss();
         }
     }
 	
 	private static class SingleChoiceClickListener implements DialogInterface.OnClickListener{
  
+		FREContext freContext;
+		
+		
+		public SingleChoiceClickListener(FREContext freContext) {
+			this.freContext = freContext;
+		}
+		
         @Override
 		public void onClick(DialogInterface dialog,int id) 
         {
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.LIST_CHANGE,String.valueOf(id));  
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.LIST_CHANGE,String.valueOf(id));  
         }
     }
 	
 	
 	private static class IndexChange implements DialogInterface.OnMultiChoiceClickListener{
 
- 
+		FREContext freContext;
+		public IndexChange(FREContext freContext) {
+			this.freContext = freContext;
+		}
         @Override
 		public void onClick(DialogInterface dialog,int id , boolean checked) 
         {
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.LIST_CHANGE,String.valueOf(id)+"_"+String.valueOf(checked));        
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.LIST_CHANGE,String.valueOf(id)+"_"+String.valueOf(checked));        
         }
     }
 }

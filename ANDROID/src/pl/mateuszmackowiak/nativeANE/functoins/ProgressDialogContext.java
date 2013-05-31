@@ -32,7 +32,6 @@ public class ProgressDialogContext extends FREContext {
 			dialog.dismiss();
 			dialog = null;
 		}
-		NativeDialogsExtension.context = null;
 	}
 
 	@Override
@@ -178,7 +177,7 @@ public class ProgressDialogContext extends FREContext {
 			try{
 				if(dialog!=null){
 					int v = args[0].getAsInt();
-					NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
+					context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
 					dialog.dismiss();
 					dialog = null;
 				}
@@ -235,7 +234,7 @@ public class ProgressDialogContext extends FREContext {
 				boolean cancelable = args[0].getAsBool();
 				dialog.setCancelable(cancelable);
 				 if(cancelable==true){
-					 dialog.setOnCancelListener(new CancelListener());
+					 dialog.setOnCancelListener(new CancelListener(context));
 				 }
 			}catch (Exception e){
 	        	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
@@ -303,7 +302,7 @@ public class ProgressDialogContext extends FREContext {
 					dialog.setProgress(progress);
 					dialog.setCancelable(cancleble);
 					if(cancleble==true)
-						dialog.setOnCancelListener(new CancelListener());
+						dialog.setOnCancelListener(new CancelListener(context));
 					dialog.setIndeterminate(indeterminate);
 					if(!indeterminate){
 						if( maxProgress>=1)
@@ -354,7 +353,7 @@ public class ProgressDialogContext extends FREContext {
 	        }
 	       	mDialog.setCancelable(cancleble);
 	       	
-	       	mDialog.setOnCancelListener(new CancelListener());
+	       	mDialog.setOnCancelListener(new CancelListener(context));
 		}catch (Exception e){
         	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,KEY+"   "+e.toString());
             e.printStackTrace();
@@ -364,10 +363,15 @@ public class ProgressDialogContext extends FREContext {
 	
 	private class CancelListener implements DialogInterface.OnCancelListener{
  
+		FREContext freContext;
+		
+		public CancelListener(FREContext freContext) {
+			this.freContext = freContext;
+		}
         @Override
 		public void onCancel(DialogInterface dialog) 
         {
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CANCELED,"-1");
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.CANCELED,"-1");
             dialog.dismiss();
         }
     }

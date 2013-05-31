@@ -48,7 +48,6 @@ public class TextInputContext extends FREContext {
 			dialog.dismiss();
 			dialog = null;
 		}
-		NativeDialogsExtension.context = null;
 	}
 
 	@Override
@@ -103,7 +102,7 @@ public class TextInputContext extends FREContext {
 			try{
 				if(dialog!=null){
 					int v = args[0].getAsInt();
-					NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));
+					context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));
 
 					dialog.dismiss();
 					dialog = null;
@@ -138,16 +137,16 @@ public class TextInputContext extends FREContext {
 		public static final String KEY = "setCancelable";
 		
 		@Override
-	    public FREObject call(FREContext context, FREObject[] args)
+	    public FREObject call(FREContext freContext, FREObject[] args)
 	    {
 			try{
 				boolean cancelable = args[0].getAsBool();
 				dialog.setCancelable(cancelable);
 				 if(cancelable==true){
-					 dialog.setOnCancelListener(new CancelListener());
+					 dialog.setOnCancelListener(new CancelListener(freContext));
 				 }
 			}catch (Exception e){
-	        	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
+				freContext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
 	            e.printStackTrace();
 	        }
 			return null;
@@ -183,7 +182,7 @@ public class TextInputContext extends FREContext {
 		public static final String KEY = "show";
 		
 		@Override
-	    public FREObject call(FREContext context, FREObject[] args)
+	    public FREObject call(FREContext freContext, FREObject[] args)
 	    {
 			try{
 				String title="";
@@ -206,35 +205,35 @@ public class TextInputContext extends FREContext {
 				}
 				
 				TextInputDialog textInputDialog = (android.os.Build.VERSION.SDK_INT<11)?
-						new TextInputDialog(context.getActivity(),textInputs)
-						:new TextInputDialog(context.getActivity(),textInputs,theme);
+						new TextInputDialog(freContext,textInputs)
+						:new TextInputDialog(freContext,textInputs,theme);
 
 				if(title!=null)
 					textInputDialog.setTitle(Html.fromHtml(title));
 				
 			    textInputDialog.setCancelable(cancelable);
 			    if(cancelable==true)
-			    	textInputDialog.setOnCancelListener(new CancelListener());
+			    	textInputDialog.setOnCancelListener(new CancelListener(freContext));
 
 			    if(buttons!=null && buttons.length>0){
-			    	textInputDialog.setPositiveButton(buttons[0], new ClickListener(textInputDialog,0));
+			    	textInputDialog.setPositiveButton(buttons[0], new ClickListener(textInputDialog,freContext,0));
 					if(buttons.length>1)
-						textInputDialog.setNeutralButton(buttons[1], new ClickListener(textInputDialog,1));
+						textInputDialog.setNeutralButton(buttons[1], new ClickListener(textInputDialog,freContext,1));
 					if(buttons.length>2)
-						textInputDialog.setNegativeButton(buttons[2], new ClickListener(textInputDialog,2));
+						textInputDialog.setNegativeButton(buttons[2], new ClickListener(textInputDialog,freContext,2));
 				}else
-					textInputDialog.setPositiveButton("OK",new ClickListener(textInputDialog,0));
+					textInputDialog.setPositiveButton("OK",new ClickListener(textInputDialog,freContext,0));
 			    
 			    if(dialog!=null){
 			    	dialog.dismiss();
 			    }
 			    dialog = textInputDialog.create();
-			    context.dispatchStatusEventAsync(NativeDialogsExtension.OPENED,"-1");
+			    freContext.dispatchStatusEventAsync(NativeDialogsExtension.OPENED,"-1");
 			    dialog.show();
 			    
 			    
 			}catch (Exception e){
-	        	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
+				freContext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
 	            e.printStackTrace();
 	        }
 			return null;
@@ -254,10 +253,14 @@ public class TextInputContext extends FREContext {
 	
 	private class CancelListener implements DialogInterface.OnCancelListener{
  
+		FREContext freContext;
+		public CancelListener(FREContext freContext) {
+			this.freContext = freContext;
+		}
         @Override
 		public void onCancel(DialogInterface dialog) 
         {
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CANCELED,String.valueOf(-1));        
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.CANCELED,String.valueOf(-1));        
 	         //dialog.dismiss();
         }
     }
@@ -272,25 +275,25 @@ public class TextInputContext extends FREContext {
 		private TextInput textInputs[];
 
 		
-		public TextInputDialog(Context context,FREArray fretextFields) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException 
+		public TextInputDialog(FREContext freContext,FREArray fretextFields) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException 
 		{
-			super(context);
-			createContent(context,fretextFields);
+			super(freContext.getActivity());
+			createContent(freContext,fretextFields);
 		}
-		public TextInputDialog(Context context,FREArray fretextFields, int theme) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException 
+		public TextInputDialog(FREContext freContext,FREArray fretextFields, int theme) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException 
 		{
-			super(context,theme);
-			createContent(context,fretextFields);
+			super(freContext.getActivity(),theme);
+			createContent(freContext,fretextFields);
 		}
 
 		
-		public void createContent(Context context,FREArray fretextFields) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException 
+		public void createContent(FREContext freContext,FREArray fretextFields) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException 
 		{
 			if(fretextFields==null)
 				return;
 			
-			ScrollView sv = new ScrollView(context);
-			LinearLayout ll = new LinearLayout(context);
+			ScrollView sv = new ScrollView(freContext.getActivity());
+			LinearLayout ll = new LinearLayout(freContext.getActivity());
 			ll.setOrientation(LinearLayout.VERTICAL);
 			sv.addView(ll);
 			
@@ -314,7 +317,7 @@ public class TextInputContext extends FREContext {
 					name = (fretextField.getProperty("name")!=null)?fretextField.getProperty("name").getAsString():"";
 					if(name.length()>0){
 						
-						textInput =  new TextInput(context,name);
+						textInput =  new TextInput(freContext,name);
 						
 						if(fretextField.getProperty("text")!=null)
 							textInput.setText(fretextField.getProperty("text").getAsString());
@@ -329,7 +332,7 @@ public class TextInputContext extends FREContext {
 						textInputs[i] = textInput;
 					}
 				}else if(fretextField.getProperty("text")!=null){
-					TextView tv = new TextView(context);
+					TextView tv = new TextView(freContext.getActivity());
 					tv.setText(fretextField.getProperty("text").getAsString());
 					ll.addView(tv);
 				}
@@ -418,14 +421,13 @@ public class TextInputContext extends FREContext {
 	
 	
 	private class TextInput extends EditText{
-		
 		String name="";
 		CustomTextWatcher watcher;
-		TextInput(Context activity,String _name)
+		TextInput(FREContext freContext,String _name)
 		{
-			super(activity);
+			super(freContext.getActivity());
 			name = _name; 
-			watcher = new CustomTextWatcher(this);
+			watcher = new CustomTextWatcher(this,freContext);
 			addTextChangedListener(watcher);
 			
 		}
@@ -435,10 +437,14 @@ public class TextInputContext extends FREContext {
 	}
 	
 	private class CustomTextWatcher implements TextWatcher {
+		
+		FREContext freContext;
+		
 	    private TextInput mEditText;
 	    
-	    public CustomTextWatcher(TextInput e) {
+	    public CustomTextWatcher(TextInput e, FREContext freContext) {
 	        mEditText = e;
+	        this.freContext = freContext;
 	    }
 	    
 	    @Override
@@ -448,7 +454,7 @@ public class TextInputContext extends FREContext {
 	    @Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 	    	String ret=String.valueOf(mEditText.name+"#_#"+mEditText.getText().toString());
-	    	NativeDialogsExtension.context.dispatchStatusEventAsync("change",ret);  
+	    	freContext.dispatchStatusEventAsync("change",ret);  
 	    }
 
 	    @Override
@@ -462,11 +468,13 @@ public class TextInputContext extends FREContext {
 	
 	private class ClickListener implements DialogInterface.OnClickListener
 	{
+		FREContext freContext;
     	private TextInputDialog dlg;
     	private int index;
     	
-    	ClickListener(TextInputDialog dlg,int index)
+    	ClickListener(TextInputDialog dlg,FREContext freContext, int index)
     	{
+    		this.freContext = freContext;
     		this.dlg = dlg;
     		this.index = index;
     	}
@@ -475,7 +483,7 @@ public class TextInputContext extends FREContext {
 		public void onClick(DialogInterface dialog,int id) 
         {
         	try{
-        		Object obj  = NativeDialogsExtension.context.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        		Object obj  =  freContext.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         		if(obj!=null && obj instanceof InputMethodManager){
 		        	InputMethodManager imm = (InputMethodManager)obj;
 		        	if(imm.isActive()){
@@ -492,11 +500,11 @@ public class TextInputContext extends FREContext {
 		        		}
 					}
 
-		        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(index));//Math.abs(id)));
+		        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(index));//Math.abs(id)));
 		            dialog.dismiss();
         		}
         	}catch(Exception e){
-        		NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,e.toString());
+        		freContext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,e.toString());
                 e.printStackTrace();
         	}
         	//_freContext = null;

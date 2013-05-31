@@ -37,7 +37,6 @@ public class NativeAlertContext  extends FREContext {
 			alert.dismiss();
 			alert = null;
 		}
-		NativeDialogsExtension.context = null;
 	}
 
 	/**
@@ -93,7 +92,7 @@ public class NativeAlertContext  extends FREContext {
 			try{
 				if(alert!=null){
 					int v = args[0].getAsInt();
-					NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
+					context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
 					alert.dismiss();
 					alert = null;
 				}
@@ -205,13 +204,13 @@ public class NativeAlertContext  extends FREContext {
 	
 	
 	@SuppressLint("NewApi")
-	private static AlertDialog creatAlert(FREContext context,String message,String title,String closeLabel,String otherLabel,boolean cancelable,int theme)
+	private static AlertDialog creatAlert(FREContext frecontext,String message,String title,String closeLabel,String otherLabel,boolean cancelable,int theme)
     {  
-    	AlertDialog.Builder builder = (android.os.Build.VERSION.SDK_INT<11)?new AlertDialog.Builder(context.getActivity()): new AlertDialog.Builder(context.getActivity(),theme);
+    	AlertDialog.Builder builder = (android.os.Build.VERSION.SDK_INT<11)?new AlertDialog.Builder(frecontext.getActivity()): new AlertDialog.Builder(frecontext.getActivity(),theme);
     	
     	builder.setCancelable(cancelable);
     	if(cancelable==true){
-    		builder.setOnCancelListener(new CancelListener());
+    		builder.setOnCancelListener(new CancelListener(frecontext));
     	}
     	if (otherLabel==null || "".equals(otherLabel))
     	{
@@ -220,10 +219,10 @@ public class NativeAlertContext  extends FREContext {
     		
     		if(title!=null && !"".equals(title)){
     			builder.setTitle(Html.fromHtml(title));
-    			builder.setNeutralButton(closeLabel, new AlertListener());
+    			builder.setNeutralButton(closeLabel, new AlertListener(frecontext));
     		}else{
     			builder.setCancelable(true);
-    			builder.setOnCancelListener(new CancelListener());
+    			builder.setOnCancelListener(new CancelListener(frecontext));
     		}
     			
     	}
@@ -236,8 +235,8 @@ public class NativeAlertContext  extends FREContext {
 	        		builder.setTitle(Html.fromHtml(title));
 	        	if(message!=null && !"".equals(message))
 	        		builder.setMessage(Html.fromHtml(message));
-	        	builder.setPositiveButton(closeLabel, new AlertListener())
-	                   .setNegativeButton(otherLabel, new AlertListener());
+	        	builder.setPositiveButton(closeLabel, new AlertListener(frecontext))
+	                   .setNegativeButton(otherLabel, new AlertListener(frecontext));
 	        }
 	        else
 	        {
@@ -252,28 +251,33 @@ public class NativeAlertContext  extends FREContext {
 	         	als2[0]=closeLabel;
 	         	for (int i=0;i<als.length;i++)
 	        		als2[i+1]=als[i];
-	        	builder.setItems(als2, new AlertListener());
+	        	builder.setItems(als2, new AlertListener(frecontext));
 	        }
     	}
         return builder.create();
     }
 	
 	private static class CancelListener implements DialogInterface.OnCancelListener{
-		public CancelListener()
+		
+		FREContext freContext;
+		public CancelListener(FREContext freContext)
     	{ 
+			this.freContext = freContext;
     	}
         @Override
 		public void onCancel(DialogInterface dialog) 
         {
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(-1));       
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(-1));       
         	dialog.dismiss();
         	
         }
     }
     private static class AlertListener implements DialogInterface.OnClickListener
     {
-    	AlertListener()
+    	FREContext freContext;
+    	AlertListener(FREContext freContext)
     	{
+    		this.freContext = freContext;
     	}
         @Override
 		public void onClick(DialogInterface dialog, int id) 
@@ -284,7 +288,7 @@ public class NativeAlertContext  extends FREContext {
         		id=1;
         	else if(id==-3)
         		id=0;
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(id));        
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(id));        
             dialog.dismiss();
             
         }

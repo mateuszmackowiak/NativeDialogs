@@ -250,7 +250,24 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 			}
 			
 		}
-
+		/**@private*/
+		nativeDialogNamespace function setSelectedIndex(value:int):void{
+			if(_selectedIndex ==value){
+				return;
+			}
+			if(!_dataProvider || _dataProvider.length==0 || value<0 || value>=_dataProvider.length){
+				_selectedItem = null;
+				_selectedIndex = -1;
+				return;
+			}
+			_selectedIndex = value;
+			if(_dataProvider.hasOwnProperty("getItemIndex")){
+				_selectedItem = _dataProvider.getItemAt(value);
+			}else{
+				_selectedItem = _dataProvider[value];
+			}
+		}
+		
 		
 		/**
 		 * @private

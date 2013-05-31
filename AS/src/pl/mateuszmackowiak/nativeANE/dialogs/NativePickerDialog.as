@@ -15,6 +15,31 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 	public class NativePickerDialog extends AbstractNativeDialog
 	{
 		/**
+		 * use the device's default alert theme with a dark background
+		 * <br>Constant Value: 4 (0x00000004)
+		 */
+		public static const ANDROID_DEVICE_DEFAULT_DARK_THEME:uint = 0x00000004;
+		/**
+		 *  use the device's default alert theme with a dark background.
+		 * <br>Constant Value: 5 (0x00000005)
+		 */
+		public static const ANDROID_DEVICE_DEFAULT_LIGHT_THEME:uint = 0x00000005;
+		/**
+		 * use the holographic alert theme with a dark background
+		 * <br>Constant Value: 2 (0x00000002)
+		 */
+		public static const ANDROID_HOLO_DARK_THEME:uint = 0x00000002;
+		/**
+		 * use the holographic alert theme with a light background
+		 * <br>Constant Value: 3 (0x00000003)
+		 */
+		public static const ANDROID_HOLO_LIGHT_THEME:uint = 0x00000003;
+		/**
+		 * use a picker instead of a popup to draw the list
+		 * <br>Constant Value: 6 (0x00000006)
+		 */
+		public static const IOS_PICKER_THEME:uint = 0x00000006;
+		/**
 		 * Uses the traditional (pre-Holo) alert dialog theme.
 		 * <br>Constant Value: 1 (0x00000001)
 		 */
@@ -40,6 +65,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		private var _width:Number = 300;
 		private var _locked:Boolean = false;
 		private var _dataProvider:Vector.<PickerList> = null;
+		private var _cancelable:Boolean = true;
 		
 		public function NativePickerDialog(theme:int=-1)
 		{
@@ -100,7 +126,13 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 */
 		public function show(cancelable:Boolean = true):Boolean
 		{
+			
 			try{
+				if(isShowing()){
+					return false;
+				}
+				_cancelable = cancelable;
+				
 				if(!_dataProvider){
 					showError("dataProvider can't be empty while showing");
 					return false;
@@ -119,25 +151,34 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				var indexes:Vector.<int> = new Vector.<int>(leng);
 				var widths:Vector.<Number> = new Vector.<Number>(leng);
 				var p:PickerList;
-				var autoResize:Boolean = true;
+				var sumWidth:Number =0;
+				var alreadySet:uint = 0;
 				for (var i:int = 0; i < leng; i++) 
 				{
 					p = _dataProvider[i];
 					p.dialog = this;
 					data[i] = p.getLabels();
 					indexes[i] = p.selectedIndex;
-					widths[i] = p.width;
+					
 					if(p.hadSetWidth){
-						autoResize = false;
+						alreadySet++;
+						sumWidth+= p.width;
+						widths[i] = p.width;
 					}
 				}
-				if(autoResize){
-					var w:Number = 300 / leng;
+				if(alreadySet!=leng){
+					var w:Number = 300;
+					if(isAndroid()){
+					 w = 350;
+					}
+					w = (w - sumWidth) / (leng - alreadySet);
 					for (i = 0; i < leng; i++) 
 					{
 						p = _dataProvider[i];
-						p.setWidth(w);
-						widths[i] = w;
+						if(!p.hadSetWidth){
+							p.setWidth(w);
+							widths[i] = w;
+						}
 					}
 				}
 				
@@ -185,6 +226,51 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		}
 		
 		
+		
+		
+		/**
+		 * If back button on Android cancles the dialog.Changes it event if isShowing.
+		 * <br><b>AVAILABLE ONLY ON ANDROID</b>
+		 * @return if call sucessfull
+		 * 
+		 * @throws Error if the call was unsuccessful. Or will dispatch an Error Event.ERROR if there is a listener.
+		 */
+		public function setCancelable(value:Boolean):Boolean
+		{
+			if(_cancelable==value){
+				return false;
+			}
+			if(_isShowing && isAndroid()){
+				try{
+					_context.call("setCancelable",value);
+					_cancelable = value;
+					return true;
+				}catch(e:Error){
+					showError("Error setting canceleble: "+e.message,e.errorID);
+				}
+				return false;
+			}
+			_cancelable = value;
+			return true;	
+		}
+		/**@private*/
+		public function set cancelable(value:Boolean):void
+		{
+			if(value==_cancelable || _isShowing==true){
+				return;
+			}
+			_cancelable = value;
+		}
+		/**
+		 * If back button cancles the dialog.
+		 * <br><b>AVAILABLE ONLY ON ANDROID</b>
+		 */
+		public function get cancelable():Boolean
+		{
+			return _cancelable;
+		}
+		
+		
 		/**
 		 * List of button labels in the dialog.
 		 * (if isShowing will be ignored until next call of the <code>show</code> method.)
@@ -204,13 +290,15 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		
 		
 		
-		override public function set title(value:String):void
-		{
-		}
 		override public function setTitle(value:String):Boolean
 		{
-			return true;
+			if(isAndroid()){
+				return super.setTitle(value);
+			}
+			return false;
 		}
+		
+		
 		override public function shake():void
 		{
 		}
@@ -284,6 +372,12 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			}
 		}
 		
+		
+		override public function hide(buttonIndex:int=0):Boolean{
+			_locked = false;
+			return super.hide(buttonIndex);
+		}
+		
 		/**
 		 * @private
 		 */
@@ -305,11 +399,11 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					const args:Array = event.level.split("_");
 					picker = _dataProvider[int(args[0])];
 					index = int(args[1]);
-					picker.selectedIndex = index;
+					picker.setSelectedIndex(index);
 				} else {
 					picker = _dataProvider[0];
 					index = int(event.level);
-					picker.selectedIndex = index;
+					picker.setSelectedIndex(index);
 				}
 				dispatchChange(picker,index);
 			}

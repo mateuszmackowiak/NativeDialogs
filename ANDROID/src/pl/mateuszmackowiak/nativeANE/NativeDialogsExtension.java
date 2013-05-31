@@ -3,6 +3,7 @@ package pl.mateuszmackowiak.nativeANE;
 import pl.mateuszmackowiak.nativeANE.functoins.DatePickerDialogContext;
 import pl.mateuszmackowiak.nativeANE.functoins.ListDialogContext;
 import pl.mateuszmackowiak.nativeANE.functoins.NativeAlertContext;
+import pl.mateuszmackowiak.nativeANE.functoins.NativePickerDialogContext;
 import pl.mateuszmackowiak.nativeANE.functoins.ProgressDialogContext;
 import pl.mateuszmackowiak.nativeANE.functoins.TextInputContext;
 import pl.mateuszmackowiak.nativeANE.functoins.ToastContext;
@@ -29,7 +30,7 @@ public class NativeDialogsExtension implements FREExtension
 	
 	private static String TAG = "[NativeDialogs]";
 
-	public static FREContext context;
+	public FREContext context;
 	
 	/**
 	 * Create the context (AS to Java).
@@ -51,8 +52,14 @@ public class NativeDialogsExtension implements FREExtension
 		else if(ListDialogContext.KEY.equals(extId))
 			return context = new ListDialogContext();
 		
+		else if(ListDialogContext.KEY.equals(extId))
+			return context = new ListDialogContext();
+		
 		else if(DatePickerDialogContext.KEY.equals(extId))
 			return context = new DatePickerDialogContext();
+		
+		else if(NativePickerDialogContext.KEY.equals(extId))
+			return context = new NativePickerDialogContext();
 		
 		else
 			return context = new NativeAlertContext();

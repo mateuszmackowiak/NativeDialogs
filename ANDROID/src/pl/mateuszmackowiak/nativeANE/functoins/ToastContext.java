@@ -22,8 +22,6 @@ public class ToastContext extends FREContext{
 	@Override
 	public void dispose() {
 		Log.d(KEY, "Disposing Extension Context");
-		
-		NativeDialogsExtension.context = null;
 	}
 
 	@Override

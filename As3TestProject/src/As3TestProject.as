@@ -48,17 +48,32 @@ package
 		protected function onPickerButtonClicked(event:MouseEvent):void
 		{
 			var picker:NativePickerDialog = new NativePickerDialog();
+			picker.title = "Select:";
+			
+			var pickerlist0:PickerList = new PickerList(["1","2","3","4","5","6"]);
+			pickerlist0.width = 40;
+			
 			var pickerlist1:PickerList = new PickerList(["HAHAHA","ATATAT","tatasd"],1);
+			
+			picker.addEventListener(NativeDialogEvent.OPENED,onOpen);
 			pickerlist1.addEventListener(NativeDialogListEvent.LIST_CHANGE,readSelectedValuesFromPickerList);
 			
 			var pickerlist2:PickerList = new PickerList(["affasf","sagasdg","ah5we","fdsad"],2);
 			pickerlist2.addEventListener(NativeDialogListEvent.LIST_CHANGE,readSelectedValuesFromPickerList);
 			
-			picker.dataProvider = Vector.<PickerList>([pickerlist1,pickerlist2]);
+			
+			picker.dataProvider = Vector.<PickerList>([pickerlist0,pickerlist1,pickerlist2]);
 			
 			picker.addEventListener(NativeDialogEvent.CLOSED,readAllSelectedValuesFromPickers);
 			picker.buttons = Vector.<String>(["Cancel","OK"]);
 			picker.show();
+		}
+		
+		private function onOpen(event):void
+		{
+			var n:NativePickerDialog = NativePickerDialog(event.target);
+			var picker:PickerList = n.dataProvider[1];
+			picker.selectedIndex = 3;
 		}
 		
 		
@@ -80,6 +95,7 @@ package
 		{
 			trace("showDatePicker")
 			var d:NativeDatePickerDialog = new NativeDatePickerDialog();
+			
 			d.addEventListener(NativeDialogEvent.CLOSED,onCloseDatePicker);
 			//d.addEventListener(NativeDialogEvent.CANCELED,onCancel);
 			//	d.addEventListener(NativeDialogEvent.OPENED,trace);

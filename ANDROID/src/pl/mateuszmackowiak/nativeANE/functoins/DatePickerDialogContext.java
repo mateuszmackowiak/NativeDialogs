@@ -42,7 +42,6 @@ public class DatePickerDialogContext extends FREContext {
 			_dialog.dismiss();
 			_dialog = null;
 		}
-		NativeDialogsExtension.context = null;
 	}
 
 	/**
@@ -131,7 +130,7 @@ public class DatePickerDialogContext extends FREContext {
 			try{
 				if(_dialog!=null){
 					int v = args[0].getAsInt();
-					NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
+					context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
 					_dialog.dismiss();
 					_dialog = null;
 				}
@@ -251,7 +250,7 @@ public class DatePickerDialogContext extends FREContext {
 	}
 	
 	
-	private static final AlertDialog creatDateDialog(FREContext context,String title,String message,String date,String buttons[], String style, boolean is24HourView,boolean cancelable,int theme,boolean hasMinMax,long minDate,long maxDate)
+	private static final AlertDialog creatDateDialog(FREContext freContext,String title,String message,String date,String buttons[], String style, boolean is24HourView,boolean cancelable,int theme,boolean hasMinMax,long minDate,long maxDate)
     {
 		try{
 			String[] dateArr = date.split(",");
@@ -265,15 +264,15 @@ public class DatePickerDialogContext extends FREContext {
 			
 			if("time".equals(style)){
 				if(android.os.Build.VERSION.SDK_INT<11){
-					dialog = new MyTimePickerDialog(context.getActivity(), hour, minute, is24HourView);
+					dialog = new MyTimePickerDialog(freContext,freContext.getActivity(), hour, minute, is24HourView);
 				}else{
-					dialog = new MyTimePickerDialog(context.getActivity(), hour, minute, is24HourView, theme);
+					dialog = new MyTimePickerDialog(freContext,freContext.getActivity(), hour, minute, is24HourView, theme);
 				}
 			}else{
 				if(android.os.Build.VERSION.SDK_INT<11){
-					dialog = new MyDatePickerDialog(context.getActivity(), year, month, day, hasMinMax, minDate, maxDate);
+					dialog = new MyDatePickerDialog(freContext,freContext.getActivity(), year, month, day, hasMinMax, minDate, maxDate);
 				}else{
-					dialog = new MyDatePickerDialog(context.getActivity(), year, month, day, hasMinMax, minDate, maxDate, theme);
+					dialog = new MyDatePickerDialog(freContext,freContext.getActivity(), year, month, day, hasMinMax, minDate, maxDate, theme);
 				}
 			}
 			
@@ -284,41 +283,45 @@ public class DatePickerDialogContext extends FREContext {
         		dialog.setMessage(Html.fromHtml(message));
 			
 			if(buttons!=null && buttons.length>0){
-				dialog.setButton(DatePickerDialog.BUTTON_POSITIVE, buttons[0], new ConfitmListener(0));
+				dialog.setButton(DatePickerDialog.BUTTON_POSITIVE, buttons[0], new ConfitmListener(freContext,0));
 				if(buttons.length>1){
-					dialog.setButton(DatePickerDialog.BUTTON_NEUTRAL, buttons[1], new ConfitmListener(1));
+					dialog.setButton(DatePickerDialog.BUTTON_NEUTRAL, buttons[1], new ConfitmListener(freContext,1));
 				}
 				if(buttons.length>2){
-					dialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, buttons[2], new ConfitmListener(2));
+					dialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, buttons[2], new ConfitmListener(freContext,2));
 				}
 			}else
-				dialog.setButton(DatePickerDialog.BUTTON_POSITIVE,"OK", new ConfitmListener(0));
+				dialog.setButton(DatePickerDialog.BUTTON_POSITIVE,"OK", new ConfitmListener(freContext,0));
 			
 			
 			dialog.setCancelable(cancelable);
 			if(cancelable==true)
-				dialog.setOnCancelListener(new CancelListener());
+				dialog.setOnCancelListener(new CancelListener(freContext));
 			
 			return dialog;
 	    }catch(Exception e){
-			context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,KEY+"   "+e.toString());
+			freContext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,KEY+"   "+e.toString());
 		}
 		return null;
     }
 	
 	private static class MyTimePickerDialog extends TimePickerDialog{
 
-		public MyTimePickerDialog(Context context, int hourOfDay, int minute,boolean is24HourView, int theme) {
+		FREContext freContext;
+		
+		public MyTimePickerDialog(FREContext freContext,Context context, int hourOfDay, int minute,boolean is24HourView, int theme) {
 			super(context, theme, null, hourOfDay, minute, is24HourView);
+			this.freContext = freContext;
 		}
-		public MyTimePickerDialog(Context context, int hourOfDay, int minute,boolean is24HourView) {
+		public MyTimePickerDialog(FREContext freContext,Context context, int hourOfDay, int minute,boolean is24HourView) {
 			super(context, null, hourOfDay, minute, is24HourView);
+			this.freContext = freContext;
 		}
 		
 		public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 			super.onTimeChanged(view, hourOfDay, minute);
 			String returnDateString = "time,"+String.valueOf(hourOfDay)+","+String.valueOf(minute);
-			NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
+			freContext.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
 		}
 	}
 	
@@ -327,15 +330,18 @@ public class DatePickerDialogContext extends FREContext {
 		private long minDate;
 		private long maxDate;
 		private boolean hasMinMax;
-
-		public MyDatePickerDialog (Context context, int year, int monthOfYear, int dayOfMonth, boolean hasMinMax, long minDate, long maxDate){
+		private FREContext freContext;
+		
+		public MyDatePickerDialog (FREContext freContext,Context context, int year, int monthOfYear, int dayOfMonth, boolean hasMinMax, long minDate, long maxDate){
 			super(context,null,year,monthOfYear,dayOfMonth);
 			setMinMax(hasMinMax, minDate, maxDate);
+			this.freContext = freContext;
 		}
 
-		public MyDatePickerDialog (Context context, int year, int monthOfYear, int dayOfMonth, boolean hasMinMax, long minDate, long maxDate,int theme){
+		public MyDatePickerDialog (FREContext freContext,Context context, int year, int monthOfYear, int dayOfMonth, boolean hasMinMax, long minDate, long maxDate,int theme){
 			super(context,theme,null,year,monthOfYear,dayOfMonth);
 			setMinMax(hasMinMax, minDate, maxDate);
+			this.freContext = freContext;
 		} 
 		
 		private void setMinMax(boolean hasMinMax, long minDate, long maxDate) {
@@ -357,7 +363,7 @@ public class DatePickerDialogContext extends FREContext {
 			else
 			{
 				String returnDateString = "day,"+String.valueOf(year)+","+String.valueOf(month)+","+String.valueOf(day);
-				NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
+				freContext.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
 			}
 		}
 		
@@ -383,26 +389,38 @@ public class DatePickerDialogContext extends FREContext {
 	}
 	
 	private static class CancelListener implements DialogInterface.OnCancelListener{
+		FREContext freContext;
+		
+		/**
+		 * 
+		 */
+		public CancelListener(FREContext freContext) {
+			this.freContext = freContext;
+		}
         @Override
 		public void onCancel(DialogInterface dialog) 
         {
         	Log.e(KEY,"onCancle");
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CANCELED,String.valueOf(-1));   
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.CANCELED,String.valueOf(-1));   
      	   dialog.dismiss();
         }
     }
 	
 	private static class ConfitmListener implements DialogInterface.OnClickListener{
     	private int index;
-    	ConfitmListener(int index)
+    	FREContext freContext;
+    	
+    	
+    	ConfitmListener(FREContext freContext,int index)
     	{
     		this.index = index;
+    		this.freContext = freContext;
     	}
  
         @Override
 		public void onClick(DialogInterface dialog,int id) 
         {
-        	NativeDialogsExtension.context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(index));//Math.abs(id-1)));
+        	freContext.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(index));//Math.abs(id-1)));
         	dialog.dismiss();
         }
     }
