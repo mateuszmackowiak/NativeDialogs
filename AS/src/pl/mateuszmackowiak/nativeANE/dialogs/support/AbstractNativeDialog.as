@@ -4,8 +4,8 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 	import flash.events.EventDispatcher;
 	import flash.external.ExtensionContext;
 	import flash.system.Capabilities;
-import flash.utils.Dictionary;
-import flash.utils.getQualifiedClassName;
+
+	import flash.utils.getQualifiedClassName;
 	
 	import pl.mateuszmackowiak.nativeANE.nativeDialogNamespace;
 	
@@ -16,7 +16,7 @@ import flash.utils.getQualifiedClassName;
 	 */
 	public class AbstractNativeDialog extends EventDispatcher implements iNativeDialog
 	{
-		private static const SUPER_CACHE:Dictionary = new Dictionary();
+		//private static const SUPER_CACHE:Dictionary = new Dictionary();
 
 		//---------------------------------------------------------------------
 		//
@@ -44,7 +44,7 @@ import flash.utils.getQualifiedClassName;
 			if(k!=abstractKey){
 				throw new Error("[AbstractNativeDialog] is an abstract class. It must not be directly instantiated.");
 			}
-			SUPER_CACHE[this] = true;
+			//SUPER_CACHE[this] = true;
 			init();
 		}
 		
@@ -210,9 +210,9 @@ import flash.utils.getQualifiedClassName;
 		{
 			_isShowing = false;
 			try{
-				delete SUPER_CACHE[this];
+				//delete SUPER_CACHE[this];
 				if(_context){
-					trace("Disposing on .dispose");
+					trace("Disposing on dispose()");
 					_context.dispose();
 					_wasDisposed = true;
 					_context = null;

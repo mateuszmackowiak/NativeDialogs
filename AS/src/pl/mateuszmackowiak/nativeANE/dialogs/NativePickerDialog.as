@@ -90,7 +90,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		
 		nativeDialogNamespace function setSelectedIndex(pickerList:PickerList, index:int):void{
 			try{
-				if(!isShowing()){
+				if(!_isShowing){
 					return;
 				}
 				var p:PickerList;
@@ -128,7 +128,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		{
 			
 			try{
-				if(isShowing()){
+				if(_isShowing){
 					return false;
 				}
 				_cancelable = cancelable;

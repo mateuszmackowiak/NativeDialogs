@@ -126,7 +126,6 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		
 		/**@private*/
 		override protected function init():void{
-			var e:Error;
 			try{
 				_context = ExtensionContext.createExtensionContext(NativeAlertDialog.EXTENSION_ID, "ListDialogContext");
 				_context.addEventListener(StatusEvent.STATUS, onStatus);
@@ -423,7 +422,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 */
 		public function set displayMode(value:String):void
 		{
-			if(isShowing())
+			if(_isShowing)
 				return;
 			_displayMode = value;
 		}

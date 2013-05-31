@@ -521,7 +521,7 @@ void NativeDialogsContextInitializer(void* extData, const uint8_t* ctxType, FREC
     NativeDialogControler* nativeDialogController = [[NativeDialogControler alloc]init];
     nativeDialogController.freContext = ctx;
     
-    FRESetContextNativeData( ctx, nativeDialogController );
+    //FRESetContextNativeData( ctx, nativeDialogController );
     
     if(strcmp((const char *)ctxType, LIST_DIALOG_CONTEXT)==0){
         
@@ -721,11 +721,11 @@ void NativeDialogsExtFinalizer(void* extData)
  */
 void NativeDialogsContextFinalizer(FREContext ctx)
 {
-    NativeDialogControler* nativeDialogController;
+    /*NativeDialogControler* nativeDialogController;
     FREGetContextNativeData(ctx, (void**)&nativeDialogController);
     NSLog(@"Finalize!");
     [nativeDialogController release];
-
+*/
     return;
 }
 

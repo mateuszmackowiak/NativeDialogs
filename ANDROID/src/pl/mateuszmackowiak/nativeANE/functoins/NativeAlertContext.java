@@ -86,18 +86,18 @@ public class NativeAlertContext  extends FREContext {
 		public static final String KEY = "dismiss";
 		
 		@Override
-	    public FREObject call(FREContext context, FREObject[] args)
+	    public FREObject call(FREContext frecontext, FREObject[] args)
 	    {
 			
 			try{
 				if(alert!=null){
 					int v = args[0].getAsInt();
-					context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
+					frecontext.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
 					alert.dismiss();
 					alert = null;
 				}
 			}catch (Exception e){
-	        	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
+				frecontext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
 	            e.printStackTrace();
 	        }
 			return null;
@@ -107,7 +107,7 @@ public class NativeAlertContext  extends FREContext {
 		public static final String KEY = "isShowing";
 		
 		@Override
-	    public FREObject call(FREContext context, FREObject[] args)
+	    public FREObject call(FREContext frecontext, FREObject[] args)
 	    {
 			try{
 				if(alert!=null && alert.isShowing()){
@@ -115,7 +115,7 @@ public class NativeAlertContext  extends FREContext {
 				}
 				return FREObject.newObject(false);
 			}catch (Exception e){
-	        	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
+				frecontext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
 	            e.printStackTrace();
 	        }
 			return null;
@@ -125,7 +125,7 @@ public class NativeAlertContext  extends FREContext {
 		public static final String KEY = "updateMessage";
 		
 		@Override
-	    public FREObject call(FREContext context, FREObject[] args)
+	    public FREObject call(FREContext frecontext, FREObject[] args)
 	    {
 			try{
 				String message="";
@@ -133,7 +133,7 @@ public class NativeAlertContext  extends FREContext {
 				
 				alert.setMessage(message);
 			}catch (Exception e){
-	        	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
+				frecontext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
 	            e.printStackTrace();
 	        }
 			return null;
@@ -143,7 +143,7 @@ public class NativeAlertContext  extends FREContext {
 		public static final String KEY = "updateTitle";
 		
 		@Override
-	    public FREObject call(FREContext context, FREObject[] args)
+	    public FREObject call(FREContext frecontext, FREObject[] args)
 	    {
 			try{
 				String title="";
@@ -151,7 +151,7 @@ public class NativeAlertContext  extends FREContext {
 				
 				alert.setTitle(title);
 			}catch (Exception e){
-	        	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
+				frecontext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
 	            e.printStackTrace();
 	        }
 			return null;
@@ -164,7 +164,7 @@ public class NativeAlertContext  extends FREContext {
 		public static final String KEY = "showAlertWithTitleAndMessage";
 		
 		@Override
-	    public FREObject call(FREContext context, FREObject[] args)
+	    public FREObject call(FREContext frecontext, FREObject[] args)
 	    {
 	        String message="",title="",closeLabel="",otherLabel="";
 	        boolean cancelable=false;
@@ -180,13 +180,13 @@ public class NativeAlertContext  extends FREContext {
 				if(alert!=null){
 					alert.dismiss();
 				}
-				alert = creatAlert(context,message,title,closeLabel,otherLabel,cancelable,theme);
+				alert = creatAlert(frecontext,message,title,closeLabel,otherLabel,cancelable,theme);
 			    alert.show();
 			    
-			    context.dispatchStatusEventAsync(NativeDialogsExtension.OPENED,"-1");
+			    frecontext.dispatchStatusEventAsync(NativeDialogsExtension.OPENED,"-1");
 			    
 	        }catch (Exception e){
-	        	context.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
+	        	frecontext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
 	            e.printStackTrace();
 	        }    
 	        return null;

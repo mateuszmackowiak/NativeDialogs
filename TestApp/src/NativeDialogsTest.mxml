@@ -61,7 +61,7 @@
 			protected function onShowAlertButtonClicked(event:MouseEvent):void
 			{
 				//dialog = NativeAlertDialog.show("Message","Title","OK","Cancle",mess,true);
-				NativeAlertDialog.showAlert("Message", "Title",Vector.<String>(["OK","Cancle"]),mess,true);
+				NativeAlertDialog.show("MEssage", "Title","OK","Cancle",trace,true);
 				/*
 				var a:NativeAlertDialog = new NativeAlertDialog();
 				a.closeHandler = function(e:NativeDialogEvent):void{
@@ -75,7 +75,7 @@
 
 			protected function onMultiChoiceButtonClicked(event:MouseEvent):void
 			{
-				var m:NativeListDialog = new NativeListDialog(0,NativeListDialog.IOS_PICKER_THEME);
+				var m:NativeListDialog = new NativeListDialog();
 				
 				m.addEventListener(NativeDialogEvent.CLOSED,readSelected);
 				m.addEventListener(NativeDialogListEvent.LIST_CHANGE,function(event:NativeDialogListEvent):void
@@ -94,7 +94,7 @@
 			}
 			protected function onShowSingleChoiceButtonClicked(event:MouseEvent):void
 			{
-				var m:NativeListDialog = new NativeListDialog(0,NativeListDialog.IOS_PICKER_THEME);
+				var m:NativeListDialog = new NativeListDialog();
 				
 				m.addEventListener(NativeDialogEvent.CLOSED,readSelected);
 				m.addEventListener(NativeDialogListEvent.LIST_CHANGE,mess);

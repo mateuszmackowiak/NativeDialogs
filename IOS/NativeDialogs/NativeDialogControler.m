@@ -1137,7 +1137,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 }
 
 -(BOOL)isShowing{
-    #ifdef MYDEBUG
+    /*#ifdef MYDEBUG
         NSLog(@"isShowing");
     #endif
     if(sbAlert){
@@ -1148,7 +1148,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     }
     else if(alert){
         return [alert isVisible];
-    }
+    }*/
     return NO;
 }
 

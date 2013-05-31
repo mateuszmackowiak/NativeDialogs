@@ -26,7 +26,7 @@
 	<target name="iOSCompile" if="${IOS_ARM_ENABLE}" depends="iOSClean">
 		<exec executable="xcodebuild" dir="." failonerror="true"> 
 			<arg line="-project ${IOS_PROJECT_PATH}"/>
-			<arg line="-sdk iphoneos"/>
+			<!--<arg line="-sdk iphoneos"/>-->
 			<arg line="-target NativeDialogs"/>
 			<!--<arg line="-alltargets"/>-->
 			<arg line="-configuration Release"/>

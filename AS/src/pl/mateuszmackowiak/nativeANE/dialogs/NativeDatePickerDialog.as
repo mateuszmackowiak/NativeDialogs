@@ -162,7 +162,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 */
 		public function set displayMode(value:String):void
 		{
-			if(isShowing())
+			if(_isShowing)
 				return;
 			_displayMode = value;
 		}
@@ -180,7 +180,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		 */
 		public function set is24HourView(value:Boolean):void
 		{
-			if(isShowing())
+			if(_isShowing)
 				return;
 			_is24HourView = value;
 		}

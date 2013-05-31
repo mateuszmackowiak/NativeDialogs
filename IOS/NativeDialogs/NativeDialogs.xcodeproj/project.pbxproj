@@ -104,7 +104,7 @@
 		9AD71CB716CBC2800086A206 /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "error@2x.png"; path = "SVProgressHUD/error@2x.png"; sourceTree = SOURCE_ROOT; };
 		9AD71CB816CBC2800086A206 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = success.png; path = SVProgressHUD/success.png; sourceTree = SOURCE_ROOT; };
 		9AD71CB916CBC2800086A206 /* success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "success@2x.png"; path = "SVProgressHUD/success@2x.png"; sourceTree = SOURCE_ROOT; };
-		9ADF1B0616BF0F2200DA9AAA /* As3TestProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = As3TestProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9ADF1B0616BF0F2200DA9AAA /* NativeDialogsTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NativeDialogsTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ADF1B0C16BF0F2200DA9AAA /* nativealert-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nativealert-Info.plist"; sourceTree = "<group>"; };
 		9ADF1B0E16BF0F2200DA9AAA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9ADF1B1016BF0F2200DA9AAA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -158,7 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				9A0396F516BD905700445AD1 /* libNativeDialogs.a */,
-				9ADF1B0616BF0F2200DA9AAA /* As3TestProject.app */,
+				9ADF1B0616BF0F2200DA9AAA /* NativeDialogsTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -335,7 +335,7 @@
 			);
 			name = nativealert;
 			productName = nativealert;
-			productReference = 9ADF1B0616BF0F2200DA9AAA /* As3TestProject.app */;
+			productReference = 9ADF1B0616BF0F2200DA9AAA /* NativeDialogsTest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -402,7 +402,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# change to the proper directory\npushd ~/Documents/git/NativeDialogs/As3TestProject/bin-debug\n\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\n\n\n# package th e IPA - skip if already built\n\"/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.7/bin/adt\" -package -target ipa-debug-interpreter-simulator -provisioning-profile /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/nativealertdeveloper.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/iphone_dev.p12 \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.1.sdk/ -C ../src/ icons -C ../src/ images\n\nelse\n\n# package the IPA - skip if already built\n\"/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.7/bin/adt\" -package -target ipa-debug-interpreter -provisioning-profile /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/nativealertdeveloper.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/iphone_dev.p12  \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/ -C ../src/ icons -C ../src/ images\n\n\nfi\n\necho \"****** App packed *******\"\n#extract the IPA\ncp \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\".ipa.zip\n\nunzip -o \"$PRODUCT_NAME\".ipa.zip\nrm \"$PRODUCT_NAME\".ipa.zip\n\n# copy the contents of the IPA to the location xcode wants\ncp -r Payload/\"$PRODUCT_NAME\".app/ * \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\ncp -r \"$PRODUCT_NAME\".app.dSYM \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\n\n# remove the following files and folders to avoid signature errors when installing the app\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature/CodeResources\"\nrmdir \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/CodeResources\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/PkgInfo\"\n\n# restore working directory\n#popd";
+			shellScript = "# change to the proper directory\npushd ~/Documents/git/NativeDialogs/TestApp/bin-debug\n\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\n\n\n# package th e IPA - skip if already built\n\"/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.7/bin/adt\" -package -target ipa-debug-interpreter-simulator -provisioning-profile /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/nativealertdeveloper.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/iphone_dev.p12 \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.1.sdk/ -C ../src/ icons -C ../src/ images\n\nelse\n\n# package the IPA - skip if already built\n\"/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.7/bin/adt\" -package -target ipa-debug-interpreter -provisioning-profile /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/nativealertdeveloper.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/iphone_dev.p12  \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/ -C ../src/ icons -C ../src/ images\n\n\nfi\n\necho \"****** App packed *******\"\n#extract the IPA\ncp \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\".ipa.zip\n\nunzip -o \"$PRODUCT_NAME\".ipa.zip\nrm \"$PRODUCT_NAME\".ipa.zip\n\n# copy the contents of the IPA to the location xcode wants\ncp -r Payload/\"$PRODUCT_NAME\".app/ * \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\ncp -r \"$PRODUCT_NAME\".app.dSYM \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\n\n# remove the following files and folders to avoid signature errors when installing the app\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature/CodeResources\"\nrmdir \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/CodeResources\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/PkgInfo\"\n\n# restore working directory\n#popd";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -543,7 +543,7 @@
 				INFOPLIST_FILE = "nativealert/nativealert-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = As3TestProject;
+				PRODUCT_NAME = NativeDialogsTest;
 				USER_HEADER_SEARCH_PATHS = "/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.7/include/";
 				WRAPPER_EXTENSION = app;
 			};
@@ -567,7 +567,7 @@
 				INFOPLIST_FILE = "nativealert/nativealert-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PRODUCT_NAME = As3TestProject;
+				PRODUCT_NAME = NativeDialogsTest;
 				USER_HEADER_SEARCH_PATHS = "/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.7/include/";
 				WRAPPER_EXTENSION = app;
 			};
