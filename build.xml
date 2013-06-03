@@ -115,6 +115,8 @@
 									
 									<arg value="-platform"/>
 									<arg value="iPhone-x86"/>
+									<arg value="-platformoptions"/>
+									<arg value="${IOS_PLATFORM_OPTIONS}"/>
 									<arg value="-C"/>
 									<arg value="${BINARIES_FOLDER}/iOS"/>
 									<arg value="."/>
@@ -219,6 +221,8 @@
 									
 									<arg value="-platform"/>
 									<arg value="iPhone-x86"/>
+									<arg value="-platformoptions"/>
+									<arg value="${IOS_PLATFORM_OPTIONS}"/>
 									<arg value="-C"/>
 									<arg value="${BINARIES_FOLDER}/iOS"/>
 									<arg value="."/>

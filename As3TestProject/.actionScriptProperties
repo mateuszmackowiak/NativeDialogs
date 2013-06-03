@@ -35,7 +35,7 @@
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="/NativeDialogs_AS/bin/NativeDialogs_AS.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="5" linkType="2" path="${DOCUMENTS}/NativeDialogs/Binaries/NativeDialogs.ane"/>
+      <libraryPathEntry kind="5" linkType="2" path="/Users/mmmackowiak/Downloads/ANE-Alert-master/bin/AirAlert.ane"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -53,7 +53,7 @@
       <airSettings airCertificatePath="/Volumes/mateusz/CERTYFIKATY/iphoneCert.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
         <anePaths>
-          <anePathEntry path="${DOCUMENTS}/NativeDialogs/Binaries/NativeDialogs.ane"/>
+          <anePathEntry path="/Users/mmmackowiak/Downloads/ANE-Alert-master/bin/AirAlert.ane"/>
         </anePaths>
         <newLaunchParams/>
         <modifiedLaunchParams/>

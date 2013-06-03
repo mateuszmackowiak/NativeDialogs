@@ -11,6 +11,12 @@
 #import "AlertTextView.h"
 
 
+#define nativeDialog_opened (const uint8_t*)"nativeDialog_opened"
+#define nativeDialog_closed (const uint8_t*)"nativeDialog_closed"
+#define nativeDialog_canceled (const uint8_t*)"nativeDialog_canceled"
+#define nativeListDialog_change (const uint8_t *)"nativeListDialog_change"
+
+#define error (const uint8_t*)"error"
 
 @interface ListItem : NSObject
 @property( nonatomic, retain ) NSString *text;
@@ -65,6 +71,15 @@
 {
     self = [super init];
     if (self) {
+        freContext = nil;
+        tableItemList =nil;
+        alert = nil;
+        sbAlert = nil;
+        progressView = nil;
+        popover = nil;
+        actionSheet = nil;
+        delegate = nil;
+        picker = nil;
         cancelable = NO;
     }
     return self;
@@ -98,8 +113,13 @@
                 [alert addButtonWithTitle:label];
         }
     }
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_opened", (uint8_t*)"-1");
-    [alert show];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
+    
+
+    FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
+
 }
 
 
@@ -110,38 +130,51 @@
 #pragma mark - Toolbar and Pickers Utilities
 
 
--(void)presentView:(UIView*)viewToPresent withToolBar:(UIToolbar*)toolbar andTitle:(NSString*)title{
-    
+-(void)presentView:(UIView*)viewToPresent withToolBarItems:(FREObject *)toolbarItems andTitle:(NSString*)title{
+
+    [self dismissWithButtonIndex:0];
+    NSArray* buttons = [NativeDialogControler arrayOfStringsFormFreArray:toolbarItems];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        UIViewController* popoverContent = [[UIViewController alloc] init];
+        __block UIViewController* popoverContent = [[UIViewController alloc] init];
         
-        UIView *popoverView = [[UIView alloc] init];
+        __block UIView *popoverView = [[UIView alloc] init];
         popoverView.backgroundColor = [UIColor blackColor];
         
-        [popoverView addSubview:viewToPresent];
-        [popoverView addSubview:toolbar];
-        
-        popoverContent.view = popoverView;
         UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
         popoverController.delegate=self;
         
         UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
         
-        [popoverController setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
-        CGFloat viewWidth = wind.frame.size.width;
-        CGFloat viewHeight = wind.frame.size.height;
-        CGRect rect = CGRectMake(viewWidth/2, viewHeight/2, 1, 1);
-        
-        [popoverController presentPopoverFromRect:rect inView:wind permittedArrowDirections:0 animated:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            UIToolbar* toolbar = [self initToolbar:buttons];
+            
+            [popoverView addSubview:viewToPresent];
+            [popoverView addSubview:toolbar];
+            
+            popoverContent.view = popoverView;
+
+            [popoverController setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
+            CGFloat viewWidth = wind.frame.size.width;
+            CGFloat viewHeight = wind.frame.size.height;
+            CGRect rect = CGRectMake(viewWidth/2, viewHeight/2, 1, 1);
+            
+            [popoverController presentPopoverFromRect:rect inView:wind permittedArrowDirections:0 animated:YES];
+            
+            [toolbar sizeToFit];
+            [toolbar release];
+            
+            [popoverView release];
+            popoverView = nil;
+            [popoverContent release];
+            popoverContent = nil;
+        });
         
         popover = popoverController;
         
-        [popoverView release];
-        popoverView = nil;
-        [popoverContent release];
-        popoverContent = nil;
+        
         
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -152,88 +185,72 @@
                                                 cancelButtonTitle:nil
                                            destructiveButtonTitle:nil
                                                 otherButtonTitles:nil];
-        [aac addSubview:toolbar];
-        [aac addSubview:viewToPresent];
-        
+       
         
         UIWindow* wind= [[UIApplication sharedApplication] keyWindow];
         if(!wind){
             NSLog(@"Window is nil");
-            FREDispatchStatusEventAsync(freContext, (const uint8_t*)"error", (const uint8_t*)"Window is nil");
+            FREDispatchStatusEventAsync(freContext, error, (const uint8_t*)"Window is nil");
             return;
         }
         
-        [aac showInView:wind.rootViewController.view];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIToolbar* toolbar = [self initToolbar:buttons];
+            
+            [aac addSubview:viewToPresent];
+            [aac addSubview:toolbar];
+            
+            [aac showInView:wind.rootViewController.view];
         
-        if (UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-            [aac setBounds:CGRectMake(0,0,[UIScreen mainScreen].bounds.size.height, 370)];
-        } else {
-            [aac setBounds:CGRectMake(0,0,[UIScreen mainScreen].bounds.size.width, 464)];
-        }
-        [viewToPresent sizeToFit];
-        
+            if (UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+                [aac setBounds:CGRectMake(0,0,[UIScreen mainScreen].bounds.size.height, 370)];
+            } else {
+                [aac setBounds:CGRectMake(0,0,[UIScreen mainScreen].bounds.size.width, 464)];
+            }
+            [viewToPresent sizeToFit];
+            
+            [toolbar sizeToFit];
+            [toolbar release];
+        });
         actionSheet = aac;
         
     }
-    [toolbar sizeToFit];
-    [toolbar release];
+    FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
+    
+    
     
 }
 
-
-- (UIToolbar *)initToolbar:(FREObject *)buttons
+- (UIToolbar *)initToolbar:(NSArray*)buttons
 {
     UIToolbar *pickerDateToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     pickerDateToolbar.barStyle = UIBarStyleBlackOpaque;
     
     NSMutableArray* barItems = [[NSMutableArray alloc]init];
-    
-    uint32_t buttons_len;
-    FREGetArrayLength(buttons, &buttons_len);
-    
-    if(buttons_len>0){
-        uint32_t stingLen;
-        const uint8_t *buttonLabel;
+
+    uint32_t buttons_len = 0;
+    if (buttons && buttons.count>0) {
+        buttons_len = buttons.count;
         UIBarButtonItem *barButton;
-        for (int i = 1; i<buttons_len; i++) {
-            FREObject button;
-            FREGetArrayElementAt(buttons, i, &button);
-            
-            FREGetObjectAsUTF8(button, &stingLen, &buttonLabel);
-            if(buttonLabel){
-                NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
-                if(s && ![s isEqualToString:@""]){
-                    barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
-                    [barButton setTag:i];
-                    [barItems addObject:barButton];
-                    [barButton release];
-                    barButton = nil;
-                }
-            }
-        }
         
+        for (int i =1; i<buttons_len; i++) {
+            barButton = [[UIBarButtonItem alloc] initWithTitle:[buttons objectAtIndex:i] style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
+            [barButton setTag:i];
+            [barItems addObject:barButton];
+            [barButton release];
+            barButton = nil;
+        }
         
         UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
         [barItems addObject:flexSpace];
         [flexSpace release];
         flexSpace = nil;
         
-        
-        
-        FREObject button2;
-        FREGetArrayElementAt(buttons, 0, &button2);
-        
-        FREGetObjectAsUTF8(button2, &stingLen, &buttonLabel);
-        if(buttonLabel){
-            NSString * s= [NSString stringWithUTF8String:(char*)buttonLabel];
-            if(s && ![s isEqualToString:@""]){
-                barButton = [[UIBarButtonItem alloc] initWithTitle:s style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
-                [barButton setTag:0];
-                [barItems addObject:barButton];
-                [barButton release];
-                barButton = nil;
-            }
-        }   
+        barButton = [[UIBarButtonItem alloc] initWithTitle:[buttons objectAtIndex:0] style:UIBarButtonItemStyleBordered target:self action:@selector(actionSheetButtonClicked:)];
+        [barButton setTag:0];
+        [barItems addObject:barButton];
+        [barButton release];
+        barButton = nil;
         
     }else{
         UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
@@ -260,11 +277,11 @@
     NSInteger index = [sender tag];
     if(cancelable && index == 1)
     {
-        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
+        FREDispatchStatusEventAsync(freContext, nativeDialog_canceled, (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
     }
     else
     {
-        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_closed", (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
+        FREDispatchStatusEventAsync(freContext, nativeDialog_closed, (const uint8_t *)[[NSString stringWithFormat:@"%d",index] UTF8String]);
     }
     
     if(popover){
@@ -323,12 +340,12 @@
                     }
                 }
             }else{
-                UIToolbar *toolbar = [self initToolbar:buttons];
+
                 picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 0, 0)];
                 picker.showsSelectionIndicator = YES;
                 delegate = [[NativeListDelegate alloc] initWithMultipleOptions:options andWidths:widths target:self action:@selector(selectionChanged:withRow:andComponent:)];
                 picker.delegate = delegate;
-                toolbar.barStyle = UIBarStyleBlackOpaque;
+                
                 
                 uint32_t indexes_len;
                 if (FREGetArrayLength(indexes, &indexes_len) == FRE_OK)
@@ -348,14 +365,14 @@
                         }
                     }
                 }
+                [self presentView:picker withToolBarItems:buttons andTitle:title];
                 
-                [self presentView:picker withToolBar:toolbar andTitle:title];
             }
 
         }
     }
     @catch (NSException *exception) {
-        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"error", (const uint8_t *)[[exception reason] UTF8String]);
+        FREDispatchStatusEventAsync(freContext, error, (const uint8_t *)[[exception reason] UTF8String]);
     }
 #ifdef MYDEBUG
     NSLog(@"Show picker with options ended");
@@ -364,7 +381,9 @@
 
 
 -(void)setSelectedRow:(NSInteger)index andSection:(NSInteger)section{
-    [picker selectRow:index inComponent:section animated:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [picker selectRow:index inComponent:section animated:YES];
+    });
 }
 
 
@@ -375,22 +394,19 @@
                         buttons: (FREObject*)buttons{
     @try {
         
-        UIToolbar *toolbar = [self initToolbar:buttons];
         picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 0, 0)];
         picker.showsSelectionIndicator = YES;
         delegate = [[NativeListDelegate alloc] initWithOptions:options target:self action:@selector(selectionChanged:withRow:)];
         picker.delegate = delegate;
-        toolbar.barStyle = UIBarStyleBlackOpaque;
+        
         if(checked>-1){
             [picker selectRow:checked inComponent:0 animated:NO];
         }
-        
-        [self presentView:picker withToolBar:toolbar andTitle:title];
-        
+        [self presentView:picker withToolBarItems:buttons andTitle:title];
         
     }
     @catch (NSException *exception) {
-        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"error", (const uint8_t *)[[exception reason] UTF8String]);
+        FREDispatchStatusEventAsync(freContext, error, (const uint8_t *)[[exception reason] UTF8String]);
     }
 }
 
@@ -431,13 +447,11 @@
         
         [datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
         
-        UIToolbar *toolbar = [self initToolbar:buttons];
+        [self presentView:datePicker withToolBarItems:buttons andTitle:title];
         
-        [self presentView:datePicker withToolBar:toolbar andTitle:title];
-
     }
     @catch (NSException *exception) {
-        FREDispatchStatusEventAsync(freContext, (const uint8_t *)"error", (const uint8_t *)[[exception reason] UTF8String]);
+        FREDispatchStatusEventAsync(freContext, error, (const uint8_t *)[[exception reason] UTF8String]);
     }
 
 }
@@ -460,7 +474,9 @@
         for (int i = 0; i < [[actionSheet subviews] count]; i++) {
             if ([[actionSheet.subviews objectAtIndex:i] class] == [UIDatePicker class]) {
                 UIDatePicker* datepicker = (UIDatePicker*)[actionSheet.subviews objectAtIndex:i];
-                [datepicker setDate:date animated:YES];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [datepicker setDate:date animated:YES];
+                });
                 break;
             }
         }
@@ -470,7 +486,9 @@
         for (int i = 0; i < [[contentView subviews] count]; i++) {
             if ([[contentView.subviews objectAtIndex:i] class] == [UIDatePicker class]) {
                 UIDatePicker* datepicker = (UIDatePicker*)[contentView.subviews objectAtIndex:i];
-                [datepicker setDate:[NSDate dateWithTimeIntervalSinceNow:-99999] animated:YES];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [datepicker setDate:date animated:YES];
+                });
                 break;
             }
         }
@@ -495,7 +513,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
     
-    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeDialog_canceled", (const uint8_t *)"-1");
+    FREDispatchStatusEventAsync(freContext, nativeDialog_canceled, (const uint8_t *)"-1");
     [popover autorelease];
     popover = nil;
     
@@ -534,9 +552,13 @@
         progressView.progress=[progress floatValue];
     }
     [alert setDelegate:self];
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_opened", (uint8_t*)"-1");
-    [alert show];
     
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
+
+    FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
 }
 
 
@@ -787,9 +809,12 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
         }
         
     }
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_opened", (uint8_t*)"-1");
     
-    [alert show];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
+    
+    FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
 }
 
 
@@ -797,12 +822,12 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 
 -(void)selectionChanged:(id)sender
                 withRow:(NSInteger)row{
-    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeListDialog_change", (const uint8_t *)[[NSString stringWithFormat:@"%D",row] UTF8String]);
+    FREDispatchStatusEventAsync(freContext, nativeListDialog_change, (const uint8_t *)[[NSString stringWithFormat:@"%D",row] UTF8String]);
 }
 -(void)selectionChanged:(id)sender
                 withRow:(NSInteger)row
            andComponent:(NSInteger)component{
-    FREDispatchStatusEventAsync(freContext, (const uint8_t *)"nativeListDialog_change", (const uint8_t *)[[NSString stringWithFormat:@"%D_%D",component,row] UTF8String]);
+    FREDispatchStatusEventAsync(freContext, nativeListDialog_change, (const uint8_t *)[[NSString stringWithFormat:@"%D_%D",component,row] UTF8String]);
 }
 
 -(void)showSelectDialogWithTitle: (NSString*)title
@@ -905,9 +930,12 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
                     [sbAlert setStyle:SBTableAlertStyleApple];
                     [sbAlert setDataSource:self];
                     [sbAlert setDelegate:self];
-                    [sbAlert show];
                     
-                    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_opened", (uint8_t*)"-1");
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [sbAlert show];
+                    });
+                    
+                    FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
                     
                 }else if(type ==FRE_TYPE_VECTOR || type ==FRE_TYPE_ARRAY){
                     
@@ -947,9 +975,11 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [sbAlert setDataSource:self];
     [sbAlert setDelegate:self];
     
-    [sbAlert show];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [sbAlert show];
+    });
     
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_opened", (uint8_t*)"-1");
+    FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
 
 }
 
@@ -1007,7 +1037,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 	}else
         returnString = [NSString stringWithFormat:@"%d", [indexPath row]];
     
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeListDialog_change", (uint8_t*)[returnString UTF8String]);
+    FREDispatchStatusEventAsync(freContext, nativeListDialog_change, (uint8_t*)[returnString UTF8String]);
      
 }
 
@@ -1017,12 +1047,13 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 - (void)tableAlert:(SBTableAlert *)tableAlert didDismissWithButtonIndex:(NSInteger)buttonIndex{
 
     NSString *buttonID = [NSString stringWithFormat:@"%d", buttonIndex];
-    uint8_t* event = (uint8_t*)"nativeDialog_closed";
     if(cancelable && buttonIndex == 1)
     {
-        event = (uint8_t*)"nativeDialog_canceled";
+        FREDispatchStatusEventAsync(freContext, nativeDialog_canceled, (uint8_t*)[buttonID UTF8String]);
+    }else{
+        FREDispatchStatusEventAsync(freContext, nativeDialog_closed, (uint8_t*)[buttonID UTF8String]);
     }
-    FREDispatchStatusEventAsync(freContext, event, (uint8_t*)[buttonID UTF8String]);
+    
     //Cleanup references.
     
     [tableItemList release];
@@ -1048,15 +1079,16 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     cancelable = can;
 }
 -(void)dismissWithButtonIndex:(int32_t)index{
-
-    [popover dismissPopoverAnimated:YES];
-    [actionSheet dismissWithClickedButtonIndex:index animated:YES];
-    [alert dismissWithClickedButtonIndex:index animated:YES];
-    [sbAlert.view dismissWithClickedButtonIndex:index animated:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [popover dismissPopoverAnimated:YES];
+        [actionSheet dismissWithClickedButtonIndex:index animated:YES];
+        [alert dismissWithClickedButtonIndex:index animated:YES];
+        [sbAlert.view dismissWithClickedButtonIndex:index animated:YES];
+    });
 }
 -(UIView*)getView{
     NSLog(@"Getting View");
-    UIView *u;
+    UIView *u = nil;
     if(popover ){
         u = popover.contentViewController.view;
     }else if(alert && alert.isHidden==NO){
@@ -1075,6 +1107,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 #endif
     UIView* u= [self getView];
     if(u){
+    dispatch_async(dispatch_get_main_queue(), ^{
         CGRect r = u.frame;
         oldX = r.origin.x;
         r.origin.x = r.origin.x - r.origin.x * 0.1;
@@ -1090,6 +1123,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
         [u setFrame:r];
         
         [UIView commitAnimations];
+    });
     }
 }
 -(void)animationFinished:(NSString*)animationID{
@@ -1137,7 +1171,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 }
 
 -(BOOL)isShowing{
-    /*#ifdef MYDEBUG
+    #ifdef MYDEBUG
         NSLog(@"isShowing");
     #endif
     if(sbAlert){
@@ -1148,7 +1182,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     }
     else if(alert){
         return [alert isVisible];
-    }*/
+    }
     return NO;
 }
 
@@ -1159,6 +1193,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 
 
 #pragma mark - UIAlertViewDelegate
+
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -1173,7 +1208,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     }
     //Create our params to pass to the event dispatcher.
     NSString *buttonID = [NSString stringWithFormat:@"%d", buttonIndex];
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_closed", (uint8_t*)[buttonID UTF8String]);
+    FREDispatchStatusEventAsync(freContext, nativeDialog_closed, (uint8_t*)[buttonID UTF8String]);
     
     //Cleanup references.
     [alert release];
@@ -1183,25 +1218,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     progressView = nil;
     
 }
-/*
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    
-    //Create our params to pass to the event dispatcher.
-    NSString *buttonID = [NSString stringWithFormat:@"%d", buttonIndex];
-    FREDispatchStatusEventAsync(freContext, (uint8_t*)"nativeDialog_closed", (uint8_t*)[buttonID UTF8String]);
-    
-    //Cleanup references.
-    [alertView release];
-    alert = NULL;
-    
-    if(progressView){
-        [progressView release];
-        progressView = nil;
-    }
 
-}
-*/
 
 -(void)dealloc{
     
@@ -1223,4 +1240,31 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [super dealloc];
 }
 
+
+#pragma mark - Utilities
+
++(NSArray*)arrayOfStringsFormFreArray:(FREObject*)objects{
+    
+    uint32_t stringsLength = 0;
+    
+    if(FREGetArrayLength(objects, &stringsLength)==FRE_OK && stringsLength>0){
+        
+        NSMutableArray* strings = [[NSMutableArray alloc]init];
+        uint32_t stingLen;
+        const uint8_t *label;
+        for (int i = 0; i<stringsLength; i++) {
+            FREObject newString = nil;
+            if(FREGetArrayElementAt(objects, i, &newString)==FRE_OK){
+                if(FREGetObjectAsUTF8(newString, &stingLen, &label)==FRE_OK  && label){
+                    NSString * s= [NSString stringWithUTF8String:(char*)label];
+                    if(s && ![s isEqualToString:@""]){
+                        [strings addObject:s];
+                    }
+                }
+            }
+        }
+        return strings;
+    }
+    return nil;
+}
 @end

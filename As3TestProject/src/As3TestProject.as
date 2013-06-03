@@ -1,17 +1,14 @@
 package
 {
+	import com.freshplanet.ane.AirAlert.AirAlert;
+	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import pl.mateuszmackowiak.nativeANE.dialogs.NativeDatePickerDialog;
-	import pl.mateuszmackowiak.nativeANE.dialogs.NativeListDialog;
-	import pl.mateuszmackowiak.nativeANE.dialogs.NativePickerDialog;
-	import pl.mateuszmackowiak.nativeANE.dialogs.support.PickerList;
-	import pl.mateuszmackowiak.nativeANE.events.NativeDialogEvent;
-	import pl.mateuszmackowiak.nativeANE.events.NativeDialogListEvent;
+
 	
 	public class As3TestProject extends Sprite
 	{
@@ -42,10 +39,20 @@ package
 			circle2.x = 200;
 			addChild(circle2);
 			circle.addEventListener(MouseEvent.CLICK,onPickerButtonClicked)
-			circle2.addEventListener(MouseEvent.CLICK,showDatePicker)
+			//circle2.addEventListener(MouseEvent.CLICK,showDatePicker)
 		}
 		
 		protected function onPickerButtonClicked(event:MouseEvent):void
+		{
+			var currentDate : Date = new Date();
+			var callback : Function = function( selectedDate:String ) : void {
+				trace("selected date = ", selectedDate.toString());
+			}
+			// Native extension call
+			AirAlert.getInstance().showAlert("test","message");
+			
+		}
+		/*protected function onPickerButtonClicked(event:MouseEvent):void
 		{
 			var picker:NativePickerDialog = new NativePickerDialog();
 			picker.title = "Select:";
@@ -155,6 +162,6 @@ package
 			trace("selectedItems: "+m.selectedItems);
 			
 			m.dispose();
-		}
+		}*/
 	}
 }

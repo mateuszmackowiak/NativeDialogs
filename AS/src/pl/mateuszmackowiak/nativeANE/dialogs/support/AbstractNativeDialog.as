@@ -4,7 +4,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 	import flash.events.EventDispatcher;
 	import flash.external.ExtensionContext;
 	import flash.system.Capabilities;
-
+	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
 	import pl.mateuszmackowiak.nativeANE.nativeDialogNamespace;
@@ -16,7 +16,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 	 */
 	public class AbstractNativeDialog extends EventDispatcher implements iNativeDialog
 	{
-		//private static const SUPER_CACHE:Dictionary = new Dictionary();
+		private static const SUPER_CACHE:Dictionary = new Dictionary();
 
 		//---------------------------------------------------------------------
 		//
@@ -44,8 +44,8 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 			if(k!=abstractKey){
 				throw new Error("[AbstractNativeDialog] is an abstract class. It must not be directly instantiated.");
 			}
-			//SUPER_CACHE[this] = true;
-			init();
+			SUPER_CACHE[this] = true;
+			
 		}
 		
 		/**@private*/
@@ -74,7 +74,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 			} 
 			catch(error:Error) 
 			{
-				showError("Error calling shake method "+error.message,error.errorID);
+				showError("'shake' "+error.message,error.errorID);
 			}
 		}
 		
@@ -92,7 +92,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 						return b2;
 					}
 				}catch(error:Error){
-					showError(error);
+					showError("'isShowing' "+error);
 				}
 			}
 			return false;
@@ -128,7 +128,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 				}
 				return false;
 			}catch(e:Error){
-				showError("Error setting title "+e.message,e.errorID);
+				showError("'setTitle' "+e.message,e.errorID);
 			}
 			return false;
 		}
@@ -191,7 +191,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 				}
 				return false;
 			}catch(e:Error){
-				showError("Error calling dismiss method "+e.message,e.errorID);
+				showError("'hide' "+e.message,e.errorID);
 			}
 			return false;
 		}
@@ -210,7 +210,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 		{
 			_isShowing = false;
 			try{
-				//delete SUPER_CACHE[this];
+				delete SUPER_CACHE[this];
 				if(_context){
 					trace("Disposing on dispose()");
 					_context.dispose();
@@ -220,7 +220,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs.support
 					trace(className+" was already disposed.");
 				}
 			}catch(e:Error){
-				showError("Error calling dispose method "+e.message,e.errorID);
+				showError("'dispose' "+e.message,e.errorID);
 			}
 		}
 

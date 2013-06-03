@@ -74,7 +74,7 @@ FREObject showListDialog (FREContext ctx, void* functionData, uint32_t argc, FRE
     const uint8_t *title;
     const uint8_t *message;
     uint32_t cancelableInt;
-    BOOL cancelable;
+    BOOL cancelable = YES;
     
     NSString *titleString = nil;
     NSString *messageString = nil;
@@ -336,9 +336,9 @@ FREObject setSelectedIndex (FREContext ctx, void* functionData, uint32_t argc, F
 #endif
     NativeDialogControler *nativeDialogController = functionData;
     
-    uint32_t section;
+    uint32_t section = 0;
     if(FREGetObjectAsBool(argv[0], &section)==FRE_OK){
-        uint32_t index;
+        uint32_t index = 0;
         if(FREGetObjectAsBool(argv[0], &section)==FRE_OK){
             [nativeDialogController setSelectedRow:index andSection:section];
         }
@@ -402,8 +402,8 @@ FREObject showDatePicker(FREContext ctx, void* functionData, uint32_t argc, FREO
     
     bool hasMinMax = FALSE;
     
-    double min;
-    double max;
+    double min = 0.0;
+    double max = 0.0;
     
     if(argc >= 10)
     {
@@ -488,40 +488,45 @@ void NativeDialogsContextInitializer(void* extData, const uint8_t* ctxType, FREC
         NSLog(@"Entering NativeDialogsContextInitializer()");
         NSLog(@"context %s",ctxType);
     #endif
-    *numFunctionsToTest = 0;
+    
+    uint numOfFun = 0;
+    
+    
 
     if(strcmp((const char *)ctxType, LIST_DIALOG_CONTEXT)==0)
     {
-        *numFunctionsToTest = 6;
+        numOfFun = 6;
     }
     else if(strcmp((const char *)ctxType, ALERT_CONTEXT)==0)
     {
-        *numFunctionsToTest = 6;
+        numOfFun = 6;
     }
     else if(strcmp((const char *)ctxType, TEXT_INPUT_CONTEXT)==0)
     {
-        *numFunctionsToTest = 5;
+        numOfFun = 5;
     }
     else if(strcmp((const char *)ctxType, PROGRESS_CONTEXT)==0)
     {
-        *numFunctionsToTest = 7;
+        numOfFun = 7;
     }else if(strcmp((const char *)ctxType, TOAST_CONTEXT)==0)
     {
-        *numFunctionsToTest = 1;
+        numOfFun = 1;
     }else if(strcmp((const char *)ctxType, DATE_PICKER_CONTEX)==0)
     {
-        *numFunctionsToTest = 8;
+        numOfFun = 8;
     }else if(strcmp((const char *)ctxType, PICKER_CONTEXT)==0)
     {
-        *numFunctionsToTest = 6;
+        numOfFun = 6;
     }
 
-    FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * (*numFunctionsToTest));
-
+    FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * numOfFun);
+    
+    *numFunctionsToTest = numOfFun;
+    
     NativeDialogControler* nativeDialogController = [[NativeDialogControler alloc]init];
     nativeDialogController.freContext = ctx;
     
-    //FRESetContextNativeData( ctx, nativeDialogController );
+    FRESetContextNativeData( ctx, nativeDialogController );
     
     if(strcmp((const char *)ctxType, LIST_DIALOG_CONTEXT)==0){
         
@@ -721,11 +726,11 @@ void NativeDialogsExtFinalizer(void* extData)
  */
 void NativeDialogsContextFinalizer(FREContext ctx)
 {
-    /*NativeDialogControler* nativeDialogController;
+    NativeDialogControler* nativeDialogController;
     FREGetContextNativeData(ctx, (void**)&nativeDialogController);
     NSLog(@"Finalize!");
     [nativeDialogController release];
-*/
+
     return;
 }
 

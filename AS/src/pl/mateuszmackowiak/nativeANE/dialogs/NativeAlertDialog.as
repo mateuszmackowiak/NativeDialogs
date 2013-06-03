@@ -116,7 +116,8 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				_theme = theme;
 			else
 				_theme = _defaultTheme;
-		
+			
+			init();
 		}
 		
 		

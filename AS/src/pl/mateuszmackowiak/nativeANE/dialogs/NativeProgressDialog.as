@@ -122,7 +122,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				_iosTheme = iOSTheme;
 			else
 				_iosTheme = _defaultIOSTheme;
-			
+			init();
 		}
 		
 		/**@private*/
@@ -132,7 +132,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				_context = ExtensionContext.createExtensionContext(NativeAlertDialog.EXTENSION_ID, "ProgressContext");
 				_context.addEventListener(StatusEvent.STATUS, onStatus);
 			}catch(e:Error){
-				throw new Error("Error initiating contex of the extension: "+e.message,e.errorID);
+				throw new Error("'init' "+e.message,e.errorID);
 			}
 		}
 		/**
@@ -163,7 +163,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				}
 				return false;
 			}catch(e:Error){
-				showError("Error calling show method "+e.message,e.errorID);
+				showError("'show' "+e.message,e.errorID);
 			}
 			return false;
 		}
@@ -194,7 +194,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				}
 				return false;
 			}catch(e:Error){
-				showError("Error calling show method "+e.message,e.errorID);
+				showError("'show' "+e.message,e.errorID);
 			}
 			return false;
 		}
@@ -226,7 +226,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				}
 				return false;
 			}catch(e:Error){
-				showError("Error calling show method "+e.message,e.errorID);
+				showError("'show' "+e.message,e.errorID);
 			}
 			return false;
 		}
@@ -250,7 +250,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 						_context.call("setIndeterminate",value);
 						return true;
 					}catch(e:Error){
-						showError("Error setting setIndeterminate "+e.message,e.errorID);
+						showError("'setIndeterminate' "+e.message,e.errorID);
 					}
 				}
 			}
@@ -291,7 +291,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 						_context.call("updateSecondary",value);
 						return true;
 					}catch(e:Error){
-						showError("Error setting secondary progress "+e.message,e.errorID);
+						showError("'setSecondaryProgress' "+e.message,e.errorID);
 					}
 				}
 			}
@@ -338,7 +338,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					}
 					
 				}catch(e:Error){
-					showError("Error setting progress "+e.message,e.errorID);
+					showError("'setProgress' "+e.message,e.errorID);
 				}
 			}
 			return false;
@@ -388,7 +388,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				
 				return true;
 			}catch(e:Error){
-				showError("Error setting MAX "+e.message,e.errorID);
+				showError("'setMax' "+e.message,e.errorID);
 			}
 			
 			return false;
@@ -440,7 +440,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 						return true;
 					}
 				}catch(e:Error){
-					showError("Error setting message "+e.message,e.errorID);
+					showError("'setMessage' "+e.message,e.errorID);
 				}
 			}
 			return false;
@@ -601,7 +601,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 					default:
 					{
 						_isShowing = isShowing();
-						showError(event.toString());
+						showError(String(event));
 						break;
 					}
 				}

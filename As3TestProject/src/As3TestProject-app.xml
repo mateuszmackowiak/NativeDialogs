@@ -283,6 +283,8 @@
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
     <extensions>
-        <extensionID>pl.mateuszmackowiak.nativeANE.NativeDialogs</extensionID>
+        
+    
+    <extensionID>com.freshplanet.AirAlert</extensionID>
     </extensions>
 </application>

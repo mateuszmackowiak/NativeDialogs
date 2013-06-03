@@ -122,6 +122,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 			else
 				_iosTheme = _defaultIOSTheme;
 			
+			init();
 		}
 		
 		/**@private*/
