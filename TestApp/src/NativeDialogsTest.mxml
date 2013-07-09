@@ -60,15 +60,16 @@
 			
 			protected function onShowAlertButtonClicked(event:MouseEvent):void
 			{
-				NativeAlertDialog.showAlert("MEssage","Title", Vector.<String>(["OK","Cancle"]),trace,true);
-				/*
-				var a:NativeAlertDialog = new NativeAlertDialog();
+				NativeAlertDialog.showAlert("MEssage","Title", Vector.<String>(["OK","Cancle"]),trace,true).closeLabel = "dupa";
+				
+				/*var a:NativeAlertDialog = new NativeAlertDialog();
 				a.closeHandler = function(e:NativeDialogEvent):void{
 					mess(e);
 				};
 				a.title = "Title";
 				a.message = "Some message.";
 				a.closeLabel = "OK";
+				a.otherLabels = "YES,dupa";
 				a.show();*/
 			}
 

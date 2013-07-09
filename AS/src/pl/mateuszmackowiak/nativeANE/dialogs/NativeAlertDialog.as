@@ -303,7 +303,11 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				if(!_title)
 					_title="";
 				if(!_buttons || _buttons.length==0)
-					_buttons=Vector.<String>(["OK"]);
+					_buttons = Vector.<String>(["OK"]);
+				
+				if(_closeLabel && _buttons.indexOf(_closeLabel)==-1){
+					_buttons.unshift(_closeLabel);
+				}
 				if(!_message)
 					_message="";
 				
