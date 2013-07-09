@@ -1,7 +1,7 @@
 # Native Dialogs - Adobe air Native Extension #
 =============
 
-Adobe Air Native Extension for mobile native dialogs (IOS,Andoid) - Toast, Text Input dialog, Progress dialog, Alert dialog, multi single choice dialog + DatePicker dialog
+Adobe Air Native Extension for mobile native dialogs (IOS,Andoid) - Toast, Text Input dialog, Progress dialog, Alert dialog, multi / single choice dialog, DatePicker dialog , PickerList dialog
 
 
 ***
@@ -15,10 +15,57 @@ Before creating an Issue. Please:
 - On IOS: To see the answers of the console with the terminal (IOS Simulator) type: "tail -f /var/log/system.log" in the console. To see it on the device download form the app store a free app "Console" and if the app crashes go to the app.
 - Please send part of Your code that causes the problem.
 
+## NativePickerDialog (IOS/Andorid) ##
 
+	Displays a dialog with a scrollable list. On IOS - the native picker
+	
+*Usage*
+
+		protected function onsPickerButtonClicked(event:MouseEvent):void
+			{
+				var picker:NativePickerDialog = new NativePickerDialog();
+				var pickerlist1:PickerList = new PickerList(["HAHAHA","ATATAT","tatasd"],1);
+				pickerlist1.addEventListener(NativeDialogListEvent.LIST_CHANGE,mess);
+				
+				var pickerlist2:PickerList = new PickerList(["affasf","sagasdg","ah5we","fdsad"],2);
+				pickerlist2.addEventListener(NativeDialogListEvent.LIST_CHANGE,mess);
+				
+				picker.dataProvider = Vector.<PickerList>([pickerlist1,pickerlist2]);
+				
+				picker.addEventListener(NativeDialogEvent.CLOSED,readAllSelectedValuesFromPickers);
+			
+				picker.show();
+			}
+			
+			private function readSelectedValuesFromPickerList(event:NativeDialogListEvent):void
+			{
+				var pickerList:PickerList = PickerList(event.target);
+				trace(event);
+				trace("selectedIndex: "+pickerList.selectedIndex);
+				trace("selectedItem: "+pickerList.selectedItem);
+			}
+			
+			private function readAllSelectedValuesFromPickers(event:NativeDialogEvent):void
+			{
+				var picker:NativePickerDialog = NativePickerDialog(event.target);
+				var v:Vector.<PickerList> = picker.dataProvider;
+				var pickerList:PickerList;
+				trace(event);
+				for (var i:int = 0; i < v.length; i++) 
+				{
+					pickerList = v[i];
+					trace("pickerlist "+i);
+					trace("selectedIndex: "+pickerList.selectedIndex);
+					trace("selectedItem: "+pickerList.selectedItem);
+				}
+				
+				picker.dispose();
+			}
+			
+			
 ## NativeDatePickerDialog (IOS/Andorid) ##
 
-	Displays a native date-picker dialog.
+	Displays a native date-picker dialog. (Now DISPLAY_MODE_DATE_AND_TIME works on Android)
   
 *Usage*
 
@@ -55,19 +102,16 @@ Before creating an Issue. Please:
 
 *Usage:*
 
-	private function showAler(){
-		NativeAlert.show( "some message" , "title" , "first button label" , "otherButtons,LabelsSeperated,WithAComma", someAnswerFunction);
-	}
-	private function someAnswerFunction(event:NativeDialogEvent):void{
-		//event.preventDefault(); 
-
-		// IMPORTANT: 
-		//default behavior is to remove the default listener "someAnswerFunction()" and to call the dispose()
-		//
-		trace(event);
-	}
-
-
+	private function showAlert(){
+		NativeAlertDialog.showAlert( "some message" , "title" ,  Vector.<String>(["OK","Cancle"]) , 
+			function someAnswerFunction(event:NativeDialogEvent):void{
+				//event.preventDefault(); 
+				var buttonPressed:String = event.index;// the index of the pressed button
+				// IMPORTANT: 
+				//default behavior is to remove the default listener "someAnswerFunction()" and to call the dispose()
+				//
+				trace(event);
+			});
 
 	/*
 		var a:NativeAlertDialog = new NativeAlertDialog();
