@@ -85,6 +85,58 @@
     return self;
 }
 
+-(void)showAlertWithTitle: (NSString *)title
+                  message: (NSString*)message
+                andButtons:(FREObject *)buttons{
+    
+    [self dismissWithButtonIndex:0];
+    
+    NSString* closeLabel=nil;
+    
+    uint32_t buttons_len;
+    FREGetArrayLength(buttons, &buttons_len);
+    
+    if(buttons_len>0){
+        FREObject button0;
+        FREGetArrayElementAt(buttons, 0, &button0);
+        
+        uint32_t button0LabelLength;
+        const uint8_t *button0Label;
+        FREGetObjectAsUTF8(button0, &button0LabelLength, &button0Label);
+        
+        closeLabel = [NSString stringWithUTF8String:(char*)button0Label];
+    }else{
+        closeLabel = NSLocalizedString(@"OK", nil);
+    }
+    alert = [[UIAlertView alloc] initWithTitle:title
+                                           message:message
+                                          delegate:self
+                                 cancelButtonTitle:closeLabel
+                             otherButtonTitles:nil];
+    
+    if(buttons_len>1){
+        FREObject button1;
+        FREGetArrayElementAt(buttons, 1, &button1);
+        
+        uint32_t button1LabelLength;
+        const uint8_t *button1Label;
+        FREGetObjectAsUTF8(button1, &button1LabelLength, &button1Label);
+        NSString* otherButton=[NSString stringWithUTF8String:(char*)button1Label];
+        
+        if(otherButton!=nil && ![otherButton isEqualToString:@""]){
+            [alert addButtonWithTitle:otherButton];
+            
+        }
+        
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
+    
+    
+    FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
+
+}
 
 -(void)showAlertWithTitle: (NSString *)title
                   message: (NSString*)message

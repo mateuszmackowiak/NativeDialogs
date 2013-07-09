@@ -60,8 +60,7 @@
 			
 			protected function onShowAlertButtonClicked(event:MouseEvent):void
 			{
-				//dialog = NativeAlertDialog.show("Message","Title","OK","Cancle",mess,true);
-				NativeAlertDialog.show("MEssage", "Title","OK","Cancle",trace,true);
+				NativeAlertDialog.showAlert("MEssage","Title", Vector.<String>(["OK","Cancle"]),trace,true);
 				/*
 				var a:NativeAlertDialog = new NativeAlertDialog();
 				a.closeHandler = function(e:NativeDialogEvent):void{
@@ -173,7 +172,7 @@
 			
 			protected function onHorizontalProgressDialogButtonClicked(event:MouseEvent):void
 			{
-				var p:NativeProgressDialog= new NativeProgressDialog(-1,NativeProgressDialog.IOS_SVHUD_NON_BACKGROUND_THEME);
+				var p:NativeProgressDialog= new NativeProgressDialog();
 				p.addEventListener(NativeDialogEvent.CLOSED,onCloseDialog);
 				p.secondaryProgress = 45;
 				p.max = 50;
@@ -241,7 +240,7 @@
 					mess("Date set to:"+String(_date));
 				});
 				//d.buttons = Vector.<String>(["Cancle","OK"]);
-				d.displayMode =NativeDatePickerDialog.DISPLAY_MODE_DATE;
+				d.displayMode =NativeDatePickerDialog.DISPLAY_MODE_DATE_AND_TIME;
 				d.title = "DatePicker";
 				d.message = "Select date:";
 				d.date = _date;

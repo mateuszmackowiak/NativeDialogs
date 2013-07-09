@@ -1,12 +1,19 @@
 package
 {
-	import com.freshplanet.ane.AirAlert.AirAlert;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	
+	import pl.mateuszmackowiak.nativeANE.dialogs.NativeAlertDialog;
+	import pl.mateuszmackowiak.nativeANE.dialogs.NativeDatePickerDialog;
+	import pl.mateuszmackowiak.nativeANE.dialogs.NativeListDialog;
+	import pl.mateuszmackowiak.nativeANE.dialogs.NativePickerDialog;
+	import pl.mateuszmackowiak.nativeANE.dialogs.support.PickerList;
+	import pl.mateuszmackowiak.nativeANE.events.NativeDialogEvent;
+	import pl.mateuszmackowiak.nativeANE.events.NativeDialogListEvent;
 	
 
 	
@@ -38,23 +45,15 @@ package
 			circle2.graphics.endFill();
 			circle2.x = 200;
 			addChild(circle2);
-			circle.addEventListener(MouseEvent.CLICK,onPickerButtonClicked)
-			//circle2.addEventListener(MouseEvent.CLICK,showDatePicker)
+			circle.addEventListener(MouseEvent.CLICK,onPickerButtonClicked);
+			circle2.addEventListener(MouseEvent.CLICK,showDatePicker);
 		}
 		
 		protected function onPickerButtonClicked(event:MouseEvent):void
 		{
-			var currentDate : Date = new Date();
-			var callback : Function = function( selectedDate:String ) : void {
-				trace("selected date = ", selectedDate.toString());
-			}
-			// Native extension call
-			AirAlert.getInstance().showAlert("test","message");
+			NativeAlertDialog.showAlert("Jagnięcina","Men",Vector.<String>(["Bekon","Inne"]),trace);
 			
-		}
-		/*protected function onPickerButtonClicked(event:MouseEvent):void
-		{
-			var picker:NativePickerDialog = new NativePickerDialog();
+			/*var picker:NativePickerDialog = new NativePickerDialog();
 			picker.title = "Select:";
 			
 			var pickerlist0:PickerList = new PickerList(["1","2","3","4","5","6"]);
@@ -73,7 +72,7 @@ package
 			
 			picker.addEventListener(NativeDialogEvent.CLOSED,readAllSelectedValuesFromPickers);
 			picker.buttons = Vector.<String>(["Cancel","OK"]);
-			picker.show();
+			picker.show();*/
 		}
 		
 		private function onOpen(event):void
@@ -162,6 +161,7 @@ package
 			trace("selectedItems: "+m.selectedItems);
 			
 			m.dispose();
-		}*/
+		}
 	}
+	
 }

@@ -3,6 +3,7 @@ package pl.mateuszmackowiak.nativeANE.functoins;
 import java.util.HashMap;
 import java.util.Map;
 
+import pl.mateuszmackowiak.nativeANE.FREUtilities;
 import pl.mateuszmackowiak.nativeANE.NativeDialogsExtension;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -13,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.TranslateAnimation;
 
+import com.adobe.fre.FREArray;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
@@ -23,7 +25,7 @@ import com.adobe.fre.FREObject;
 public class NativeAlertContext  extends FREContext {
 
 	
-	public static final String KEY = "NativeAlert";
+	public static final String KEY = "NativeAlertContext";
 	
 	private AlertDialog alert = null;
 	
@@ -160,13 +162,14 @@ public class NativeAlertContext  extends FREContext {
 	
 	
 	
-	public class showAlertFunction implements FREFunction{
+	/*public class showAlertFunction implements FREFunction{
 		public static final String KEY = "showAlertWithTitleAndMessage";
 		
 		@Override
 	    public FREObject call(FREContext frecontext, FREObject[] args)
 	    {
 	        String message="",title="",closeLabel="",otherLabel="";
+	        String []buttons = null;
 	        boolean cancelable=false;
 	        int theme=1;  
 	        try{
@@ -180,7 +183,46 @@ public class NativeAlertContext  extends FREContext {
 				if(alert!=null){
 					alert.dismiss();
 				}
-				alert = creatAlert(frecontext,message,title,closeLabel,otherLabel,cancelable,theme);
+				if(otherLabel!=null && !"".equals(otherLabel)){
+					buttons = otherLabel.split(",");
+				}
+				alert = creatAlert(frecontext,message,title,closeLabel,buttons,cancelable,theme);
+			    alert.show();
+			    
+			    frecontext.dispatchStatusEventAsync(NativeDialogsExtension.OPENED,"-1");
+			    
+	        }catch (Exception e){
+	        	frecontext.dispatchStatusEventAsync(NativeDialogsExtension.ERROR_EVENT,String.valueOf(e));
+	            e.printStackTrace();
+	        }    
+	        return null;
+	    }
+	}*/
+	
+	
+	public class showAlertFunction implements FREFunction{
+		public static final String KEY = "showAlertWithTitleAndMessage";
+		
+		@Override
+	    public FREObject call(FREContext frecontext, FREObject[] args)
+	    {
+	        String message="",title="";
+	        boolean cancelable=false;
+	        CharSequence []buttons = null;
+	        int theme=1;  
+	        try{
+
+	            title = args[0].getAsString();
+	            message = args[1].getAsString();
+	            if(args[2]!=null && args[2] instanceof FREArray){
+	            	buttons = FREUtilities.convertFREArrayToCharSequenceArray((FREArray)args[2]);
+	        	}
+			    cancelable= args[3].getAsBool();
+				theme= args[4].getAsInt();
+				if(alert!=null){
+					alert.dismiss();
+				}
+				alert = creatAlert(frecontext,message,title,buttons,cancelable,theme);
 			    alert.show();
 			    
 			    frecontext.dispatchStatusEventAsync(NativeDialogsExtension.OPENED,"-1");
@@ -194,17 +236,8 @@ public class NativeAlertContext  extends FREContext {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@SuppressLint("NewApi")
-	private static AlertDialog creatAlert(FREContext frecontext,String message,String title,String closeLabel,String otherLabel,boolean cancelable,int theme)
+	private static AlertDialog creatAlert(FREContext frecontext,String message,String title,CharSequence[] buttons,boolean cancelable,int theme)
     {  
     	AlertDialog.Builder builder = (android.os.Build.VERSION.SDK_INT<11)?new AlertDialog.Builder(frecontext.getActivity()): new AlertDialog.Builder(frecontext.getActivity(),theme);
     	
@@ -212,48 +245,30 @@ public class NativeAlertContext  extends FREContext {
     	if(cancelable==true){
     		builder.setOnCancelListener(new CancelListener(frecontext));
     	}
-    	if (otherLabel==null || "".equals(otherLabel))
-    	{
-    		if(message!=null && !"".equals(message))
-    			builder.setMessage(Html.fromHtml(message));
-    		
-    		if(title!=null && !"".equals(title)){
-    			builder.setTitle(Html.fromHtml(title));
-    			builder.setNeutralButton(closeLabel, new AlertListener(frecontext));
-    		}else{
-    			builder.setCancelable(true);
-    			builder.setOnCancelListener(new CancelListener(frecontext));
-    		}
-    			
-    	}
-    	else
-    	{
-	    	String[] als = otherLabel.split(",");
-	        if (als.length==1)
-	        {
-	        	if(title!=null && !"".equals(title))
-	        		builder.setTitle(Html.fromHtml(title));
-	        	if(message!=null && !"".equals(message))
-	        		builder.setMessage(Html.fromHtml(message));
-	        	builder.setPositiveButton(closeLabel, new AlertListener(frecontext))
-	                   .setNegativeButton(otherLabel, new AlertListener(frecontext));
-	        }
-	        else
-	        {
-	        	if(title!=null && !"".equals(title) && message!=null && !"".equals(message))
-	        		builder.setTitle(Html.fromHtml(title)+": "+Html.fromHtml(message));
-	        	else if(title!=null && !"".equals(title))
-	        		builder.setTitle(Html.fromHtml(title));
-	        	else if(message!=null && !"".equals(message))
-	        		builder.setTitle(Html.fromHtml(message));
-	        		
-	        	String[] als2 = new String[als.length+1];
-	         	als2[0]=closeLabel;
-	         	for (int i=0;i<als.length;i++)
-	        		als2[i+1]=als[i];
-	        	builder.setItems(als2, new AlertListener(frecontext));
-	        }
-    	}
+        if (buttons.length<=2)
+        {
+        	if(title!=null && !"".equals(title))
+        		builder.setTitle(Html.fromHtml(title));
+        	if(message!=null && !"".equals(message))
+        		builder.setMessage(Html.fromHtml(message));
+        	if(buttons.length==1){
+        		builder.setPositiveButton(buttons[0], new AlertListener(frecontext));
+        	}else if(buttons.length==2){
+        		builder.setPositiveButton(buttons[0], new AlertListener(frecontext))
+                   .setNegativeButton(buttons[1], new AlertListener(frecontext));
+        	}
+        }
+        else
+        {
+        	if(title!=null && !"".equals(title) && message!=null && !"".equals(message))
+        		builder.setTitle(Html.fromHtml(title)+": "+Html.fromHtml(message));
+        	else if(title!=null && !"".equals(title))
+        		builder.setTitle(Html.fromHtml(title));
+        	else if(message!=null && !"".equals(message))
+        		builder.setTitle(Html.fromHtml(message));
+        	
+        	builder.setItems(buttons, new AlertListener(frecontext));
+        }
         return builder.create();
     }
 	

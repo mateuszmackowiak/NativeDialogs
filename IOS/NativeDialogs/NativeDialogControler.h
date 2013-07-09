@@ -29,6 +29,9 @@
 
 -(void)createMultiChoice;
 
+-(void)showAlertWithTitle: (NSString *)title
+                  message: (NSString*)message
+                andButtons:(FREObject *)buttons;
 
 -(void)showAlertWithTitle: (NSString *)title
                   message: (NSString*)message

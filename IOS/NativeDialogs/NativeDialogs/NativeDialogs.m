@@ -23,7 +23,7 @@
 
 #pragma mark - dialog methods
 
-
+/*
 FREObject showAlertWithTitleAndMessage (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] ){
     NativeDialogControler *nativeDialogController = functionData;
     //Temporary values to hold our actionscript code.
@@ -62,6 +62,34 @@ FREObject showAlertWithTitleAndMessage (FREContext ctx, void* functionData, uint
                       message:messageString
                    closeLabel:closeLabelString
                   otherLabels:otherLabelsString];
+    return NULL;
+}
+*/
+
+FREObject showAlert (FREContext ctx, void* functionData, uint32_t argc, FREObject argv[] ){
+    NativeDialogControler *nativeDialogController = functionData;
+    //Temporary values to hold our actionscript code.
+    
+    
+    uint32_t stringLength;
+    const uint8_t *title = nil;
+    const uint8_t *message = nil;
+    
+    NSString *titleString = nil;
+    NSString *messageString = nil;
+    
+    //Turn our actionscrpt code into native code.
+    if(argv[0] && FREGetObjectAsUTF8(argv[0], &stringLength, &title)==FRE_OK){
+        titleString = [NSString stringWithUTF8String:(char*)title];
+    }
+    if(argv[1] && FREGetObjectAsUTF8(argv[1], &stringLength, &message)==FRE_OK){
+        messageString = [NSString stringWithUTF8String:(char*)message];
+    }
+    //Create our Strings for our Alert.
+    
+    [nativeDialogController showAlertWithTitle:titleString
+                                       message:messageString
+                                     andButtons:argv[2]];
     return NULL;
 }
 
@@ -559,7 +587,7 @@ void NativeDialogsContextInitializer(void* extData, const uint8_t* ctxType, FREC
         
         func[0].name = (const uint8_t *) "showAlertWithTitleAndMessage";
         func[0].functionData = nativeDialogController;
-        func[0].function = &showAlertWithTitleAndMessage;
+        func[0].function = &showAlert;
         
         func[1].name = (const uint8_t*) "isShowing";
         func[1].functionData = nativeDialogController;

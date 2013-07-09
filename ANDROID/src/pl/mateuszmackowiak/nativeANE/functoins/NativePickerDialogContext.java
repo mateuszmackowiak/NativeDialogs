@@ -193,9 +193,6 @@ public class NativePickerDialogContext extends FREContext{
 				PickerDialog pickerDialog = (android.os.Build.VERSION.SDK_INT<11)?
 						new PickerDialog(frecontext,frecontext.getActivity(),title, message,options,selections,widths,theme)
 						:new PickerDialog(frecontext,frecontext.getActivity(),title, message,options,selections,widths,theme);
-
-				if(title!=null)
-					pickerDialog.setTitle(Html.fromHtml(title));
 				
 			    pickerDialog.setCancelable(cancelable);
 			    if(cancelable==true)
@@ -316,7 +313,7 @@ public class NativePickerDialogContext extends FREContext{
 		public void createContent(FREContext freContext,Context context,String title,String message,FREArray pickerLists, int[] selections , double [] widths, int theme) throws IllegalArgumentException, FREInvalidObjectException, FREWrongThreadException, IllegalStateException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException 
 		{
 			if(title!=null){
-				this.setTitle(title);
+				this.setTitle(Html.fromHtml(title));
 			}
 			RelativeLayout rl = new RelativeLayout(context);
 			

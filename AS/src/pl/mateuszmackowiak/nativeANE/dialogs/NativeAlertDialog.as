@@ -78,7 +78,7 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 		//
 		//---------------------------------------------------------------------
 		/**@private*/
-		private var _closeLabel:String="OK";
+		private var _closeLabel:String = null;
 		/**@private*/
 		private var _buttons:Vector.<String> = null;
 		/**@private*/
@@ -302,15 +302,13 @@ package pl.mateuszmackowiak.nativeANE.dialogs
 				}
 				if(!_title)
 					_title="";
-				if(!_closeLabel && (!otherLabels || otherLabels==""))
-					_closeLabel ="OK";
-				if(!otherLabels)
-					otherLabels="";
+				if(!_buttons || _buttons.length==0)
+					_buttons=Vector.<String>(["OK"]);
 				if(!_message)
 					_message="";
 				
 				
-				_context.call("showAlertWithTitleAndMessage", _title, _message, _closeLabel, _buttons.join(","), cancelable, _theme);
+				_context.call("showAlertWithTitleAndMessage", _title, _message, _buttons, cancelable, _theme);
 				
 				return true;
 			}catch(e:Error){

@@ -3,8 +3,10 @@ package pl.mateuszmackowiak.nativeANE.functoins;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
 import pl.mateuszmackowiak.nativeANE.FREUtilities;
 import pl.mateuszmackowiak.nativeANE.NativeDialogsExtension;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -12,11 +14,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.DatePicker;
+import android.widget.DatePicker.OnDateChangedListener;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
+
 
 import com.adobe.fre.FREArray;
 import com.adobe.fre.FREContext;
@@ -28,8 +37,7 @@ public class DatePickerDialogContext extends FREContext {
 	public static final String KEY = "DatePickerDialogContext";
 
 	private AlertDialog _dialog = null;
-	
-
+	private TimeAndDatePicker _timeAndDatePicker = null;
 
 
 	
@@ -78,13 +86,22 @@ public class DatePickerDialogContext extends FREContext {
 				if(_dialog!=null){
 					String []date = args[0].getAsString().split(",");
 					
+					int year = Integer.valueOf(date[0]).intValue();
+					int month = Integer.valueOf(date[1]).intValue();
+					int day = Integer.valueOf(date[2]).intValue();
+					int hour = Integer.valueOf(date[3]).intValue();
+					int minutes = Integer.valueOf(date[4]).intValue();
 					if(_dialog instanceof DatePickerDialog){
-						((DatePickerDialog)_dialog).updateDate(Integer.valueOf(date[0]).intValue()
-								, Integer.valueOf(date[1]).intValue()
-								, Integer.valueOf(date[2]).intValue());
+						((DatePickerDialog)_dialog).updateDate(year, month, day);
+						
 					}else if(_dialog instanceof TimePickerDialog){
-						((TimePickerDialog)_dialog).updateTime(Integer.valueOf(date[3]).intValue()
-								, Integer.valueOf(date[4]).intValue());
+						((TimePickerDialog)_dialog).updateTime(hour,minutes);
+						
+					}else if(_timeAndDatePicker !=null){
+						
+						_timeAndDatePicker.getDatePicker().updateDate(year, month, day);
+						_timeAndDatePicker.getTimePicker().setCurrentHour(hour);
+						_timeAndDatePicker.getTimePicker().setCurrentMinute(minutes);
 					}
 				}
 			}catch (Exception e){
@@ -132,6 +149,7 @@ public class DatePickerDialogContext extends FREContext {
 					int v = args[0].getAsInt();
 					context.dispatchStatusEventAsync(NativeDialogsExtension.CLOSED,String.valueOf(v));        
 					_dialog.dismiss();
+					_timeAndDatePicker = null;
 					_dialog = null;
 				}
 			}catch (Exception e){
@@ -250,7 +268,7 @@ public class DatePickerDialogContext extends FREContext {
 	}
 	
 	
-	private static final AlertDialog creatDateDialog(FREContext freContext,String title,String message,String date,String buttons[], String style, boolean is24HourView,boolean cancelable,int theme,boolean hasMinMax,long minDate,long maxDate)
+	private AlertDialog creatDateDialog(FREContext freContext,String title,String message,String date,String buttons[], String style, boolean is24HourView,boolean cancelable,int theme,boolean hasMinMax,long minDate,long maxDate)
     {
 		try{
 			String[] dateArr = date.split(",");
@@ -268,11 +286,19 @@ public class DatePickerDialogContext extends FREContext {
 				}else{
 					dialog = new MyTimePickerDialog(freContext,freContext.getActivity(), hour, minute, is24HourView, theme);
 				}
-			}else{
+			}else if("date".equals(style)){
 				if(android.os.Build.VERSION.SDK_INT<11){
 					dialog = new MyDatePickerDialog(freContext,freContext.getActivity(), year, month, day, hasMinMax, minDate, maxDate);
 				}else{
 					dialog = new MyDatePickerDialog(freContext,freContext.getActivity(), year, month, day, hasMinMax, minDate, maxDate, theme);
+				}
+			}else{
+				if(android.os.Build.VERSION.SDK_INT<11){
+					_timeAndDatePicker = new TimeAndDatePicker(freContext,freContext.getActivity(), year, month, day, hour, minute, is24HourView, hasMinMax, minDate, maxDate);
+					dialog = _timeAndDatePicker.create();
+				}else{
+					_timeAndDatePicker = new TimeAndDatePicker(freContext,freContext.getActivity(), year, month, day, hour, minute, is24HourView, hasMinMax, minDate, maxDate,theme);
+					dialog = _timeAndDatePicker.create();
 				}
 			}
 			
@@ -334,25 +360,24 @@ public class DatePickerDialogContext extends FREContext {
 		
 		public MyDatePickerDialog (FREContext freContext,Context context, int year, int monthOfYear, int dayOfMonth, boolean hasMinMax, long minDate, long maxDate){
 			super(context,null,year,monthOfYear,dayOfMonth);
-			setMinMax(hasMinMax, minDate, maxDate);
+			this.hasMinMax = hasMinMax;
+			this.minDate = minDate;
+			this.maxDate = maxDate;
 			this.freContext = freContext;
 		}
 
 		public MyDatePickerDialog (FREContext freContext,Context context, int year, int monthOfYear, int dayOfMonth, boolean hasMinMax, long minDate, long maxDate,int theme){
 			super(context,theme,null,year,monthOfYear,dayOfMonth);
-			setMinMax(hasMinMax, minDate, maxDate);
-			this.freContext = freContext;
-		} 
-		
-		private void setMinMax(boolean hasMinMax, long minDate, long maxDate) {
 			this.hasMinMax = hasMinMax;
 			this.minDate = minDate;
 			this.maxDate = maxDate;
-		}
+			this.freContext = freContext;
+		} 
+		
 
 		@Override
 		public void onDateChanged(DatePicker view, int year, int month, int day) {
-			Calendar date = validate(year, month, day);
+			Calendar date = validate(year, month, day, hasMinMax, minDate, maxDate);
 			int newYear = date.get(Calendar.YEAR);
 			int newMonth = date.get(Calendar.MONTH);
 			int newDay = date.get(Calendar.DAY_OF_MONTH);
@@ -366,25 +391,77 @@ public class DatePickerDialogContext extends FREContext {
 				freContext.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
 			}
 		}
-		
-		private Calendar validate(int year, int month, int day) {
-			Calendar cal = (Calendar) Calendar.getInstance().clone();
-			cal.set(Calendar.YEAR, year);
-			cal.set(Calendar.MONTH, month);
-			cal.set(Calendar.DAY_OF_MONTH, day);
-			if(hasMinMax)
+	}
+	
+	
+	private static Calendar validate(int year, int month, int day , boolean hasMinMax, long minDate, long maxDate ) {
+		Calendar cal = (Calendar) Calendar.getInstance().clone();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH, day);
+		if(hasMinMax)
+		{
+			Long calTime = cal.getTimeInMillis();
+			if(calTime < minDate)
 			{
-				Long calTime = cal.getTimeInMillis();
-				if(calTime < minDate)
-				{
-					cal.setTimeInMillis(minDate);
-				}
-				else if(calTime > maxDate)
-				{
-					cal.setTimeInMillis(maxDate);
-				}
+				cal.setTimeInMillis(minDate);
 			}
-			return cal;
+			else if(calTime > maxDate)
+			{
+				cal.setTimeInMillis(maxDate);
+			}
+		}
+		return cal;
+	}
+	
+	@SuppressLint("NewApi")
+	private static class TimeAndDatePicker extends AlertDialog.Builder{
+
+		private DatePicker datePicker;
+		private TimePicker timePicker;
+		public TimeAndDatePicker(FREContext freContext,Context context, int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute,boolean is24HourView, boolean hasMinMax, long minDate, long maxDate) 
+		{
+			super(context);
+			createContent(freContext,context,year,monthOfYear,dayOfMonth,hourOfDay,minute,is24HourView,hasMinMax,minDate,maxDate,-1);
+		}
+		
+		public TimeAndDatePicker(FREContext freContext,Context context, int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute,boolean is24HourView, boolean hasMinMax, long minDate, long maxDate, int theme) 
+		{
+			super(context,theme);
+			createContent(freContext,context,year,monthOfYear,dayOfMonth,hourOfDay,minute,is24HourView,hasMinMax,minDate,maxDate,theme);
+		}
+		
+		
+		public void createContent(FREContext freContext,Context context, int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute,boolean is24HourView, boolean hasMinMax, long minDate, long maxDate, int theme) 
+		{
+			RelativeLayout rl = new RelativeLayout(context);
+			
+			LinearLayout ll = new LinearLayout(context);
+			ll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+			ll.setOrientation(LinearLayout.VERTICAL);
+			ll.setGravity(Gravity.CENTER_HORIZONTAL);
+			
+			timePicker = new TimePicker(context);
+			timePicker.setCurrentHour(hourOfDay);
+			timePicker.setCurrentMinute(minute);
+			timePicker.setIs24HourView(is24HourView);
+			timePicker.setOnTimeChangedListener(new MyOnTimeChangeListener(freContext));
+			ll.addView(timePicker);
+			
+			datePicker = new DatePicker(context);
+			datePicker.init(year, monthOfYear, dayOfMonth, new MyOnDateChangeListenr(freContext , hasMinMax, minDate, maxDate));
+			ll.addView(datePicker);
+			
+			rl.addView(ll);
+			setView(rl);
+		}
+		
+		public TimePicker getTimePicker(){
+			return timePicker;
+		}
+		
+		public DatePicker getDatePicker(){
+			return datePicker;
 		}
 	}
 	
@@ -426,4 +503,49 @@ public class DatePickerDialogContext extends FREContext {
     }
 	
 
+	
+	private static class MyOnDateChangeListenr implements OnDateChangedListener{
+		private FREContext freContext;
+		private long minDate;
+		private long maxDate;
+		private boolean hasMinMax;
+		
+		public MyOnDateChangeListenr(FREContext freContext, boolean hasMinMax, long minDate, long maxDate){
+			super();
+			this.hasMinMax = hasMinMax;
+			this.minDate = minDate;
+			this.maxDate = maxDate;
+			this.freContext = freContext;
+		}
+		@Override
+		public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+			Calendar date = validate(year, monthOfYear, dayOfMonth , hasMinMax , minDate, maxDate);
+			int newYear = date.get(Calendar.YEAR);
+			int newMonth = date.get(Calendar.MONTH);
+			int newDay = date.get(Calendar.DAY_OF_MONTH);
+			if(newYear != year || newMonth != monthOfYear || newDay != dayOfMonth)
+			{
+				view.updateDate(newYear, newMonth, newDay);
+			}
+			else
+			{
+				String returnDateString = "day,"+String.valueOf(year)+","+String.valueOf(monthOfYear)+","+String.valueOf(dayOfMonth);
+				freContext.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
+			}
+		}
+		
+	}
+	private static class MyOnTimeChangeListener implements OnTimeChangedListener{
+		private FREContext freContext;
+		
+		public MyOnTimeChangeListener(FREContext freContext){
+			super();
+			this.freContext = freContext;
+		}
+		
+		public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+			String returnDateString = "time,"+String.valueOf(hourOfDay)+","+String.valueOf(minute);
+			freContext.dispatchStatusEventAsync(NativeDialogsExtension.DATE_CHANGED,returnDateString);
+		}
+	}
 }
