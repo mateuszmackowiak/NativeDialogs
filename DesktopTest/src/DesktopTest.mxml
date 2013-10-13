@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="init(event)">
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle"/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import pl.mateuszmackowiak.NativeAlert;
+			
+			private var alert:NativeAlert;
+			
+			protected function init(event:FlexEvent):void
+			{
+				alert = new NativeAlert();
+				
+				alertButton.addEventListener(MouseEvent.CLICK, alertButtonClickedHandler);
+				confirmButton.addEventListener(MouseEvent.CLICK, confirmButtonClickedHandler);
+				promptButton.addEventListener(MouseEvent.CLICK, promptButtonClickedHandler);
+			}
+			
+			protected function alertButtonClickedHandler(event:MouseEvent):void
+			{
+				alert.alert("Test message");
+			}
+			
+			protected function confirmButtonClickedHandler(event:MouseEvent):void
+			{
+				alert.confirm("Test message");
+			}
+			
+			protected function promptButtonClickedHandler(event:MouseEvent):void
+			{
+				alert.prompt("Test message", "default text");	
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Button label="Alert" id="alertButton"/>
+	
+	<s:Button label="Confirm" id="confirmButton"/>
+	
+	<s:Button label="Prompt" id="promptButton"/>
+	
+</s:WindowedApplication>

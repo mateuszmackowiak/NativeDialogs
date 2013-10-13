@@ -7,13 +7,26 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "NativeDialogControler.m"
-         timestampString = "391914840.040336"
+         filePath = "NativeDialogs/NativeDialogs.m"
+         timestampString = "403322481.216854"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "278"
-         endingLineNumber = "278"
-         landmarkName = "-initToolbar:"
+         startingLineNumber = "214"
+         endingLineNumber = "214"
+         landmarkName = "dismiss()"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "external/TSAlertView/TSAlertView.m"
+         timestampString = "403324840.257985"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "813"
+         endingLineNumber = "813"
+         landmarkName = "-buttonsAreaSize_Stacked"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
@@ -22,7 +35,7 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         scope = "0"
+         scope = "1"
          stopOnStyle = "0">
       </ExceptionBreakpoint>
    </ExceptionBreakpoints>

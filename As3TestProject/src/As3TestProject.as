@@ -52,27 +52,6 @@ package
 		protected function onPickerButtonClicked(event:MouseEvent):void
 		{
 			NativeAlertDialog.showAlert("Jagnięcina","Men",Vector.<String>(["Bekon","Inne"]),trace);
-			
-			/*var picker:NativePickerDialog = new NativePickerDialog();
-			picker.title = "Select:";
-			
-			var pickerlist0:PickerList = new PickerList(["1","2","3","4","5","6"]);
-			pickerlist0.width = 40;
-			
-			var pickerlist1:PickerList = new PickerList(["HAHAHA","ATATAT","tatasd"],1);
-			
-			picker.addEventListener(NativeDialogEvent.OPENED,onOpen);
-			pickerlist1.addEventListener(NativeDialogListEvent.LIST_CHANGE,readSelectedValuesFromPickerList);
-			
-			var pickerlist2:PickerList = new PickerList(["affasf","sagasdg","ah5we","fdsad"],2);
-			pickerlist2.addEventListener(NativeDialogListEvent.LIST_CHANGE,readSelectedValuesFromPickerList);
-			
-			
-			picker.dataProvider = Vector.<PickerList>([pickerlist0,pickerlist1,pickerlist2]);
-			
-			picker.addEventListener(NativeDialogEvent.CLOSED,readAllSelectedValuesFromPickers);
-			picker.buttons = Vector.<String>(["Cancel","OK"]);
-			picker.show();*/
 		}
 		
 		private function onOpen(event):void

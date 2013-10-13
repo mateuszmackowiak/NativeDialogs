@@ -63,6 +63,7 @@
 @synthesize alert;
 @synthesize sbAlert;
 @synthesize progressView;
+@synthesize tsalertView;
 @synthesize freContext;
 
 #pragma mark - Alert
@@ -75,6 +76,7 @@
         tableItemList =nil;
         alert = nil;
         sbAlert = nil;
+        tsalertView = nil;
         progressView = nil;
         popover = nil;
         actionSheet = nil;
@@ -579,36 +581,56 @@
                 progress: (NSNumber*)progress
             showActivity:(Boolean)showActivity
                cancleble:(Boolean)cancleble{
+    BOOL isIOS_7 = [[[UIDevice currentDevice] systemVersion] floatValue]>=7.0;
+    if (isIOS_7) {
+        tsalertView = [[TSAlertView alloc] initWithTitle:title
+                                                 message:message
+                                                delegate:self
+                                       cancelButtonTitle:nil
+                                       otherButtonTitles:nil];
+    }else{
+        alert = [[UIAlertView alloc] initWithTitle:title
+                                                 message:message
+                                                delegate:self
+                                       cancelButtonTitle:nil
+                                       otherButtonTitles:nil];
+    }
     
-    [self dismissWithButtonIndex:0];
-    
-    alert = [[UIAlertView alloc] initWithTitle:title
-                                             message:message
-                                            delegate:self
-                                   cancelButtonTitle:nil
-                                   otherButtonTitles:nil];
     
     if (style== 0 || showActivity) {
         
         UIActivityIndicatorView *activityWheel = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         activityWheel.frame = CGRectMake(142.0f-activityWheel.bounds.size.width*.5, 80.0f, activityWheel.bounds.size.width, activityWheel.bounds.size.height);
-        [alert addSubview:activityWheel];
+        if (alert) {
+            [alert addSubview:activityWheel];
+        }else{
+            [tsalertView addSubview:activityWheel];
+        }
         [activityWheel startAnimating];
         [activityWheel release];
         
     } else {
         
         progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(30.0f, 90.0f, 225.0f, 90.0f)];
-        [alert addSubview:progressView];
+        if (alert) {
+            [alert addSubview:progressView];
+        }else{
+            [tsalertView addSubview:progressView];
+        }
         [progressView setProgressViewStyle: UIProgressViewStyleBar];
         progressView.progress=[progress floatValue];
     }
-    [alert setDelegate:self];
+    [tsalertView setDelegate:self];
     
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
+    if ([NSThread isMainThread]) {
         [alert show];
-    });
+        [tsalertView show];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [alert show];
+            [tsalertView show];
+        });
+    }
 
     FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
 }
@@ -901,7 +923,6 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     }
     else
     {
-        [self dismissWithButtonIndex:0];
         
         NSString* closeLabel=nil;
         NSString* otherLabel=nil;
@@ -934,8 +955,9 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
         
         
         //Create our alert.
-        sbAlert = [[SBTableAlert alloc] initWithTitle:title cancelButtonTitle:closeLabel messageFormat: message];//retain];
-        
+        sbAlert = [[SBTableAlert alloc] initWithTitle:title cancelButtonTitle:closeLabel messageFormat: message];
+        [sbAlert setDataSource:self];
+        [sbAlert setDelegate:self];
         
         if(otherLabel && ![otherLabel isEqualToString:@""])
         {
@@ -975,21 +997,17 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
                     
                     if(checkedValue>=0 || checkedValue< options_len){
                         ListItem* item = [tableItemList objectAtIndex:checkedValue];
-                        if(item)
+                        if(item){
                             item.selected = YES;
+                        }
                     }
                     [sbAlert setType:SBTableAlertTypeSingleSelect];
                     [sbAlert setStyle:SBTableAlertStyleApple];
-                    [sbAlert setDataSource:self];
-                    [sbAlert setDelegate:self];
                     
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [sbAlert show];
-                    });
-                    
-                    FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
+                    [self showList];
                     
                 }else if(type ==FRE_TYPE_VECTOR || type ==FRE_TYPE_ARRAY){
+                    [sbAlert setType:SBTableAlertTypeMultipleSelct];
                     
                     uint32_t checkedItems_len; // array length
                     FREGetArrayLength(checked, &checkedItems_len);
@@ -1002,40 +1020,37 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
                                 uint32_t boolean;
                                 if(FREGetObjectAsBool(checkedListItem, &boolean)==FRE_OK){
                                     ListItem* item = [tableItemList objectAtIndex:i];
-                                    if(item)
+                                    if(item){
                                         item.selected = boolean;
+                                    }
                                 }
                             }
                         }
                     }
-                    [self createMultiChoice];
+                    
+                    [self showList];
                     
                 }
             }else{
-                [self createMultiChoice];
+                [sbAlert setType:SBTableAlertTypeMultipleSelct];
+                [self showList];
             }
         }
     }
 }
 
 
-
--(void)createMultiChoice{
-
+-(void)showList{
     
-    [sbAlert setType:SBTableAlertTypeMultipleSelct];
-    [sbAlert setDataSource:self];
-    [sbAlert setDelegate:self];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
+    if ([NSThread isMainThread]) {
         [sbAlert show];
-    });
-    
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [sbAlert show];
+        });
+    }
     FREDispatchStatusEventAsync(freContext, nativeDialog_opened, (uint8_t*)"-1");
-
 }
-
-
 
 
 #pragma mark - SBTableAlertDataSource
@@ -1135,6 +1150,7 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
         [popover dismissPopoverAnimated:YES];
         [actionSheet dismissWithClickedButtonIndex:index animated:YES];
         [alert dismissWithClickedButtonIndex:index animated:YES];
+        [tsalertView dismissWithClickedButtonIndex:index animated:YES];
         [sbAlert.view dismissWithClickedButtonIndex:index animated:YES];
     });
 }
@@ -1145,6 +1161,9 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
         u = popover.contentViewController.view;
     }else if(alert && alert.isHidden==NO){
         u = alert;
+    }
+    else if(tsalertView){
+        u = tsalertView;
     }
     else if(sbAlert && sbAlert.view.isHidden==NO){
         u = sbAlert.view;
@@ -1200,10 +1219,14 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
                            withObject: message waitUntilDone:NO];
 }
 - (void) updateMessageWithSt:(NSString*)message {
-    if(sbAlert)
+    if(sbAlert){
         sbAlert.view.message = message;
-    else if(alert)
+    }else if(tsalertView){
+        tsalertView.message = message;
+    }
+    else if(alert){
         alert.message = message;
+    }
 }
 -(void)updateTitle:(NSString*)title{
     #ifdef MYDEBUG
@@ -1215,8 +1238,11 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     
 }
 - (void) updateTitleWithSt:(NSString*)title {
-    if(sbAlert)
+    if(sbAlert){
         sbAlert.view.title =title;
+    }else if(tsalertView){
+        tsalertView.title = title;
+    }
     else if(alert){
         [alert setTitle:title];
     }
@@ -1229,8 +1255,12 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     if(sbAlert){
         if(sbAlert.view.isHidden==NO){
             return YES;
-        }else
+        }else{
             return NO;
+        }
+    }
+    else if(tsalertView){
+        return tsalertView.isVisible;
     }
     else if(alert){
         return [alert isVisible];
@@ -1249,12 +1279,16 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    BOOL isIOS_5OrLater = [[[UIDevice currentDevice] systemVersion] floatValue]>=5.0;
-    if(isIOS_5OrLater){
-        if([alertView alertViewStyle]!=UIAlertViewStyleDefault && [alertView alertViewStyle]!=AlertTextViewStyleDefault){
-            [[alertView textFieldAtIndex:0] resignFirstResponder];
-            if([alertView alertViewStyle]==UIAlertViewStyleLoginAndPasswordInput || [alertView alertViewStyle]==AlertTextViewStyleLoginAndPasswordInput){
-                [[alertView textFieldAtIndex:1] resignFirstResponder];
+    if ([alertView isKindOfClass:[TSAlertView class]]) {
+        
+    }else{
+        BOOL isIOS_5OrLater = [[[UIDevice currentDevice] systemVersion] floatValue]>=5.0;
+        if(isIOS_5OrLater){
+            if([alertView alertViewStyle]!=UIAlertViewStyleDefault && [alertView alertViewStyle]!=AlertTextViewStyleDefault){
+                [[alertView textFieldAtIndex:0] resignFirstResponder];
+                if([alertView alertViewStyle]==UIAlertViewStyleLoginAndPasswordInput || [alertView alertViewStyle]==AlertTextViewStyleLoginAndPasswordInput){
+                    [[alertView textFieldAtIndex:1] resignFirstResponder];
+                }
             }
         }
     }
@@ -1262,12 +1296,17 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     NSString *buttonID = [NSString stringWithFormat:@"%d", buttonIndex];
     FREDispatchStatusEventAsync(freContext, nativeDialog_closed, (uint8_t*)[buttonID UTF8String]);
     
+    [progressView release];
+    progressView = nil;
+    
     //Cleanup references.
+    [tsalertView release];
+    tsalertView = nil;
+    
     [alert release];
     alert = nil;
 
-    [progressView release];
-    progressView = nil;
+    
     
 }
 
@@ -1283,6 +1322,8 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     [popover release];
     [alert release];
     [actionSheet release];
+    [tsalertView release];
+    tsalertView = nil;
     [sbAlert release];
     [progressView release];
     

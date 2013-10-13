@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <actionScriptProperties analytics="false" mainApplicationPath="NativeDialogsTest.mxml" projectUUID="f7f8a568-4cc3-4daa-98d9-653adbe6e9a4" version="11">
-  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="true" copyDependentFiles="true" flexSDK="Flex 4.6.0 AIR SDK 3.7" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="true" useDebugRSLSwfs="true" useFlashSDK="false" verifyDigests="true" warn="true">
+  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="true" useDebugRSLSwfs="true" useFlashSDK="false" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
@@ -21,15 +21,14 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/spark_dmv.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_dmv.swc" useDefaultLinkType="false"/>
-          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/airframework.swc" useDefaultLinkType="false"/>
-          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/applicationupdater_ui.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_flashflexkit.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/applicationupdater_ui.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/airframework.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="1" linkType="1" path="libs"/>
-      <libraryPathEntry kind="3" linkType="1" path="/NativeDialogs_AS/bin/NativeDialogs_AS.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="5" linkType="2" path="/Users/mmmackowiak/Documents/git/NativeDialogs/Binaries/NativeDialogs.ane"/>
+      <libraryPathEntry kind="5" linkType="2" path="/Users/mmmackowiak/Documents/projects/Flash/NativeExtensions/NativeDialogs/Binaries/NativeDialogs.ane"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -43,11 +42,14 @@
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
-    <buildTarget buildTargetName="device" iosSettingsVersion="2" isCurrent="true" platformId="com.adobe.flexide.multiplatform.ios.platform" provisioningFile="/Volumes/mateusz/CERTYFIKATY/lazyAdmin.mobileprovision" releasePackageType="">
-      <airSettings airCertificatePath="/Volumes/mateusz/CERTYFIKATY/iphoneCert.p12" airTimestamp="true" anePathSet="true" version="1">
-        <airExcludes/>
+    <buildTarget buildTargetName="device" iosSettingsVersion="2" isCurrent="true" platformId="com.adobe.flexide.multiplatform.ios.platform" provisioningFile="/Users/mmmackowiak/Documents/projects/Certyfikaty/Test.mobileprovision" releasePackageType="">
+      <airSettings airCertificatePath="/Users/mmmackowiak/Documents/projects/Certyfikaty/MateuszMackowiak.p12" airTimestamp="true" anePathSet="true" version="1">
+        <airExcludes>
+          <pathEntry path="Payload"/>
+          <pathEntry path=".DS_Store"/>
+        </airExcludes>
         <anePaths>
-          <anePathEntry path="${DOCUMENTS}/NativeDialogs/Binaries/NativeDialogs.ane"/>
+          <anePathEntry path="/Users/mmmackowiak/Documents/projects/Flash/NativeExtensions/NativeDialogs/Binaries/NativeDialogs.ane"/>
         </anePaths>
         <newLaunchParams/>
         <modifiedLaunchParams/>
@@ -64,7 +66,7 @@
           <pathEntry path=".DS_Store"/>
         </airExcludes>
         <anePaths>
-          <anePathEntry path="${DOCUMENTS}/NativeDialogs/Binaries/NativeDialogs.ane"/>
+          <anePathEntry path="${DOCUMENTS}/Binaries/NativeDialogs.ane"/>
         </anePaths>
         <newLaunchParams/>
         <modifiedLaunchParams/>

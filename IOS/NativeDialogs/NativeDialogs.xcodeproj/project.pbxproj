@@ -26,18 +26,26 @@
 		9A03972516BD908000445AD1 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A03972416BD908000445AD1 /* FlashRuntimeExtensions.h */; };
 		9A03972816BD916800445AD1 /* NativeDialogControler.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A03972616BD916800445AD1 /* NativeDialogControler.h */; };
 		9A03972916BD916800445AD1 /* NativeDialogControler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A03972716BD916800445AD1 /* NativeDialogControler.m */; };
-		9A199BAC16CD9B8F00953C37 /* WToast.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A199BAA16CD9B8F00953C37 /* WToast.h */; };
-		9A199BAD16CD9B8F00953C37 /* WToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A199BAB16CD9B8F00953C37 /* WToast.m */; };
-		9AA7AE3416C0262300CB48D4 /* SVProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */; };
-		9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */; };
-		9AADCCF216CEADE3008BB47C /* SBTableAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AADCCF016CEADE3008BB47C /* SBTableAlert.h */; };
-		9AADCCF316CEADE3008BB47C /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AADCCF116CEADE3008BB47C /* SBTableAlert.m */; };
-		9AD71CBA16CBC2860086A206 /* error.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB616CBC2800086A206 /* error.png */; };
-		9AD71CBB16CBC2860086A206 /* error@2x.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB716CBC2800086A206 /* error@2x.png */; };
-		9AD71CBC16CBC2860086A206 /* success.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB816CBC2800086A206 /* success.png */; };
-		9AD71CBD16CBC2860086A206 /* success@2x.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AD71CB916CBC2800086A206 /* success@2x.png */; };
 		9AEF3E6416BFE96A0003036B /* AlertTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AEF3E6216BFE96A0003036B /* AlertTextView.h */; };
 		9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AEF3E6316BFE96A0003036B /* AlertTextView.m */; };
+		9AF80B44180A15B3008A2B78 /* SBTableAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF80B2F180A15B3008A2B78 /* SBTableAlert.h */; };
+		9AF80B45180A15B3008A2B78 /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF80B30180A15B3008A2B78 /* SBTableAlert.m */; };
+		9AF80B46180A15B3008A2B78 /* SVProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF80B36180A15B3008A2B78 /* SVProgressHUD.h */; };
+		9AF80B47180A15B3008A2B78 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF80B37180A15B3008A2B78 /* SVProgressHUD.m */; };
+		9AF80B48180A15B3008A2B78 /* WToast.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF80B39180A15B3008A2B78 /* WToast.h */; };
+		9AF80B49180A15B3008A2B78 /* WToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF80B3A180A15B3008A2B78 /* WToast.m */; };
+		9AF80B4A180A15B3008A2B78 /* TSAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF80B3C180A15B3008A2B78 /* TSAlertView.h */; };
+		9AF80B4B180A15B3008A2B78 /* TSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF80B3D180A15B3008A2B78 /* TSAlertView.m */; };
+		9AF80B4C180A20D4008A2B78 /* error.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B32180A15B3008A2B78 /* error.png */; };
+		9AF80B4D180A20D4008A2B78 /* error@2x.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B33180A15B3008A2B78 /* error@2x.png */; };
+		9AF80B4E180A20D4008A2B78 /* success.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B34180A15B3008A2B78 /* success.png */; };
+		9AF80B4F180A20D4008A2B78 /* success@2x.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B35180A15B3008A2B78 /* success@2x.png */; };
+		9AF80B50180A20D4008A2B78 /* TSAlertViewBackground.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B3E180A15B3008A2B78 /* TSAlertViewBackground.png */; };
+		9AF80B51180A20D4008A2B78 /* TSAlertViewBackground2.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B3F180A15B3008A2B78 /* TSAlertViewBackground2.png */; };
+		9AF80B52180A20D4008A2B78 /* TSAlertViewButtonBackground.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B40180A15B3008A2B78 /* TSAlertViewButtonBackground.png */; };
+		9AF80B53180A20D4008A2B78 /* TSAlertViewButtonBackground_Highlighted.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B41180A15B3008A2B78 /* TSAlertViewButtonBackground_Highlighted.png */; };
+		9AF80B54180A20D4008A2B78 /* TSAlertViewCancelButtonBackground.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B42180A15B3008A2B78 /* TSAlertViewCancelButtonBackground.png */; };
+		9AF80B55180A20D4008A2B78 /* TSAlertViewMessageListViewShadow.png in Copy Aditional Files */ = {isa = PBXBuildFile; fileRef = 9AF80B43180A15B3008A2B78 /* TSAlertViewMessageListViewShadow.png */; };
 		B1CCA51B171EA35900716F40 /* NativeListDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B1CCA51A171EA35900716F40 /* NativeListDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -56,12 +64,18 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 6;
+			dstSubfolderSpec = 7;
 			files = (
-				9AD71CBA16CBC2860086A206 /* error.png in Copy Aditional Files */,
-				9AD71CBB16CBC2860086A206 /* error@2x.png in Copy Aditional Files */,
-				9AD71CBC16CBC2860086A206 /* success.png in Copy Aditional Files */,
-				9AD71CBD16CBC2860086A206 /* success@2x.png in Copy Aditional Files */,
+				9AF80B4C180A20D4008A2B78 /* error.png in Copy Aditional Files */,
+				9AF80B4D180A20D4008A2B78 /* error@2x.png in Copy Aditional Files */,
+				9AF80B4E180A20D4008A2B78 /* success.png in Copy Aditional Files */,
+				9AF80B4F180A20D4008A2B78 /* success@2x.png in Copy Aditional Files */,
+				9AF80B50180A20D4008A2B78 /* TSAlertViewBackground.png in Copy Aditional Files */,
+				9AF80B51180A20D4008A2B78 /* TSAlertViewBackground2.png in Copy Aditional Files */,
+				9AF80B52180A20D4008A2B78 /* TSAlertViewButtonBackground.png in Copy Aditional Files */,
+				9AF80B53180A20D4008A2B78 /* TSAlertViewButtonBackground_Highlighted.png in Copy Aditional Files */,
+				9AF80B54180A20D4008A2B78 /* TSAlertViewCancelButtonBackground.png in Copy Aditional Files */,
+				9AF80B55180A20D4008A2B78 /* TSAlertViewMessageListViewShadow.png in Copy Aditional Files */,
 			);
 			name = "Copy Aditional Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,17 +107,7 @@
 		9A03972416BD908000445AD1 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
 		9A03972616BD916800445AD1 /* NativeDialogControler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NativeDialogControler.h; sourceTree = SOURCE_ROOT; };
 		9A03972716BD916800445AD1 /* NativeDialogControler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeDialogControler.m; sourceTree = SOURCE_ROOT; };
-		9A199BAA16CD9B8F00953C37 /* WToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WToast.h; path = Toast/WToast.h; sourceTree = SOURCE_ROOT; };
-		9A199BAB16CD9B8F00953C37 /* WToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WToast.m; path = Toast/WToast.m; sourceTree = SOURCE_ROOT; };
-		9A873002175675C0002301E0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = SVProgressHUD/SVProgressHUD.h; sourceTree = SOURCE_ROOT; };
-		9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD.m; sourceTree = SOURCE_ROOT; };
-		9AADCCF016CEADE3008BB47C /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBTableAlert.h; path = SBTableAlert/SBTableAlert.h; sourceTree = SOURCE_ROOT; };
-		9AADCCF116CEADE3008BB47C /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBTableAlert.m; path = SBTableAlert/SBTableAlert.m; sourceTree = SOURCE_ROOT; };
-		9AD71CB616CBC2800086A206 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = error.png; path = SVProgressHUD/error.png; sourceTree = SOURCE_ROOT; };
-		9AD71CB716CBC2800086A206 /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "error@2x.png"; path = "SVProgressHUD/error@2x.png"; sourceTree = SOURCE_ROOT; };
-		9AD71CB816CBC2800086A206 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = success.png; path = SVProgressHUD/success.png; sourceTree = SOURCE_ROOT; };
-		9AD71CB916CBC2800086A206 /* success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "success@2x.png"; path = "SVProgressHUD/success@2x.png"; sourceTree = SOURCE_ROOT; };
+		9A873002175675C0002301E0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		9ADF1B0616BF0F2200DA9AAA /* NativeDialogsTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NativeDialogsTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ADF1B0C16BF0F2200DA9AAA /* nativealert-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nativealert-Info.plist"; sourceTree = "<group>"; };
 		9ADF1B0E16BF0F2200DA9AAA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -113,6 +117,24 @@
 		9ADF1B1416BF0F2200DA9AAA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9AEF3E6216BFE96A0003036B /* AlertTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlertTextView.h; path = AlertTextView/AlertTextView.h; sourceTree = SOURCE_ROOT; };
 		9AEF3E6316BFE96A0003036B /* AlertTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlertTextView.m; path = AlertTextView/AlertTextView.m; sourceTree = SOURCE_ROOT; };
+		9AF80B2F180A15B3008A2B78 /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBTableAlert.h; sourceTree = "<group>"; };
+		9AF80B30180A15B3008A2B78 /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBTableAlert.m; sourceTree = "<group>"; };
+		9AF80B32180A15B3008A2B78 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = "<group>"; };
+		9AF80B33180A15B3008A2B78 /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "error@2x.png"; sourceTree = "<group>"; };
+		9AF80B34180A15B3008A2B78 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
+		9AF80B35180A15B3008A2B78 /* success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success@2x.png"; sourceTree = "<group>"; };
+		9AF80B36180A15B3008A2B78 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		9AF80B37180A15B3008A2B78 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		9AF80B39180A15B3008A2B78 /* WToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WToast.h; sourceTree = "<group>"; };
+		9AF80B3A180A15B3008A2B78 /* WToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WToast.m; sourceTree = "<group>"; };
+		9AF80B3C180A15B3008A2B78 /* TSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSAlertView.h; sourceTree = "<group>"; };
+		9AF80B3D180A15B3008A2B78 /* TSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSAlertView.m; sourceTree = "<group>"; };
+		9AF80B3E180A15B3008A2B78 /* TSAlertViewBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TSAlertViewBackground.png; sourceTree = "<group>"; };
+		9AF80B3F180A15B3008A2B78 /* TSAlertViewBackground2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TSAlertViewBackground2.png; sourceTree = "<group>"; };
+		9AF80B40180A15B3008A2B78 /* TSAlertViewButtonBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TSAlertViewButtonBackground.png; sourceTree = "<group>"; };
+		9AF80B41180A15B3008A2B78 /* TSAlertViewButtonBackground_Highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TSAlertViewButtonBackground_Highlighted.png; sourceTree = "<group>"; };
+		9AF80B42180A15B3008A2B78 /* TSAlertViewCancelButtonBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TSAlertViewCancelButtonBackground.png; sourceTree = "<group>"; };
+		9AF80B43180A15B3008A2B78 /* TSAlertViewMessageListViewShadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TSAlertViewMessageListViewShadow.png; sourceTree = "<group>"; };
 		B1CCA519171EA2FD00716F40 /* NativeListDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeListDelegate.h; sourceTree = "<group>"; };
 		B1CCA51A171EA35900716F40 /* NativeListDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NativeListDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -146,11 +168,12 @@
 		9A0396EA16BD905700445AD1 = {
 			isa = PBXGroup;
 			children = (
-				9A873002175675C0002301E0 /* Default-568h@2x.png */,
+				9AF80B2D180A15B3008A2B78 /* External */,
 				9A03971616BD905700445AD1 /* NativeDialogs */,
-				9ADF1B0A16BF0F2200DA9AAA /* nativealert */,
+				9ADF1B0A16BF0F2200DA9AAA /* demoApp */,
 				9A0396F716BD905700445AD1 /* Frameworks */,
 				9A0396F616BD905700445AD1 /* Products */,
+				9A03971716BD905700445AD1 /* Supporting Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -188,9 +211,8 @@
 		9A03971616BD905700445AD1 /* NativeDialogs */ = {
 			isa = PBXGroup;
 			children = (
-				9AADCCEB16CE79FE008BB47C /* lib */,
+				9AEF3E6716BFE9770003036B /* AlertTextView */,
 				9A03971A16BD905700445AD1 /* NativeDialogs.m */,
-				9A03971716BD905700445AD1 /* Supporting Files */,
 				9A03972616BD916800445AD1 /* NativeDialogControler.h */,
 				9A03972716BD916800445AD1 /* NativeDialogControler.m */,
 				B1CCA519171EA2FD00716F40 /* NativeListDelegate.h */,
@@ -202,6 +224,7 @@
 		9A03971716BD905700445AD1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9A873002175675C0002301E0 /* Default-568h@2x.png */,
 				9A03972416BD908000445AD1 /* FlashRuntimeExtensions.h */,
 				9A03971816BD905700445AD1 /* NativeDialogs-Prefix.pch */,
 				9A03971C16BD905700445AD1 /* platformoptions.xml */,
@@ -209,57 +232,17 @@
 				9A03971E16BD905700445AD1 /* aneBuildBefore.sh */,
 			);
 			name = "Supporting Files";
+			path = NativeDialogs;
 			sourceTree = "<group>";
 		};
-		9A199BAE16CD9B9300953C37 /* Toast */ = {
-			isa = PBXGroup;
-			children = (
-				9A199BAA16CD9B8F00953C37 /* WToast.h */,
-				9A199BAB16CD9B8F00953C37 /* WToast.m */,
-			);
-			name = Toast;
-			sourceTree = "<group>";
-		};
-		9A2775A416BDD14400298B22 /* SBTableAlert */ = {
-			isa = PBXGroup;
-			children = (
-				9AADCCF016CEADE3008BB47C /* SBTableAlert.h */,
-				9AADCCF116CEADE3008BB47C /* SBTableAlert.m */,
-			);
-			name = SBTableAlert;
-			sourceTree = "<group>";
-		};
-		9AA7AE3616C0262800CB48D4 /* SVPRogressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				9AD71CB616CBC2800086A206 /* error.png */,
-				9AD71CB716CBC2800086A206 /* error@2x.png */,
-				9AD71CB816CBC2800086A206 /* success.png */,
-				9AD71CB916CBC2800086A206 /* success@2x.png */,
-				9AA7AE3216C0262300CB48D4 /* SVProgressHUD.h */,
-				9AA7AE3316C0262300CB48D4 /* SVProgressHUD.m */,
-			);
-			name = SVPRogressHUD;
-			sourceTree = "<group>";
-		};
-		9AADCCEB16CE79FE008BB47C /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				9A199BAE16CD9B9300953C37 /* Toast */,
-				9AA7AE3616C0262800CB48D4 /* SVPRogressHUD */,
-				9AEF3E6716BFE9770003036B /* AlertTextView */,
-				9A2775A416BDD14400298B22 /* SBTableAlert */,
-			);
-			name = lib;
-			sourceTree = "<group>";
-		};
-		9ADF1B0A16BF0F2200DA9AAA /* nativealert */ = {
+		9ADF1B0A16BF0F2200DA9AAA /* demoApp */ = {
 			isa = PBXGroup;
 			children = (
 				9ADF1B1316BF0F2200DA9AAA /* AppDelegate.h */,
 				9ADF1B1416BF0F2200DA9AAA /* AppDelegate.m */,
 				9ADF1B0B16BF0F2200DA9AAA /* Supporting Files */,
 			);
+			name = demoApp;
 			path = nativealert;
 			sourceTree = "<group>";
 		};
@@ -283,6 +266,64 @@
 			name = AlertTextView;
 			sourceTree = "<group>";
 		};
+		9AF80B2D180A15B3008A2B78 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				9AF80B2E180A15B3008A2B78 /* SBTableAlert */,
+				9AF80B31180A15B3008A2B78 /* SVProgressHUD */,
+				9AF80B38180A15B3008A2B78 /* Toast */,
+				9AF80B3B180A15B3008A2B78 /* TSAlertView */,
+			);
+			name = External;
+			path = external;
+			sourceTree = "<group>";
+		};
+		9AF80B2E180A15B3008A2B78 /* SBTableAlert */ = {
+			isa = PBXGroup;
+			children = (
+				9AF80B2F180A15B3008A2B78 /* SBTableAlert.h */,
+				9AF80B30180A15B3008A2B78 /* SBTableAlert.m */,
+			);
+			path = SBTableAlert;
+			sourceTree = "<group>";
+		};
+		9AF80B31180A15B3008A2B78 /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				9AF80B32180A15B3008A2B78 /* error.png */,
+				9AF80B33180A15B3008A2B78 /* error@2x.png */,
+				9AF80B34180A15B3008A2B78 /* success.png */,
+				9AF80B35180A15B3008A2B78 /* success@2x.png */,
+				9AF80B36180A15B3008A2B78 /* SVProgressHUD.h */,
+				9AF80B37180A15B3008A2B78 /* SVProgressHUD.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
+		9AF80B38180A15B3008A2B78 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				9AF80B39180A15B3008A2B78 /* WToast.h */,
+				9AF80B3A180A15B3008A2B78 /* WToast.m */,
+			);
+			path = Toast;
+			sourceTree = "<group>";
+		};
+		9AF80B3B180A15B3008A2B78 /* TSAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				9AF80B3C180A15B3008A2B78 /* TSAlertView.h */,
+				9AF80B3D180A15B3008A2B78 /* TSAlertView.m */,
+				9AF80B3E180A15B3008A2B78 /* TSAlertViewBackground.png */,
+				9AF80B3F180A15B3008A2B78 /* TSAlertViewBackground2.png */,
+				9AF80B40180A15B3008A2B78 /* TSAlertViewButtonBackground.png */,
+				9AF80B41180A15B3008A2B78 /* TSAlertViewButtonBackground_Highlighted.png */,
+				9AF80B42180A15B3008A2B78 /* TSAlertViewCancelButtonBackground.png */,
+				9AF80B43180A15B3008A2B78 /* TSAlertViewMessageListViewShadow.png */,
+			);
+			path = TSAlertView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -293,9 +334,10 @@
 				9A03972516BD908000445AD1 /* FlashRuntimeExtensions.h in Headers */,
 				9A03972816BD916800445AD1 /* NativeDialogControler.h in Headers */,
 				9AEF3E6416BFE96A0003036B /* AlertTextView.h in Headers */,
-				9AA7AE3416C0262300CB48D4 /* SVProgressHUD.h in Headers */,
-				9A199BAC16CD9B8F00953C37 /* WToast.h in Headers */,
-				9AADCCF216CEADE3008BB47C /* SBTableAlert.h in Headers */,
+				9AF80B44180A15B3008A2B78 /* SBTableAlert.h in Headers */,
+				9AF80B46180A15B3008A2B78 /* SVProgressHUD.h in Headers */,
+				9AF80B48180A15B3008A2B78 /* WToast.h in Headers */,
+				9AF80B4A180A15B3008A2B78 /* TSAlertView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,7 +418,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "\n\t\t\t\t\t\tchmod 755 \"$PROJECT_DIR/$PROJECT_NAME/aneBuildBefore.sh\"\n\t\t\t\t\t\t\"$PROJECT_DIR/$PROJECT_NAME/aneBuildBefore.sh\"\n\t\t\t\t\t";
+			shellScript = "chmod 755 \"$PROJECT_DIR/$PROJECT_NAME/aneBuildBefore.sh\"\n\"$PROJECT_DIR/$PROJECT_NAME/aneBuildBefore.sh\"\n\t\t\t\t\t";
+			showEnvVarsInLog = 0;
 		};
 		9A0396F316BD905700445AD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -389,7 +432,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "\n\t\t\t\t\t\tchmod 755 \"$PROJECT_DIR/$PROJECT_NAME/aneBuildAfter.sh\"\n\t\t\t\t\t\t\"$PROJECT_DIR/$PROJECT_NAME/aneBuildAfter.sh\"\n\t\t\t\t\t";
+			shellScript = "chmod 755 \"$PROJECT_DIR/$PROJECT_NAME/aneBuildAfter.sh\"\n\"$PROJECT_DIR/$PROJECT_NAME/aneBuildAfter.sh\"\n\t\t\t\t\t";
 		};
 		9ADF1B1916BF0F2E00DA9AAA /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -402,7 +445,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# change to the proper directory\npushd ~/Documents/git/NativeDialogs/TestApp/bin-debug\n\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\n\n\n# package th e IPA - skip if already built\n\"/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.8beta/bin/adt\" -package -target ipa-debug-interpreter-simulator -provisioning-profile /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/nativealertdeveloper.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/iphone_dev.p12 \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.1.sdk/ -C ../src/ icons -C ../src/ images\n\nelse\n\n# package the IPA - skip if already built\n\"/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.8beta/bin/adt\" -package -target ipa-debug-interpreter -provisioning-profile /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/nativealertdeveloper.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/Adobe\\ Flash\\ Builder\\ 4.6/CERTYFIKATY/iphone_dev.p12  \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/ -C ../src/ icons -C ../src/ images\n\n\nfi\n\necho \"****** App packed *******\"\n#extract the IPA\ncp \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\".ipa.zip\n\nunzip -o \"$PRODUCT_NAME\".ipa.zip\nrm \"$PRODUCT_NAME\".ipa.zip\n\n# copy the contents of the IPA to the location xcode wants\ncp -r Payload/\"$PRODUCT_NAME\".app/ * \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\ncp -r \"$PRODUCT_NAME\".app.dSYM \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\n\n# remove the following files and folders to avoid signature errors when installing the app\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature/CodeResources\"\nrmdir \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/CodeResources\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/PkgInfo\"\n\n# restore working directory\n#popd";
+			shellScript = "# change to the proper directory\npushd ~/Documents/projects/Flash/NativeExtensions/NativeDialogs/TestApp/bin-debug\n\n\necho \"$SDK_DIR\"\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\n\n# package th e IPA - skip if already built\n\"/Users/mmmackowiak/Documents/apacheFlex/Flex 4.10 AIR 3.8/bin/adt\" -package -target ipa-debug-interpreter-simulator -provisioning-profile /Users/mmmackowiak/Documents/projects/Certyfikaty/Test.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/projects/Certyfikaty/MateuszMackowiak.p12 \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk \"$SDK_DIR\" -C ../src/ icons -C ../src/ images\n\nelse\n\n# package the IPA - skip if already built\n\"/Users/mmmackowiak/Documents/apacheFlex/Flex 4.10 AIR 3.8/bin/adt\" -package -target ipa-debug-interpreter -provisioning-profile /Users/mmmackowiak/Documents/projects/Certyfikaty/Test.mobileprovision -storetype pkcs12 -keystore /Users/mmmackowiak/Documents/projects/Certyfikaty/MateuszMackowiak.p12 \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\"-app.xml \"$PRODUCT_NAME\".swf -extdir \"$PROJECT_DIR\"/../ -platformsdk \"$SDK_DIR\" -C ../src/ icons -C ../src/ images\n\n\nfi\n\necho \"****** App packed *******\"\n#extract the IPA\ncp \"$PRODUCT_NAME\".ipa \"$PRODUCT_NAME\".ipa.zip\n\nunzip -o \"$PRODUCT_NAME\".ipa.zip\nrm \"$PRODUCT_NAME\".ipa.zip\n\n# copy the contents of the IPA to the location xcode wants\ncp -r Payload/\"$PRODUCT_NAME\".app/ * \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\ncp -r AOT/\"$PRODUCT_NAME\".app.dSYM \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/\"\n\n# remove the following files and folders to avoid signature errors when installing the app\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature/CodeResources\"\nrmdir \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/_CodeSignature\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/CodeResources\"\nrm \"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/PkgInfo\"\n\n# restore working directory\n#popd";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -414,10 +457,11 @@
 				9A03971B16BD905700445AD1 /* NativeDialogs.m in Sources */,
 				9A03972916BD916800445AD1 /* NativeDialogControler.m in Sources */,
 				9AEF3E6516BFE96A0003036B /* AlertTextView.m in Sources */,
-				9AA7AE3516C0262300CB48D4 /* SVProgressHUD.m in Sources */,
-				9A199BAD16CD9B8F00953C37 /* WToast.m in Sources */,
-				9AADCCF316CEADE3008BB47C /* SBTableAlert.m in Sources */,
 				B1CCA51B171EA35900716F40 /* NativeListDelegate.m in Sources */,
+				9AF80B45180A15B3008A2B78 /* SBTableAlert.m in Sources */,
+				9AF80B47180A15B3008A2B78 /* SVProgressHUD.m in Sources */,
+				9AF80B49180A15B3008A2B78 /* WToast.m in Sources */,
+				9AF80B4B180A15B3008A2B78 /* TSAlertView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,17 +538,19 @@
 		9A03972216BD905700445AD1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_TEMP_DIR = "build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				DSTROOT = /tmp/NativeDialogs.dst;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NativeDialogs/NativeDialogs-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.7/include/";
+				USER_HEADER_SEARCH_PATHS = "/Users/mmmackowiak/Documents/apacheFlex/Flex 4.10 AIR 3.8/include/";
 				VALID_ARCHS = "armv7 armv7s i386";
 			};
 			name = Debug;
@@ -512,17 +558,19 @@
 		9A03972316BD905700445AD1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_TEMP_DIR = "build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				DSTROOT = /tmp/NativeDialogs.dst;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NativeDialogs/NativeDialogs-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.7/include/";
+				USER_HEADER_SEARCH_PATHS = "/Users/mmmackowiak/Documents/apacheFlex/Flex 4.10 AIR 3.8/include/";
 				VALID_ARCHS = "armv7 armv7s i386";
 			};
 			name = Release;
@@ -546,7 +594,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = NativeDialogsTest;
-				USER_HEADER_SEARCH_PATHS = "/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.8beta/include/";
+				USER_HEADER_SEARCH_PATHS = "/Users/mmmackowiak/Documents/apacheFlex/Flex 4.10 AIR 3.8/include/";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -570,7 +618,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = NativeDialogsTest;
-				USER_HEADER_SEARCH_PATHS = "/Applications/Adobe Flash Builder 4.7/sdks/4.6.0 AIR3.8beta/include/";
+				USER_HEADER_SEARCH_PATHS = "/Users/mmmackowiak/Documents/apacheFlex/Flex 4.10 AIR 3.8/include/";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

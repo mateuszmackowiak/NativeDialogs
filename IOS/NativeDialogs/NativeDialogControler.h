@@ -9,7 +9,7 @@
 #import "SBTableAlert.h"
 #import "NativeListDelegate.h"
 
-@interface NativeDialogControler : NSObject <UIAlertViewDelegate,SBTableAlertDelegate,SBTableAlertDataSource,UIActionSheetDelegate,UIPopoverControllerDelegate,UIPickerViewDelegate>
+@interface NativeDialogControler : NSObject <UIAlertViewDelegate,SBTableAlertDelegate, TSAlertViewDelegate,SBTableAlertDataSource,UIActionSheetDelegate,UIPopoverControllerDelegate,UIPickerViewDelegate>
 {
     UIPopoverController     *popover;
     UIActionSheet           *actionSheet;
@@ -24,10 +24,9 @@
 @property ( nonatomic, retain ) NSMutableArray  *tableItemList;
 @property ( nonatomic, retain ) UIAlertView     *alert;
 @property ( nonatomic, retain ) SBTableAlert    *sbAlert;
+@property ( nonatomic, retain ) TSAlertView     *tsalertView;
 @property ( nonatomic, retain ) UIProgressView  *progressView;
 
-
--(void)createMultiChoice;
 
 -(void)showAlertWithTitle: (NSString *)title
                   message: (NSString*)message
