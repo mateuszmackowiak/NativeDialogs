@@ -604,7 +604,7 @@
         if (alert) {
             [alert addSubview:activityWheel];
         }else{
-            [tsalertView addSubview:activityWheel];
+            [tsalertView setCustomSubview:activityWheel];
         }
         [activityWheel startAnimating];
         [activityWheel release];
@@ -615,7 +615,7 @@
         if (alert) {
             [alert addSubview:progressView];
         }else{
-            [tsalertView addSubview:progressView];
+            [tsalertView setCustomSubview:progressView];
         }
         [progressView setProgressViewStyle: UIProgressViewStyleBar];
         progressView.progress=[progress floatValue];

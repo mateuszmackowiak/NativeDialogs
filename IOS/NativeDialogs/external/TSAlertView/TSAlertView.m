@@ -685,6 +685,9 @@ const CGFloat kTSAlertView_ColumnMargin = 10.0;
 		totalHeight -= messageViewSize.height;
 		//$$what if it's still too tall?
 		messageViewSize.height = self.maxHeight - totalHeight;
+        if (self.customSubview) {
+            messageViewSize.height = 120;
+        }
 		
 		totalHeight = self.maxHeight;
 		
@@ -728,12 +731,28 @@ const CGFloat kTSAlertView_ColumnMargin = 10.0;
 		
         if( self.customSubview )
         {
-            self.customSubview.frame = CGRectMake( kTSAlertView_LeftMargin, y, customSubviewSize.width, customSubviewSize.height );
+            
+            CGFloat maxCustomSubiewHeight = totalHeight - (kTSAlertView_TopMargin + titleLabelSize.height + kTSAlertView_RowMargin + messageViewSize.height +  kTSAlertView_RowMargin + inputRowHeight + kTSAlertView_RowMargin + buttonsAreaSize.height + kTSAlertView_BottomMargin);
+            
+            CGFloat maxWidth = self.width - (kTSAlertView_LeftMargin * 2);
+            CGFloat customViewX = kTSAlertView_LeftMargin;
+            if (customSubviewSize.width > maxWidth) {
+                customSubviewSize.width = maxWidth;
+            }else if(customSubviewSize.width < self.width - kTSAlertView_LeftMargin * 2){
+                //center custom view
+                customViewX = self.width *.5f - customSubviewSize.width *.5;
+            }
+            
+            if (customSubviewSize.height > maxCustomSubiewHeight) {
+                customSubviewSize.height = maxCustomSubiewHeight;
+            }
+            
+            self.customSubview.frame = CGRectMake( customViewX, y, customSubviewSize.width, customSubviewSize.height );
             y += customSubviewSize.height + kTSAlertView_RowMargin;
         }
         
-        if (self.buttons.count>0) {
-            // buttons
+        // buttons
+        if (self.buttons.count>0) {    
             CGFloat buttonHeight = [[self.buttons objectAtIndex:0] sizeThatFits: CGSizeZero].height;
             if ( stacked )
             {
@@ -755,6 +774,7 @@ const CGFloat kTSAlertView_ColumnMargin = 10.0;
                 }
             }
         }
+		
 	}
 	
 	return CGSizeMake( self.width, totalHeight );
@@ -795,10 +815,12 @@ const CGFloat kTSAlertView_ColumnMargin = 10.0;
 - (CGSize) buttonsAreaSize_SideBySide
 {
 	CGFloat maxWidth = self.width - (kTSAlertView_LeftMargin * 2);
-	if (self.buttons.count<=0) {
-        return CGSizeZero;
+    
+    CGSize bs = CGSizeZero;
+    
+	if (self.buttons.count>0) {
+        bs = [[self.buttons objectAtIndex:0] sizeThatFits: CGSizeZero];
     }
-	CGSize bs = [[self.buttons objectAtIndex:0] sizeThatFits: CGSizeZero];
 	
 	bs.width = maxWidth;
 	
@@ -809,10 +831,11 @@ const CGFloat kTSAlertView_ColumnMargin = 10.0;
 {
 	CGFloat maxWidth = self.width - (kTSAlertView_LeftMargin * 2);
 	int buttonCount = [self.buttons count];
-	if (!buttonCount) {
-        return CGSizeZero;
+	
+	CGSize bs = CGSizeZero;
+    if (self.buttons.count>0) {
+        bs = [[self.buttons objectAtIndex:0] sizeThatFits: CGSizeZero];
     }
-	CGSize bs = [[self.buttons objectAtIndex:0] sizeThatFits: CGSizeZero];
 	
 	bs.width = maxWidth;
 	

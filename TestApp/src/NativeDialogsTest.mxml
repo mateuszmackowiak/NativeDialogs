@@ -88,7 +88,7 @@
 				m.buttons = Vector.<String> (["OK","Cancle"]);
 				m.title = "Title";
 				m.message = "Message";
-				m.dataProvider = Vector.<Object>(["one","two","three"]);
+				m.dataProvider = Vector.<Object>(["one","two","three","one","two","three","one","two","three","one","two","three","one","two","three","one","two","three","one","two","three"]);
 				m.displayMode = NativeListDialog.DISPLAY_MODE_MULTIPLE;
 				m.show();
 			}
